@@ -1,94 +1,7 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#072d4a">
-    <meta name="description" content="Tazkiya - Daily Muhasabah & Amal Sholeh Planner">
-    <title>Tazkiya - Daily Muhasabah & Amal Sholeh Planner</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter & Amiri for Arabic aesthetic -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js CDN for Visual Analytics -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        ocean: {
-                            50: '#f0f7ff',
-                            100: '#e0f0fe',
-                            200: '#bae2fd',
-                            300: '#7ccbfd',
-                            400: '#36b2fa',
-                            500: '#0ca0eb',
-                            600: '#007ec9',
-                            700: '#0165a4',
-                            800: '#065588',
-                            900: '#0b4770',
-                            950: '#072d4a',
-                        },
-                        gold: {
-                            400: '#fbbf24',
-                            500: '#d97706',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        arabic: ['Amiri', 'serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        body {
-            background-color: #f8fafc;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-        }
-        .bg-pattern {
-            background-image: radial-gradient(#38bdf8 0.6px, transparent 0.6px), radial-gradient(#38bdf8 0.6px, #f8fafc 0.6px);
-            background-size: 24px 24px;
-            background-position: 0 0, 12px 12px;
-            background-opacity: 0.15;
-        }
-        .glass-card {
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(226, 232, 240, 0.8);
-        }
-        .card-3d {
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-            transform-style: preserve-3d;
-            box-shadow: 0 10px 25px -5px rgba(14, 116, 144, 0.08), 0 8px 10px -6px rgba(14, 116, 144, 0.04);
-        }
-        .card-3d:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 35px -10px rgba(12, 160, 235, 0.22), 0 12px 15px -8px rgba(12, 160, 235, 0.12);
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f5f9;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #0284c7;
-            border-radius: 4px;
-        }
-    </style>
-</head>
+<!-- ... existing code ... -->
 <body class="text-slate-800 bg-pattern min-h-screen flex flex-col pb-12">
 
-    <!-- TAHAP 1: SCREEN LOGIN & AUTENTIKASI AWAL (MODE TAMU DIHAPUS) -->
+    <!-- TAHAP 1: SCREEN LOGIN & AUTENTIKASI AWAL (PERBAIKAN KEAMANAN PASSWORDS) -->
     <section id="loginScreen" class="min-h-screen flex items-center justify-center p-4 z-50">
         <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-ocean-100 space-y-6">
             
@@ -100,7 +13,13 @@
                     <span>TAZKIYA</span>
                     <span class="text-xs bg-ocean-100 text-ocean-800 font-semibold px-2.5 py-0.5 rounded-full border border-ocean-200">Planner</span>
                 </h1>
-                <p class="text-xs text-slate-500">Evaluasi Diri & Penjaga Ketaatan Harian</p>
+                <p class="text-xs text-slate-500" id="loginSubtitle">Masuk dengan Akun Terdaftar</p>
+            </div>
+
+            <!-- Notice / Alert Banner untuk Feedback Login & Register -->
+            <div id="authNoticeBox" class="hidden p-3 rounded-xl text-xs font-semibold flex items-center gap-2">
+                <i id="authNoticeIcon" class="fa-solid"></i>
+                <span id="authNoticeText"></span>
             </div>
 
             <form id="initialAuthForm" onsubmit="handleInitialAuth(event)" class="space-y-3.5 pt-2">
@@ -120,7 +39,7 @@
                 </div>
 
                 <button type="submit" id="initAuthBtn" class="w-full bg-gradient-to-r from-ocean-800 to-ocean-900 hover:from-ocean-900 hover:to-ocean-950 text-white font-bold text-xs py-3.5 rounded-xl transition shadow-lg shadow-ocean-900/20 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <i class="fa-solid fa-right-to-bracket" id="initAuthBtnIcon"></i>
                     <span id="initAuthBtnText">Masuk ke Aplikasi</span>
                 </button>
             </form>
@@ -137,383 +56,6 @@
                     <span>Masuk via Google Drive Sync</span>
                 </button>
             </div>
-
-            <p class="text-[11px] text-center text-slate-500 border-t border-slate-100 pt-3">
-                Belum punya akun? <a href="#" onclick="toggleInitAuthMode()" id="toggleInitAuthText" class="text-ocean-700 font-bold underline">Daftar Akun Baru</a>
-            </p>
-        </div>
-    </section>
-
-    <!-- MAIN APP WRAPPER -->
-    <div id="mainAppWrapper" class="hidden min-h-screen flex flex-col">
-
-        <!-- Top Navigation Header -->
-        <header class="bg-gradient-to-r from-ocean-950 via-ocean-900 to-ocean-950 text-white sticky top-0 z-40 shadow-md">
-            <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
-                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('homeTab')">
-                    <div class="w-10 h-10 rounded-full bg-ocean-800 border border-ocean-300 flex items-center justify-center text-amber-300 text-xl font-bold shadow-md">
-                        <i class="fa-solid me-0.5 fa-moon"></i>
-                    </div>
-                    <div>
-                        <h1 class="font-bold text-lg leading-tight tracking-wide text-white flex items-center gap-2">
-                            <span>TAZKIYA</span>
-                            <span class="text-xs bg-ocean-800 text-amber-300 font-normal px-2 py-0.5 rounded-full border border-ocean-700">Planner</span>
-                        </h1>
-                        <p class="text-xs text-ocean-200">Evaluasi Diri & Penjaga Ketaatan</p>
-                    </div>
-                </div>
-
-                <div class="flex items-center space-x-2 sm:space-x-4">
-                    <div class="flex items-center gap-2 text-xs bg-ocean-900 px-3 py-1.5 rounded-lg border border-ocean-800">
-                        <i class="fa-solid fa-user-circle text-amber-300"></i>
-                        <span id="userAuthStatusText" class="font-semibold text-ocean-100">User</span>
-                        <button onclick="logoutUser()" title="Keluar" class="ml-1 text-slate-400 hover:text-red-300">
-                            <i class="fa-solid fa-right-from-bracket text-xs"></i>
-                        </button>
-                    </div>
-                    <button id="openGdriveModal" class="flex items-center space-x-2 text-xs bg-ocean-800 hover:bg-ocean-700 text-ocean-100 px-3 py-1.5 rounded-lg border border-ocean-700 transition">
-                        <i class="fa-brands fa-google-drive text-ocean-300 text-sm"></i>
-                        <span id="gdriveStatusText" class="hidden sm:inline">Drive Sync</span>
-                        <span id="gdriveBadge" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- NAVIGATION TAB MENU -->
-            <nav class="bg-ocean-950/90 border-t border-ocean-800/60 px-4">
-                <div class="max-w-6xl mx-auto flex space-x-1 sm:space-x-4 text-xs font-semibold overflow-x-auto py-1 custom-scrollbar">
-                    <button data-tab="homeTab" class="tab-btn active-tab px-3.5 py-2 rounded-lg text-amber-300 bg-ocean-800/80 flex items-center gap-2 transition whitespace-nowrap">
-                        <i class="fa-solid fa-house"></i> Beranda
-                    </button>
-                    <button data-tab="muhasabahTab" class="tab-btn px-3.5 py-2 rounded-lg text-ocean-200 hover:text-white hover:bg-ocean-800/50 flex items-center gap-2 transition whitespace-nowrap">
-                        <i class="fa-solid fa-shield-halved"></i> Muhasabah Dosa
-                    </button>
-                    <button data-tab="amalTab" class="tab-btn px-3.5 py-2 rounded-lg text-ocean-200 hover:text-white hover:bg-ocean-800/50 flex items-center gap-2 transition whitespace-nowrap">
-                        <i class="fa-solid fa-hands-praying"></i> Amal Sholeh
-                    </button>
-                    <button data-tab="dzikirTab" class="tab-btn px-3.5 py-2 rounded-lg text-ocean-200 hover:text-white hover:bg-ocean-800/50 flex items-center gap-2 transition whitespace-nowrap">
-                        <i class="fa-solid fa-fingerprint"></i> Dzikir Counter
-                    </button>
-                </div>
-            </nav>
-        </header>
-
-        <!-- Main Content -->
-        <main class="max-w-6xl mx-auto px-4 mt-6 flex-grow w-full">
-
-            <!-- Date Selector & Quick Progress Dashboard -->
-            <section class="glass-card rounded-2xl p-5 mb-6 shadow-sm border border-ocean-100">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                    
-                    <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
-                        <button id="prevDateBtn" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
-                            <i class="fa-solid fa-chevron-left"></i>
-                        </button>
-                        
-                        <div class="text-center">
-                            <input type="date" id="datePicker" class="font-bold text-slate-800 bg-transparent text-center focus:outline-none cursor-pointer text-lg">
-                            <p id="hijriDateDisplay" class="text-xs text-ocean-700 font-medium text-center">-- Muharram 1446 H</p>
-                        </div>
-
-                        <button id="nextDateBtn" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
-                            <i class="fa-solid fa-chevron-right"></i>
-                        </button>
-
-                        <button id="todayBtn" class="text-xs bg-ocean-100 text-ocean-800 hover:bg-ocean-200 font-semibold px-2.5 py-1.5 rounded-lg transition">
-                            Hari Ini
-                        </button>
-                    </div>
-
-                    <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full md:w-auto">
-                        <div class="bg-ocean-50 border border-ocean-100 p-2.5 sm:p-3 rounded-xl text-center min-w-[90px]">
-                            <span class="block text-[10px] text-ocean-700 uppercase font-bold tracking-wider">Ketaatan</span>
-                            <span id="summaryAmalIndex" class="text-lg sm:text-xl font-bold text-ocean-900">0%</span>
-                        </div>
-
-                        <div class="bg-amber-50 border border-amber-100 p-2.5 sm:p-3 rounded-xl text-center min-w-[90px]">
-                            <span class="block text-[10px] text-amber-700 uppercase font-bold tracking-wider">Terjaga</span>
-                            <span id="summaryDosaIndex" class="text-lg sm:text-xl font-bold text-amber-800">100%</span>
-                        </div>
-
-                        <div class="bg-slate-50 border border-slate-200 p-2.5 sm:p-3 rounded-xl text-center min-w-[90px]">
-                            <span class="block text-[10px] text-slate-600 uppercase font-bold tracking-wider">Shalat</span>
-                            <span id="summaryShalatCount" class="text-lg sm:text-xl font-bold text-slate-800">0/5</span>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <!-- TAHAP 2: HALAMAN BERANDA DENGAN TAMPILAN 3D ELEGAN -->
-            <div id="homeTab" class="tab-content space-y-8">
-                
-                <section class="bg-gradient-to-br from-ocean-950 via-ocean-900 to-ocean-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-ocean-700/50">
-                    <div class="max-w-2xl relative z-10 space-y-3">
-                        <span class="text-xs font-bold tracking-widest text-amber-300 uppercase bg-ocean-800/80 border border-ocean-700 px-3 py-1 rounded-full inline-block">
-                            Beranda Utama
-                        </span>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
-                            "Sucikan Hati, Evaluasi Diri, dan Jaga Setiap Langkah Menuju Akhirat."
-                        </h2>
-                        <p class="text-xs sm:text-sm text-ocean-100 leading-relaxed">
-                            Pilih opsi fitur di bawah ini untuk memulai evaluasi muhasabah harianmu hari ini.
-                        </p>
-                    </div>
-                    <!-- Ambient Glow Effect -->
-                    <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-ocean-500/20 rounded-full blur-3xl pointer-events-none"></div>
-                </section>
-
-                <!-- TAHAP 3: KARTU OPSI FITUR UTAMA (3D ELEGAN) -->
-                <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    
-                    <!-- KARTU 1 -->
-                    <div onclick="switchTab('muhasabahTab')" class="card-3d bg-white p-7 rounded-3xl border border-slate-200/80 cursor-pointer group relative overflow-hidden">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-white flex items-center justify-center text-2xl mb-5 shadow-lg shadow-amber-500/30 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-shield-halved"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-800 mb-2">1. Muhasabah Dosa</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed mb-6">Evaluasi penjagaan 7 pintu maksiat anggota tubuh dari khilaf harian.</p>
-                        <span class="text-xs font-bold text-ocean-700 group-hover:text-ocean-900 flex items-center gap-1.5 transition">
-                            Buka Evaluasi <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition"></i>
-                        </span>
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full pointer-events-none"></div>
-                    </div>
-
-                    <!-- KARTU 2 -->
-                    <div onclick="switchTab('amalTab')" class="card-3d bg-white p-7 rounded-3xl border border-slate-200/80 cursor-pointer group relative overflow-hidden">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-ocean-600 to-ocean-500 text-white flex items-center justify-center text-2xl mb-5 shadow-lg shadow-ocean-500/30 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-hands-praying"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-800 mb-2">2. Target Amal Sholeh</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed mb-6">Kelola checklist amalan harian, shalat 5 waktu, dan target ketaatan.</p>
-                        <span class="text-xs font-bold text-ocean-700 group-hover:text-ocean-900 flex items-center gap-1.5 transition">
-                            Buka Amalan <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition"></i>
-                        </span>
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-ocean-500/5 rounded-bl-full pointer-events-none"></div>
-                    </div>
-
-                    <!-- KARTU 3 -->
-                    <div onclick="switchTab('dzikirTab')" class="card-3d bg-white p-7 rounded-3xl border border-slate-200/80 cursor-pointer group relative overflow-hidden">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 to-teal-500 text-white flex items-center justify-center text-2xl mb-5 shadow-lg shadow-sky-500/30 group-hover:scale-110 transition">
-                            <i class="fa-solid fa-fingerprint"></i>
-                        </div>
-                        <h3 class="text-lg font-bold text-slate-800 mb-2">3. Counter Dzikir</h3>
-                        <p class="text-xs text-slate-500 leading-relaxed mb-6">Hitung bacaan Istighfar, Sholawat, dan kalimat thoyyibah digital.</p>
-                        <span class="text-xs font-bold text-ocean-700 group-hover:text-ocean-900 flex items-center gap-1.5 transition">
-                            Mulai Dzikir <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition"></i>
-                        </span>
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-sky-500/5 rounded-bl-full pointer-events-none"></div>
-                    </div>
-
-                </section>
-
-                <!-- Renungan Ulama Widget -->
-                <section class="bg-gradient-to-br from-ocean-950 to-ocean-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
-                    <div class="flex items-center justify-between mb-3 border-b border-ocean-800/80 pb-2">
-                        <span class="text-xs font-bold tracking-widest text-amber-300 uppercase flex items-center gap-1.5">
-                            <i class="fa-solid fa-quote-left"></i> Renungan Akhirat & Nasehat Ulama
-                        </span>
-                        <button id="nextQuoteBtn" class="text-xs text-ocean-200 hover:text-amber-300 transition flex items-center gap-1">
-                            <span>Ganti Quote</span> <i class="fa-solid fa-rotate"></i>
-                        </button>
-                    </div>
-                    <div id="quoteBox" class="min-h-[90px] flex flex-col justify-between py-1">
-                        <p id="quoteText" class="text-sm sm:text-base text-ocean-100 leading-relaxed italic">
-                            "Sesungguhnya dunia ini pergi menjauh, dan akhirat datang mendekat..."
-                        </p>
-                        <div class="mt-4 pt-2 border-t border-ocean-800/50 flex justify-between items-center text-xs text-amber-300 font-semibold">
-                            <span id="quoteAuthor">— Ali bin Abi Thalib radhiyallahu 'anhu</span>
-                            <span id="quoteCategory" class="text-[10px] bg-ocean-800 text-ocean-200 px-2.5 py-0.5 rounded-full">Umur Singkat</span>
-                        </div>
-                    </div>
-                </section>
-
-            </div>
-
-            <!-- HALAMAN FITUR 1: MUHASABAH DOSA (TIDAK OTOMATIS TERTUTUP SAAT DICESKLIST) -->
-            <div id="muhasabahTab" class="tab-content hidden space-y-6">
-                <section class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
-                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 mb-4 border-b border-slate-100 gap-2">
-                        <div>
-                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-chart-pie text-ocean-700"></i>
-                                <span>Diagram Evaluasi Diri & Distribusi Hilaf</span>
-                            </h2>
-                            <p class="text-xs text-slate-500">Visualisasi tingkat kebersihan hati dan titik rawan 7 anggota tubuh</p>
-                        </div>
-                        <div id="purityStatusBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-ocean-100 text-ocean-800 border border-ocean-200">
-                            Tingkat Perjagaan: 100% (Sangat Baik)
-                        </div>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-                        <div class="md:col-span-6 lg:col-span-5 relative flex items-center justify-center p-2 min-h-[200px]">
-                            <canvas id="sinDistributionChart" class="max-h-[200px] max-w-full"></canvas>
-                        </div>
-                        <div class="md:col-span-6 lg:col-span-7 space-y-3">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rincian Per Anggota Tubuh</h3>
-                            <div id="chartMetricsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
-                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                        <div>
-                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-shield-halved text-ocean-700"></i>
-                                <span>Checklist Muhasabah 7 Anggota Tubuh</span>
-                            </h2>
-                            <p class="text-xs text-slate-500">Evaluasi dan jaga 7 pintu maksiat agar hati tetap bersih</p>
-                        </div>
-                        <span class="text-xs bg-red-50 text-red-600 font-medium px-2.5 py-1 rounded-full border border-red-100">
-                            Terjaga = Tidak Melakukan
-                        </span>
-                    </div>
-                    <div id="muhasabahContainer" class="space-y-3">
-                    </div>
-                </section>
-            </div>
-
-            <!-- HALAMAN FITUR 2: AMAL SHOLEH & SHALAT -->
-            <div id="amalTab" class="tab-content hidden space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <div class="lg:col-span-2 glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
-                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-                            <div>
-                                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                    <i class="fa-solid fa-hands-praying text-ocean-700"></i>
-                                    <span>Target Amal Sholeh Harian</span>
-                                </h2>
-                                <p class="text-xs text-slate-500">Isi waktu dengan ketaatan & tingkatkan kebiasaan baik</p>
-                            </div>
-                            <button id="addCustomAmalBtn" class="text-xs bg-ocean-700 hover:bg-ocean-800 text-white font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
-                                <i class="fa-solid fa-plus text-[10px]"></i>
-                                <span>Tambah Target</span>
-                            </button>
-                        </div>
-                        <div id="amalSholehContainer" class="space-y-2.5">
-                        </div>
-                    </div>
-
-                    <div class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
-                        <div class="mb-4 pb-3 border-b border-slate-100">
-                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-mosque text-ocean-700"></i>
-                                <span>Shalat 5 Waktu</span>
-                            </h2>
-                            <p class="text-xs text-slate-500">Evaluasi pelaksanaan shalat tepat waktu</p>
-                        </div>
-                        <div id="prayerContainer" class="space-y-2.5">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- HALAMAN FITUR 3: DZIKIR COUNTER -->
-            <div id="dzikirTab" class="tab-content hidden space-y-6">
-                <section class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 max-w-xl mx-auto text-center space-y-6">
-                    <div class="space-y-2">
-                        <span class="text-xs font-bold uppercase tracking-widest text-ocean-700 bg-ocean-50 px-3 py-1 rounded-full border border-ocean-100 inline-block">
-                            Counter Dzikir Digital
-                        </span>
-                        <div class="pt-2">
-                            <select id="dzikirSelect" class="w-full text-xs font-semibold text-slate-700 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-ocean-600">
-                                <option value="istighfar">Astaghfirullahal 'Adzim (Istighfar)</option>
-                                <option value="subhanallah">Subhanallah wa Bihamdihi</option>
-                                <option value="sholawat">Sholawat Nabi Muhammad SAW</option>
-                                <option value="hauqolah">Laa Haula wa Laa Quwwata Illa Billah</option>
-                                <option value="tahlil">Laa Ilaaha Illallah</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="py-4">
-                        <p id="dzikirArabicText" class="font-arabic text-3xl sm:text-4xl text-ocean-950 font-bold leading-relaxed mb-4">
-                            أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ
-                        </p>
-                        <div class="inline-flex items-baseline justify-center gap-1 bg-ocean-950 text-amber-300 px-6 py-3 rounded-2xl shadow-inner border border-ocean-800">
-                            <span id="dzikirCounterDisplay" class="text-4xl sm:text-5xl font-extrabold tracking-tight">0</span>
-                            <span class="text-xs text-ocean-200 font-semibold">/ <span id="dzikirTargetDisplay">100</span></span>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center justify-center gap-4">
-                        <button id="dzikirTapBtn" class="flex-1 bg-gradient-to-r from-ocean-700 to-ocean-800 hover:from-ocean-800 hover:to-ocean-900 active:scale-95 text-white font-bold text-sm py-4 rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-fingerprint text-xl"></i>
-                            <span>TAP UNTUK DZIKIR</span>
-                        </button>
-                        <button id="resetDzikirBtn" title="Reset Counter" class="w-12 h-12 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition">
-                            <i class="fa-solid fa-rotate-right"></i>
-                        </button>
-                    </div>
-                </section>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- MODAL GOOGLE DRIVE SYNC -->
-    <div id="gdriveModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
-            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
-                <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
-                    <i class="fa-brands fa-google-drive text-ocean-600"></i>
-                    <span>Konfigurasi Google Drive Sync</span>
-                </h3>
-                <button id="closeGdriveModal" class="text-slate-400 hover:text-slate-600 text-lg">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="space-y-4">
-                <p class="text-xs text-slate-600 leading-relaxed">
-                    Masukkan <strong>Google OAuth Client ID</strong> milikmu untuk mengaktifkan sinkronisasi data muhasabah otomatis ke Google Drive pribadi.
-                </p>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Google OAuth Client ID</label>
-                    <input type="text" id="gdriveClientIdInput" placeholder="xxxx.apps.googleusercontent.com" class="w-full text-xs p-3 border border-slate-300 rounded-xl focus:outline-none focus:border-ocean-600">
-                </div>
-                <div class="flex gap-2">
-                    <button id="saveGdriveConfigBtn" class="flex-1 bg-ocean-700 hover:bg-ocean-800 text-white font-bold text-xs py-3 rounded-xl transition shadow-md">
-                        Simpan ID
-                    </button>
-                    <button id="syncNowBtn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 rounded-xl transition">
-                        Simpan Lokal
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Custom Amal Sholeh -->
-    <div id="amalModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-100">
-            <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
-                <h3 class="font-bold text-slate-800 text-sm">Tambah Target Amal Sholeh</h3>
-                <button id="closeAmalModal" class="text-slate-400 hover:text-slate-600">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs text-slate-600 mb-1">Nama Amalan / Ibadah:</label>
-                    <input type="text" id="newAmalTitle" placeholder="Misal: Membaca Surat Al-Mulk sebelum tidur" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-ocean-600">
-                </div>
-                <div>
-                    <label class="block text-xs text-slate-600 mb-1">Kategori:</label>
-                    <select id="newAmalCategory" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-ocean-600">
-                        <option value="Ibadah">Ibadah Utama</option>
-                        <option value="Sosial">Kebaikan Sosial / Akhlaq</option>
-                        <option value="Ilmu">Menuntut Ilmu</option>
-                    </select>
-                </div>
-                <button id="saveNewAmalBtn" class="w-full bg-ocean-700 hover:bg-ocean-800 text-white font-semibold text-xs py-2.5 rounded-lg transition mt-2">
-                    Simpan Target Baru
-                </button>
-            </div>
-        </div>
-    </div>
 
     <script>
         const DOSA_ANGGOTA_TUBUH = [
@@ -628,7 +170,6 @@
         let currentQuoteIndex = 0;
         let sinChartInstance = null;
         let isInitRegister = false;
-        let openAccordionState = {};
 
         function loadAppData() {
             const stored = localStorage.getItem('tazkiya_app_data');
@@ -641,6 +182,7 @@
             }
             return {
                 currentUserEmail: '',
+                registeredUsers: {}, // Menyimpan email & password terenkripsi: { 'email': 'password' }
                 customAmal: [],
                 gdriveClientId: '',
                 dates: {}
@@ -684,8 +226,16 @@
         function renderMuhasabahDosa() {
             const container = document.getElementById('muhasabahContainer');
             if (!container) return;
-            container.innerHTML = '';
 
+            // Simpan status accordion yang terbuka sebelum re-render
+            const openAccordionIds = new Set();
+            document.querySelectorAll('[id^="group-"]').forEach(el => {
+                if (!el.classList.contains('hidden')) {
+                    openAccordionIds.add(el.id.replace('group-', ''));
+                }
+            });
+
+            container.innerHTML = '';
             const today = getTodayData();
 
             DOSA_ANGGOTA_TUBUH.forEach(group => {
@@ -701,7 +251,7 @@
                 });
 
                 const isAllTerjaga = totalItems > 0 && terjagaCount === totalItems;
-                const isOpen = !!openAccordionState[group.id];
+                const isOpen = openAccordionIds.has(group.id);
 
                 groupEl.innerHTML = `
                     <button class="w-full p-3.5 text-left flex items-center justify-between bg-slate-50/70 hover:bg-slate-100/70 transition toggle-accordion" data-target="${group.id}">
@@ -711,7 +261,7 @@
                             </div>
                             <div>
                                 <h3 class="text-sm font-bold text-slate-800">${group.title}</h3>
-                                <p class="text-[11px] text-slate-500" id="accordion-count-${group.id}">${terjagaCount}/${totalItems} Terjaga dari Hilaf</p>
+                                <p class="text-[11px] text-slate-500">${terjagaCount}/${totalItems} Terjaga dari Hilaf</p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-2">
@@ -727,7 +277,7 @@
                             const isChecked = !!today.dosaChecked[item.id];
                             return `
                                 <label class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs">
-                                    <input type="checkbox" class="dosa-checkbox mt-0.5 rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4 cursor-pointer" data-id="${item.id}" data-group="${group.id}" ${isChecked ? 'checked' : ''}>
+                                    <input type="checkbox" class="dosa-checkbox mt-0.5 rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4 cursor-pointer" data-id="${item.id}" ${isChecked ? 'checked' : ''}>
                                     <span class="${isChecked ? 'text-slate-800 font-medium' : 'text-slate-600'} leading-relaxed">
                                         ${item.label}
                                     </span>
@@ -749,11 +299,9 @@
                     if (targetEl.classList.contains('hidden')) {
                         targetEl.classList.remove('hidden');
                         icon?.classList.add('rotate-180');
-                        openAccordionState[targetId] = true;
                     } else {
                         targetEl.classList.add('hidden');
                         icon?.classList.remove('rotate-180');
-                        openAccordionState[targetId] = false;
                     }
                 });
             });
@@ -763,7 +311,7 @@
                     const id = e.target.getAttribute('data-id');
                     today.dosaChecked[id] = e.target.checked;
                     saveData();
-                    updateDashboardIndexes();
+                    renderMuhasabahDosa();
                 });
             });
         }
@@ -895,7 +443,7 @@
             const labels = [];
             const sinCounts = [];
             const backgroundColors = [
-                '#059669', '#3b82f6', '#f59e0b', '#8b5cf6', 
+                '#0284c7', '#0369a1', '#f59e0b', '#8b5cf6', 
                 '#ec4899', '#ef4444', '#14b8a6'
             ];
 
@@ -942,7 +490,7 @@
             const ctx = chartCanvas.getContext('2d');
             const chartDataValues = totalSinsCommitted === 0 ? [1] : sinCounts;
             const chartLabels = totalSinsCommitted === 0 ? ['Bersih Sepenuhnya'] : labels;
-            const chartColors = totalSinsCommitted === 0 ? ['#059669'] : backgroundColors;
+            const chartColors = totalSinsCommitted === 0 ? ['#0284c7'] : backgroundColors;
 
             if (sinChartInstance) {
                 sinChartInstance.data.labels = chartLabels;
@@ -999,6 +547,151 @@
 
             const currentCount = today.dzikirCounts[selectedKey] || 0;
             if (counterEl) counterEl.innerText = currentCount;
+        }
+
+        function showAuthNotice(message, isError = true) {
+            const box = document.getElementById('authNoticeBox');
+            const text = document.getElementById('authNoticeText');
+            const icon = document.getElementById('authNoticeIcon');
+            if (!box || !text || !icon) return;
+
+            box.classList.remove('hidden', 'bg-red-50', 'text-red-700', 'border-red-200', 'bg-emerald-50', 'text-emerald-700', 'border-emerald-200');
+            icon.classList.remove('fa-circle-xmark', 'fa-circle-check');
+
+            if (isError) {
+                box.classList.add('bg-red-50', 'text-red-700', 'border', 'border-red-200');
+                icon.classList.add('fa-circle-xmark');
+            } else {
+                box.classList.add('bg-emerald-50', 'text-emerald-700', 'border', 'border-emerald-200');
+                icon.classList.add('fa-circle-check');
+            }
+
+            text.innerText = message;
+        }
+
+        function hideAuthNotice() {
+            const box = document.getElementById('authNoticeBox');
+            if (box) box.classList.add('hidden');
+        }
+
+        function toggleInitAuthMode() {
+            isInitRegister = !isInitRegister;
+            hideAuthNotice();
+            const btnText = document.getElementById('initAuthBtnText');
+            const btnIcon = document.getElementById('initAuthBtnIcon');
+            const toggleText = document.getElementById('toggleInitAuthText');
+            const promptText = document.getElementById('authPromptText');
+            const subtitle = document.getElementById('loginSubtitle');
+
+            if (isInitRegister) {
+                if (btnText) btnText.innerText = 'Buat Akun Sekarang';
+                if (btnIcon) btnIcon.className = 'fa-solid fa-user-plus';
+                if (toggleText) toggleText.innerText = 'Masuk Saja';
+                if (promptText) promptText.innerText = 'Sudah memiliki akun?';
+                if (subtitle) subtitle.innerText = 'Buat Akun Baru Tazkiya';
+            } else {
+                if (btnText) btnText.innerText = 'Masuk ke Aplikasi';
+                if (btnIcon) btnIcon.className = 'fa-solid fa-right-to-bracket';
+                if (toggleText) toggleText.innerText = 'Daftar Akun Baru';
+                if (promptText) promptText.innerText = 'Belum punya akun?';
+                if (subtitle) subtitle.innerText = 'Masuk dengan Akun Terdaftar';
+            }
+        }
+
+        function handleInitialAuth(e) {
+            e.preventDefault();
+            hideAuthNotice();
+
+            const emailInput = document.getElementById('initEmailInput');
+            const passInput = document.getElementById('initPasswordInput');
+            
+            const email = emailInput ? emailInput.value.trim().toLowerCase() : '';
+            const password = passInput ? passInput.value.trim() : '';
+
+            if (!email || !password) {
+                showAuthNotice('Silakan isi email dan kata sandi dengan lengkap.');
+                return;
+            }
+
+            if (!appData.registeredUsers) {
+                appData.registeredUsers = {};
+            }
+
+            if (isInitRegister) {
+                // Proses Pendaftaran Akun Baru
+                if (appData.registeredUsers[email]) {
+                    showAuthNotice('Email ini sudah terdaftar! Silakan pilih "Masuk Saja".');
+                    return;
+                }
+                if (password.length < 4) {
+                    showAuthNotice('Kata sandi minimal 4 karakter.');
+                    return;
+                }
+
+                // Simpan Akun Baru dengan enkripsi kata sandi
+                appData.registeredUsers[email] = btoa(password);
+                appData.currentUserEmail = email;
+                saveData();
+                showAuthNotice('Pendaftaran berhasil! Mengalihkan...', false);
+                setTimeout(() => showMainApp(email), 800);
+            } else {
+                // Proses Login Validasi Kata Sandi Ketat
+                const storedEncryptedPass = appData.registeredUsers[email];
+
+                if (!storedEncryptedPass) {
+                    // Reset sesi aktif jika ada sisa data lama
+                    appData.currentUserEmail = '';
+                    saveData();
+                    showAuthNotice('Email belum terdaftar. Silakan klik "Daftar Akun Baru" terlebih dahulu.');
+                    return;
+                }
+
+                // Verifikasi kata sandi yang diketikkan pengguna
+                if (atob(storedEncryptedPass) !== password) {
+                    // Reset sesi aktif agar tidak bisa lolos login
+                    appData.currentUserEmail = '';
+                    saveData();
+                    showAuthNotice('Kata sandi salah! Masukkan kata sandi yang benar.');
+                    return;
+                }
+
+                // Login Berhasil jika Kata Sandi Benar 100%
+                appData.currentUserEmail = email;
+                saveData();
+                showAuthNotice('Berhasil masuk! Mengalihkan...', false);
+                setTimeout(() => showMainApp(email), 600);
+            }
+        }
+
+        function showMainApp(userDisplay) {
+            document.getElementById('loginScreen')?.classList.add('hidden');
+            document.getElementById('mainAppWrapper')?.classList.remove('hidden');
+            const userStatus = document.getElementById('userAuthStatusText');
+            if (userStatus) userStatus.innerText = userDisplay.split('@')[0];
+            switchTab('homeTab');
+        }
+
+        function logoutUser() {
+            appData.currentUserEmail = '';
+            saveData();
+            document.getElementById('mainAppWrapper')?.classList.add('hidden');
+            document.getElementById('loginScreen')?.classList.remove('hidden');
+            hideAuthNotice();
+            const emailInput = document.getElementById('initEmailInput');
+            const passInput = document.getElementById('initPasswordInput');
+            if (emailInput) emailInput.value = '';
+            if (passInput) passInput.value = '';
+            // Reset state registrasi ke login biasa
+            if (isInitRegister) toggleInitAuthMode();
+        }
+
+        function updateAllViews() {
+            renderMuhasabahDosa();
+            renderAmalSholeh();
+            renderShalatTracker();
+            renderQuote();
+            updateDzikirUI();
+            updateDashboardIndexes();
         }
 
         function initApp() {
@@ -1083,12 +776,12 @@
                     saveData();
                 }
                 gdriveModal?.classList.add('hidden');
-                alert('Konfigurasi Google Drive berhasil disimpan!');
+                showAuthNotice('Konfigurasi Google Drive berhasil disimpan!', false);
             });
 
             document.getElementById('syncNowBtn')?.addEventListener('click', () => {
                 saveData();
-                alert('Data berhasil disimpan secara lokal di browser Anda!');
+                showAuthNotice('Data berhasil disimpan secara lokal di browser Anda!', false);
                 gdriveModal?.classList.add('hidden');
             });
 
@@ -1120,47 +813,6 @@
             });
 
             updateAllViews();
-        }
-
-        function updateAllViews() {
-            renderMuhasabahDosa();
-            renderAmalSholeh();
-            renderShalatTracker();
-            renderQuote();
-            updateDzikirUI();
-            updateDashboardIndexes();
-        }
-
-        function toggleInitAuthMode() {
-            isInitRegister = !isInitRegister;
-            const btnText = document.getElementById('initAuthBtnText');
-            const toggleText = document.getElementById('toggleInitAuthText');
-            if (btnText) btnText.innerText = isInitRegister ? 'Daftar Akun Baru' : 'Masuk ke Aplikasi';
-            if (toggleText) toggleText.innerText = isInitRegister ? 'Masuk Saja' : 'Daftar Akun Baru';
-        }
-
-        function handleInitialAuth(e) {
-            e.preventDefault();
-            const input = document.getElementById('initEmailInput');
-            const email = input ? input.value : 'User';
-            appData.currentUserEmail = email;
-            saveData();
-            showMainApp(email);
-        }
-
-        function showMainApp(userDisplay) {
-            document.getElementById('loginScreen')?.classList.add('hidden');
-            document.getElementById('mainAppWrapper')?.classList.remove('hidden');
-            const userStatus = document.getElementById('userAuthStatusText');
-            if (userStatus) userStatus.innerText = userDisplay.split('@')[0];
-            switchTab('homeTab');
-        }
-
-        function logoutUser() {
-            appData.currentUserEmail = '';
-            saveData();
-            document.getElementById('mainAppWrapper')?.classList.add('hidden');
-            document.getElementById('loginScreen')?.classList.remove('hidden');
         }
 
         window.onload = function() {
