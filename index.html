@@ -1,0 +1,1174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#072d4a">
+    <meta name="description" content="Tazkiya - Daily Muhasabah & Amal Sholeh Planner">
+    <title>Tazkiya - Daily Muhasabah & Amal Sholeh Planner</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Amiri for Arabic aesthetic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Chart.js CDN for Visual Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ocean: {
+                            50: '#f0f7ff',
+                            100: '#e0f0fe',
+                            200: '#bae2fd',
+                            300: '#7ccbfd',
+                            400: '#36b2fa',
+                            500: '#0ca0eb',
+                            600: '#007ec9',
+                            700: '#0165a4',
+                            800: '#065588',
+                            900: '#0b4770',
+                            950: '#072d4a',
+                        },
+                        gold: {
+                            400: '#fbbf24',
+                            500: '#d97706',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f8fafc;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .bg-pattern {
+            background-image: radial-gradient(#38bdf8 0.6px, transparent 0.6px), radial-gradient(#38bdf8 0.6px, #f8fafc 0.6px);
+            background-size: 24px 24px;
+            background-position: 0 0, 12px 12px;
+            background-opacity: 0.15;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .card-3d {
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 25px -5px rgba(14, 116, 144, 0.08), 0 8px 10px -6px rgba(14, 116, 144, 0.04);
+        }
+        .card-3d:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 35px -10px rgba(12, 160, 235, 0.22), 0 12px 15px -8px rgba(12, 160, 235, 0.12);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #0284c7;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="text-slate-800 bg-pattern min-h-screen flex flex-col pb-12">
+
+    <!-- TAHAP 1: SCREEN LOGIN & AUTENTIKASI AWAL (MODE TAMU DIHAPUS) -->
+    <section id="loginScreen" class="min-h-screen flex items-center justify-center p-4 z-50">
+        <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-8 shadow-2xl border border-ocean-100 space-y-6">
+            
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-ocean-950 to-ocean-800 border-2 border-ocean-300 flex items-center justify-center text-amber-300 text-3xl font-bold mx-auto shadow-xl shadow-ocean-900/20">
+                    <i class="fa-solid fa-moon"></i>
+                </div>
+                <h1 class="text-2xl font-extrabold tracking-wide text-ocean-950 flex items-center justify-center gap-2">
+                    <span>TAZKIYA</span>
+                    <span class="text-xs bg-ocean-100 text-ocean-800 font-semibold px-2.5 py-0.5 rounded-full border border-ocean-200">Planner</span>
+                </h1>
+                <p class="text-xs text-slate-500">Evaluasi Diri & Penjaga Ketaatan Harian</p>
+            </div>
+
+            <form id="initialAuthForm" onsubmit="handleInitialAuth(event)" class="space-y-3.5 pt-2">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Alamat Email</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-envelope absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                        <input type="email" id="initEmailInput" required placeholder="nama@domain.com" class="w-full text-xs pl-9 pr-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-ocean-600 focus:border-transparent bg-slate-50/50">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Kata Sandi</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-lock absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                        <input type="password" id="initPasswordInput" required placeholder="••••••••" class="w-full text-xs pl-9 pr-3 py-3 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-ocean-600 focus:border-transparent bg-slate-50/50">
+                    </div>
+                </div>
+
+                <button type="submit" id="initAuthBtn" class="w-full bg-gradient-to-r from-ocean-800 to-ocean-900 hover:from-ocean-900 hover:to-ocean-950 text-white font-bold text-xs py-3.5 rounded-xl transition shadow-lg shadow-ocean-900/20 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-right-to-bracket"></i>
+                    <span id="initAuthBtnText">Masuk ke Aplikasi</span>
+                </button>
+            </form>
+
+            <div class="flex items-center justify-between">
+                <span class="border-b border-slate-200 w-full"></span>
+                <span class="text-[10px] text-slate-400 uppercase px-3 font-semibold whitespace-nowrap">atau opsi lain</span>
+                <span class="border-b border-slate-200 w-full"></span>
+            </div>
+
+            <div class="space-y-2.5">
+                <button onclick="document.getElementById('openGdriveModal').click();" class="w-full bg-slate-50 hover:bg-slate-100 text-slate-700 font-semibold text-xs py-3 rounded-xl border border-slate-200 transition flex items-center justify-center gap-2 shadow-sm">
+                    <i class="fa-brands fa-google-drive text-ocean-600 text-sm"></i>
+                    <span>Masuk via Google Drive Sync</span>
+                </button>
+            </div>
+
+            <p class="text-[11px] text-center text-slate-500 border-t border-slate-100 pt-3">
+                Belum punya akun? <a href="#" onclick="toggleInitAuthMode()" id="toggleInitAuthText" class="text-ocean-700 font-bold underline">Daftar Akun Baru</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- MAIN APP WRAPPER -->
+    <div id="mainAppWrapper" class="hidden min-h-screen flex flex-col">
+
+        <!-- Top Navigation Header -->
+        <header class="bg-gradient-to-r from-ocean-950 via-ocean-900 to-ocean-950 text-white sticky top-0 z-40 shadow-md">
+            <div class="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('homeTab')">
+                    <div class="w-10 h-10 rounded-full bg-ocean-800 border border-ocean-300 flex items-center justify-center text-amber-300 text-xl font-bold shadow-md">
+                        <i class="fa-solid me-0.5 fa-moon"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-bold text-lg leading-tight tracking-wide text-white flex items-center gap-2">
+                            <span>TAZKIYA</span>
+                            <span class="text-xs bg-ocean-800 text-amber-300 font-normal px-2 py-0.5 rounded-full border border-ocean-700">Planner</span>
+                        </h1>
+                        <p class="text-xs text-ocean-200">Evaluasi Diri & Penjaga Ketaatan</p>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-2 sm:space-x-4">
+                    <div class="flex items-center gap-2 text-xs bg-ocean-900 px-3 py-1.5 rounded-lg border border-ocean-800">
+                        <i class="fa-solid fa-user-circle text-amber-300"></i>
+                        <span id="userAuthStatusText" class="font-semibold text-ocean-100">User</span>
+                        <button onclick="logoutUser()" title="Keluar" class="ml-1 text-slate-400 hover:text-red-300">
+                            <i class="fa-solid fa-right-from-bracket text-xs"></i>
+                        </button>
+                    </div>
+                    <button id="openGdriveModal" class="flex items-center space-x-2 text-xs bg-ocean-800 hover:bg-ocean-700 text-ocean-100 px-3 py-1.5 rounded-lg border border-ocean-700 transition">
+                        <i class="fa-brands fa-google-drive text-ocean-300 text-sm"></i>
+                        <span id="gdriveStatusText" class="hidden sm:inline">Drive Sync</span>
+                        <span id="gdriveBadge" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- NAVIGATION TAB MENU -->
+            <nav class="bg-ocean-950/90 border-t border-ocean-800/60 px-4">
+                <div class="max-w-6xl mx-auto flex space-x-1 sm:space-x-4 text-xs font-semibold overflow-x-auto py-1 custom-scrollbar">
+                    <button data-tab="homeTab" class="tab-btn active-tab px-3.5 py-2 rounded-lg text-amber-300 bg-ocean-800/80 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-solid fa-house"></i> Beranda
+                    </button>
+                    <button data-tab="muhasabahTab" class="tab-btn px-3.5 py-2 rounded-lg text-ocean-200 hover:text-white hover:bg-ocean-800/50 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-solid fa-shield-halved"></i> Muhasabah Dosa
+                    </button>
+                    <button data-tab="amalTab" class="tab-btn px-3.5 py-2 rounded-lg text-ocean-200 hover:text-white hover:bg-ocean-800/50 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-solid fa-hands-praying"></i> Amal Sholeh
+                    </button>
+                    <button data-tab="dzikirTab" class="tab-btn px-3.5 py-2 rounded-lg text-ocean-200 hover:text-white hover:bg-ocean-800/50 flex items-center gap-2 transition whitespace-nowrap">
+                        <i class="fa-solid fa-fingerprint"></i> Dzikir Counter
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-6xl mx-auto px-4 mt-6 flex-grow w-full">
+
+            <!-- Date Selector & Quick Progress Dashboard -->
+            <section class="glass-card rounded-2xl p-5 mb-6 shadow-sm border border-ocean-100">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                    
+                    <div class="flex items-center space-x-3 w-full md:w-auto justify-between md:justify-start">
+                        <button id="prevDateBtn" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                            <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        
+                        <div class="text-center">
+                            <input type="date" id="datePicker" class="font-bold text-slate-800 bg-transparent text-center focus:outline-none cursor-pointer text-lg">
+                            <p id="hijriDateDisplay" class="text-xs text-ocean-700 font-medium text-center">-- Muharram 1446 H</p>
+                        </div>
+
+                        <button id="nextDateBtn" class="w-9 h-9 flex items-center justify-center rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 transition">
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+
+                        <button id="todayBtn" class="text-xs bg-ocean-100 text-ocean-800 hover:bg-ocean-200 font-semibold px-2.5 py-1.5 rounded-lg transition">
+                            Hari Ini
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-2 sm:gap-4 w-full md:w-auto">
+                        <div class="bg-ocean-50 border border-ocean-100 p-2.5 sm:p-3 rounded-xl text-center min-w-[90px]">
+                            <span class="block text-[10px] text-ocean-700 uppercase font-bold tracking-wider">Ketaatan</span>
+                            <span id="summaryAmalIndex" class="text-lg sm:text-xl font-bold text-ocean-900">0%</span>
+                        </div>
+
+                        <div class="bg-amber-50 border border-amber-100 p-2.5 sm:p-3 rounded-xl text-center min-w-[90px]">
+                            <span class="block text-[10px] text-amber-700 uppercase font-bold tracking-wider">Terjaga</span>
+                            <span id="summaryDosaIndex" class="text-lg sm:text-xl font-bold text-amber-800">100%</span>
+                        </div>
+
+                        <div class="bg-slate-50 border border-slate-200 p-2.5 sm:p-3 rounded-xl text-center min-w-[90px]">
+                            <span class="block text-[10px] text-slate-600 uppercase font-bold tracking-wider">Shalat</span>
+                            <span id="summaryShalatCount" class="text-lg sm:text-xl font-bold text-slate-800">0/5</span>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- TAHAP 2: HALAMAN BERANDA DENGAN TAMPILAN 3D ELEGAN -->
+            <div id="homeTab" class="tab-content space-y-8">
+                
+                <section class="bg-gradient-to-br from-ocean-950 via-ocean-900 to-ocean-800 text-white rounded-3xl p-6 sm:p-8 shadow-2xl relative overflow-hidden border border-ocean-700/50">
+                    <div class="max-w-2xl relative z-10 space-y-3">
+                        <span class="text-xs font-bold tracking-widest text-amber-300 uppercase bg-ocean-800/80 border border-ocean-700 px-3 py-1 rounded-full inline-block">
+                            Beranda Utama
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-extrabold text-white leading-tight">
+                            "Sucikan Hati, Evaluasi Diri, dan Jaga Setiap Langkah Menuju Akhirat."
+                        </h2>
+                        <p class="text-xs sm:text-sm text-ocean-100 leading-relaxed">
+                            Pilih opsi fitur di bawah ini untuk memulai evaluasi muhasabah harianmu hari ini.
+                        </p>
+                    </div>
+                    <!-- Ambient Glow Effect -->
+                    <div class="absolute -right-10 -bottom-10 w-60 h-60 bg-ocean-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                </section>
+
+                <!-- TAHAP 3: KARTU OPSI FITUR UTAMA (3D ELEGAN) -->
+                <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    
+                    <!-- KARTU 1 -->
+                    <div onclick="switchTab('muhasabahTab')" class="card-3d bg-white p-7 rounded-3xl border border-slate-200/80 cursor-pointer group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-amber-500 to-amber-400 text-white flex items-center justify-center text-2xl mb-5 shadow-lg shadow-amber-500/30 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">1. Muhasabah Dosa</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-6">Evaluasi penjagaan 7 pintu maksiat anggota tubuh dari khilaf harian.</p>
+                        <span class="text-xs font-bold text-ocean-700 group-hover:text-ocean-900 flex items-center gap-1.5 transition">
+                            Buka Evaluasi <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition"></i>
+                        </span>
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-amber-500/5 rounded-bl-full pointer-events-none"></div>
+                    </div>
+
+                    <!-- KARTU 2 -->
+                    <div onclick="switchTab('amalTab')" class="card-3d bg-white p-7 rounded-3xl border border-slate-200/80 cursor-pointer group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-ocean-600 to-ocean-500 text-white flex items-center justify-center text-2xl mb-5 shadow-lg shadow-ocean-500/30 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-hands-praying"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">2. Target Amal Sholeh</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-6">Kelola checklist amalan harian, shalat 5 waktu, dan target ketaatan.</p>
+                        <span class="text-xs font-bold text-ocean-700 group-hover:text-ocean-900 flex items-center gap-1.5 transition">
+                            Buka Amalan <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition"></i>
+                        </span>
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-ocean-500/5 rounded-bl-full pointer-events-none"></div>
+                    </div>
+
+                    <!-- KARTU 3 -->
+                    <div onclick="switchTab('dzikirTab')" class="card-3d bg-white p-7 rounded-3xl border border-slate-200/80 cursor-pointer group relative overflow-hidden">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 to-teal-500 text-white flex items-center justify-center text-2xl mb-5 shadow-lg shadow-sky-500/30 group-hover:scale-110 transition">
+                            <i class="fa-solid fa-fingerprint"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-800 mb-2">3. Counter Dzikir</h3>
+                        <p class="text-xs text-slate-500 leading-relaxed mb-6">Hitung bacaan Istighfar, Sholawat, dan kalimat thoyyibah digital.</p>
+                        <span class="text-xs font-bold text-ocean-700 group-hover:text-ocean-900 flex items-center gap-1.5 transition">
+                            Mulai Dzikir <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition"></i>
+                        </span>
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-sky-500/5 rounded-bl-full pointer-events-none"></div>
+                    </div>
+
+                </section>
+
+                <!-- Renungan Ulama Widget -->
+                <section class="bg-gradient-to-br from-ocean-950 to-ocean-900 rounded-2xl p-6 text-white shadow-lg relative overflow-hidden">
+                    <div class="flex items-center justify-between mb-3 border-b border-ocean-800/80 pb-2">
+                        <span class="text-xs font-bold tracking-widest text-amber-300 uppercase flex items-center gap-1.5">
+                            <i class="fa-solid fa-quote-left"></i> Renungan Akhirat & Nasehat Ulama
+                        </span>
+                        <button id="nextQuoteBtn" class="text-xs text-ocean-200 hover:text-amber-300 transition flex items-center gap-1">
+                            <span>Ganti Quote</span> <i class="fa-solid fa-rotate"></i>
+                        </button>
+                    </div>
+                    <div id="quoteBox" class="min-h-[90px] flex flex-col justify-between py-1">
+                        <p id="quoteText" class="text-sm sm:text-base text-ocean-100 leading-relaxed italic">
+                            "Sesungguhnya dunia ini pergi menjauh, dan akhirat datang mendekat..."
+                        </p>
+                        <div class="mt-4 pt-2 border-t border-ocean-800/50 flex justify-between items-center text-xs text-amber-300 font-semibold">
+                            <span id="quoteAuthor">— Ali bin Abi Thalib radhiyallahu 'anhu</span>
+                            <span id="quoteCategory" class="text-[10px] bg-ocean-800 text-ocean-200 px-2.5 py-0.5 rounded-full">Umur Singkat</span>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- HALAMAN FITUR 1: MUHASABAH DOSA (TIDAK OTOMATIS TERTUTUP SAAT DICESKLIST) -->
+            <div id="muhasabahTab" class="tab-content hidden space-y-6">
+                <section class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 mb-4 border-b border-slate-100 gap-2">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-chart-pie text-ocean-700"></i>
+                                <span>Diagram Evaluasi Diri & Distribusi Hilaf</span>
+                            </h2>
+                            <p class="text-xs text-slate-500">Visualisasi tingkat kebersihan hati dan titik rawan 7 anggota tubuh</p>
+                        </div>
+                        <div id="purityStatusBadge" class="text-xs font-bold px-3 py-1 rounded-full bg-ocean-100 text-ocean-800 border border-ocean-200">
+                            Tingkat Perjagaan: 100% (Sangat Baik)
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                        <div class="md:col-span-6 lg:col-span-5 relative flex items-center justify-center p-2 min-h-[200px]">
+                            <canvas id="sinDistributionChart" class="max-h-[200px] max-w-full"></canvas>
+                        </div>
+                        <div class="md:col-span-6 lg:col-span-7 space-y-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">Rincian Per Anggota Tubuh</h3>
+                            <div id="chartMetricsContainer" class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                    <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                        <div>
+                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-shield-halved text-ocean-700"></i>
+                                <span>Checklist Muhasabah 7 Anggota Tubuh</span>
+                            </h2>
+                            <p class="text-xs text-slate-500">Evaluasi dan jaga 7 pintu maksiat agar hati tetap bersih</p>
+                        </div>
+                        <span class="text-xs bg-red-50 text-red-600 font-medium px-2.5 py-1 rounded-full border border-red-100">
+                            Terjaga = Tidak Melakukan
+                        </span>
+                    </div>
+                    <div id="muhasabahContainer" class="space-y-3">
+                    </div>
+                </section>
+            </div>
+
+            <!-- HALAMAN FITUR 2: AMAL SHOLEH & SHALAT -->
+            <div id="amalTab" class="tab-content hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="lg:col-span-2 glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+                            <div>
+                                <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <i class="fa-solid fa-hands-praying text-ocean-700"></i>
+                                    <span>Target Amal Sholeh Harian</span>
+                                </h2>
+                                <p class="text-xs text-slate-500">Isi waktu dengan ketaatan & tingkatkan kebiasaan baik</p>
+                            </div>
+                            <button id="addCustomAmalBtn" class="text-xs bg-ocean-700 hover:bg-ocean-800 text-white font-semibold px-3 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-sm">
+                                <i class="fa-solid fa-plus text-[10px]"></i>
+                                <span>Tambah Target</span>
+                            </button>
+                        </div>
+                        <div id="amalSholehContainer" class="space-y-2.5">
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                        <div class="mb-4 pb-3 border-b border-slate-100">
+                            <h2 class="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-mosque text-ocean-700"></i>
+                                <span>Shalat 5 Waktu</span>
+                            </h2>
+                            <p class="text-xs text-slate-500">Evaluasi pelaksanaan shalat tepat waktu</p>
+                        </div>
+                        <div id="prayerContainer" class="space-y-2.5">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HALAMAN FITUR 3: DZIKIR COUNTER -->
+            <div id="dzikirTab" class="tab-content hidden space-y-6">
+                <section class="glass-card rounded-3xl p-6 sm:p-8 shadow-sm border border-slate-200/80 max-w-xl mx-auto text-center space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs font-bold uppercase tracking-widest text-ocean-700 bg-ocean-50 px-3 py-1 rounded-full border border-ocean-100 inline-block">
+                            Counter Dzikir Digital
+                        </span>
+                        <div class="pt-2">
+                            <select id="dzikirSelect" class="w-full text-xs font-semibold text-slate-700 p-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-ocean-600">
+                                <option value="istighfar">Astaghfirullahal 'Adzim (Istighfar)</option>
+                                <option value="subhanallah">Subhanallah wa Bihamdihi</option>
+                                <option value="sholawat">Sholawat Nabi Muhammad SAW</option>
+                                <option value="hauqolah">Laa Haula wa Laa Quwwata Illa Billah</option>
+                                <option value="tahlil">Laa Ilaaha Illallah</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="py-4">
+                        <p id="dzikirArabicText" class="font-arabic text-3xl sm:text-4xl text-ocean-950 font-bold leading-relaxed mb-4">
+                            أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ
+                        </p>
+                        <div class="inline-flex items-baseline justify-center gap-1 bg-ocean-950 text-amber-300 px-6 py-3 rounded-2xl shadow-inner border border-ocean-800">
+                            <span id="dzikirCounterDisplay" class="text-4xl sm:text-5xl font-extrabold tracking-tight">0</span>
+                            <span class="text-xs text-ocean-200 font-semibold">/ <span id="dzikirTargetDisplay">100</span></span>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-4">
+                        <button id="dzikirTapBtn" class="flex-1 bg-gradient-to-r from-ocean-700 to-ocean-800 hover:from-ocean-800 hover:to-ocean-900 active:scale-95 text-white font-bold text-sm py-4 rounded-2xl shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-fingerprint text-xl"></i>
+                            <span>TAP UNTUK DZIKIR</span>
+                        </button>
+                        <button id="resetDzikirBtn" title="Reset Counter" class="w-12 h-12 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-2xl flex items-center justify-center transition">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL GOOGLE DRIVE SYNC -->
+    <div id="gdriveModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-4 pb-3 border-b border-slate-100">
+                <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                    <i class="fa-brands fa-google-drive text-ocean-600"></i>
+                    <span>Konfigurasi Google Drive Sync</span>
+                </h3>
+                <button id="closeGdriveModal" class="text-slate-400 hover:text-slate-600 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-4">
+                <p class="text-xs text-slate-600 leading-relaxed">
+                    Masukkan <strong>Google OAuth Client ID</strong> milikmu untuk mengaktifkan sinkronisasi data muhasabah otomatis ke Google Drive pribadi.
+                </p>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Google OAuth Client ID</label>
+                    <input type="text" id="gdriveClientIdInput" placeholder="xxxx.apps.googleusercontent.com" class="w-full text-xs p-3 border border-slate-300 rounded-xl focus:outline-none focus:border-ocean-600">
+                </div>
+                <div class="flex gap-2">
+                    <button id="saveGdriveConfigBtn" class="flex-1 bg-ocean-700 hover:bg-ocean-800 text-white font-bold text-xs py-3 rounded-xl transition shadow-md">
+                        Simpan ID
+                    </button>
+                    <button id="syncNowBtn" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs py-3 rounded-xl transition">
+                        Simpan Lokal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Custom Amal Sholeh -->
+    <div id="amalModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-5 shadow-2xl border border-slate-100">
+            <div class="flex justify-between items-center mb-3 pb-2 border-b border-slate-100">
+                <h3 class="font-bold text-slate-800 text-sm">Tambah Target Amal Sholeh</h3>
+                <button id="closeAmalModal" class="text-slate-400 hover:text-slate-600">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            <div class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-600 mb-1">Nama Amalan / Ibadah:</label>
+                    <input type="text" id="newAmalTitle" placeholder="Misal: Membaca Surat Al-Mulk sebelum tidur" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-ocean-600">
+                </div>
+                <div>
+                    <label class="block text-xs text-slate-600 mb-1">Kategori:</label>
+                    <select id="newAmalCategory" class="w-full text-xs p-2.5 border border-slate-300 rounded-lg focus:outline-none focus:border-ocean-600">
+                        <option value="Ibadah">Ibadah Utama</option>
+                        <option value="Sosial">Kebaikan Sosial / Akhlaq</option>
+                        <option value="Ilmu">Menuntut Ilmu</option>
+                    </select>
+                </div>
+                <button id="saveNewAmalBtn" class="w-full bg-ocean-700 hover:bg-ocean-800 text-white font-semibold text-xs py-2.5 rounded-lg transition mt-2">
+                    Simpan Target Baru
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DOSA_ANGGOTA_TUBUH = [
+            {
+                id: 'mata',
+                title: 'Dosa Mata',
+                icon: 'fa-eye',
+                items: [
+                    { id: 'm1', label: 'Melihat konten pornografi / aurat bukan mahram' },
+                    { id: 'm2', label: 'Pandangan meremehkan / sinis kepada orang lain' },
+                    { id: 'm3', label: 'Melihat keburukan / aib saudara muslim' },
+                    { id: 'm4', label: 'Mata tidak dihalangi dari gambar/video haram di medsos' }
+                ]
+            },
+            {
+                id: 'telinga',
+                title: 'Dosa Telinga',
+                icon: 'fa-ear-listen',
+                items: [
+                    { id: 't1', label: 'Mendengarkan ghibah / gosip menceritakan aib orang' },
+                    { id: 't2', label: 'Mendengarkan musik/audio yang melalaikan dari ingat Allah' },
+                    { id: 't3', label: 'Mencuri dengar (mengintip pembicaraan rahasia orang)' }
+                ]
+            },
+            {
+                id: 'lisan',
+                title: 'Dosa Lisan',
+                icon: 'fa-comment-slash',
+                items: [
+                    { id: 'l1', label: 'Berbohong / berdusta meskipun bercanda' },
+                    { id: 'l2', label: 'Ghibah (membicarakan keburukan orang lain)' },
+                    { id: 'l3', label: 'Mengeluarkan perkataan kasar, kotor, atau memaki' },
+                    { id: 'l4', label: 'Mengingkari janji yang telah disepakati' },
+                    { id: 'l5', label: 'Perkataan sia-sia tanpa guna (laghw)' }
+                ]
+            },
+            {
+                id: 'pikiran',
+                title: 'Dosa Pikiran & Hati',
+                icon: 'fa-brain',
+                items: [
+                    { id: 'p1', label: 'Riya\' / Ingin dipuji orang lain dalam beribadah' },
+                    { id: 'p2', label: 'Hasad / Dengki atas nikmat yang diperoleh orang lain' },
+                    { id: 'p3', label: 'Su\'udzon / Berburuk sangka tanpa bukti' },
+                    { id: 'p4', label: 'Takabbur / Merasa diri lebih mulia dari orang lain' }
+                ]
+            },
+            {
+                id: 'tangan',
+                title: 'Dosa Tangan',
+                icon: 'fa-hand',
+                items: [
+                    { id: 'tn1', label: 'Mengetik komentar jahat, toxic, atau fitnah di internet' },
+                    { id: 'tn2', label: 'Mengambil/menggunakan barang yang bukan haknya' },
+                    { id: 'tn3', label: 'Menyakiti atau memukul secara dhalim' }
+                ]
+            },
+            {
+                id: 'kemaluan',
+                title: 'Dosa Kemaluan',
+                icon: 'fa-user-shield',
+                items: [
+                    { id: 'k1', label: 'Mendekati zina (fathanah/kencan tak syar\'i/khalwat)' },
+                    { id: 'k2', label: 'Menonton atau mengonsumsi hal-hal yang membangkitkan syahwat haram' }
+                ]
+            },
+            {
+                id: 'kaki',
+                title: 'Dosa Kaki',
+                icon: 'fa-shoe-prints',
+                items: [
+                    { id: 'kk1', label: 'Melangkahkan kaki ke tempat yang dimurkai Allah (tempat maksiat)' },
+                    { id: 'kk2', label: 'Berjalan dengan sombong / angkuh di muka bumi' }
+                ]
+            }
+        ];
+
+        const DEFAULT_AMAL_SHOLEH = [
+            { id: 'a1', label: 'Shalat Berjamaah / Tepat Waktu', category: 'Ibadah' },
+            { id: 'a2', label: 'Membaca Al-Qur\'an (Minimal 1 Juz / 1 Maqra)', category: 'Ibadah' },
+            { id: 'a3', label: 'Shalat Sunnah Rawatib / Dhuha / Tahajud', category: 'Ibadah' },
+            { id: 'a4', label: 'Sedekah Subuh / Kebaikan Harian', category: 'Sosial' },
+            { id: 'a5', label: 'Membaca Dzikir Pagi & Petang', category: 'Ibadah' },
+            { id: 'a6', label: 'Menuntut Ilmu Agama (Kajian / Buku Syar\'i)', category: 'Ilmu' }
+        ];
+
+        const PRAYER_LIST = [
+            { id: 'subuh', name: 'Subuh', icon: 'fa-sun' },
+            { id: 'dzuhur', name: 'Dzuhur', icon: 'fa-sun' },
+            { id: 'ashar', name: 'Ashar', icon: 'fa-sun-plant-wilt' },
+            { id: 'maghrib', name: 'Maghrib', icon: 'fa-moon' },
+            { id: 'isya', name: 'Isya', icon: 'fa-star' }
+        ];
+
+        const DZIKIR_DATA = {
+            istighfar: { text: 'أَسْتَغْفِرُ اللَّهَ الْعَظِيمَ', target: 100 },
+            subhanallah: { text: 'سُبْحَانَ اللَّهِ وَبِحَمْدِهِ', target: 100 },
+            sholawat: { text: 'اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ', target: 100 },
+            hauqolah: { text: 'لا حَوْلَ وَلا قُوَّةَ إِلا بِاللَّهِ', target: 100 },
+            tahlil: { text: 'لا إِلَهَ إِلا اللَّهُ', target: 100 }
+        };
+
+        const QUOTES_ULAMA = [
+            { quote: "Sesungguhnya dunia ini pergi menjauh, dan akhirat datang mendekat. Masing-masing memiliki anak-anak. Jadilah anak-anak akhirat dan jangan jadi anak-anak dunia! Karena hari ini adalah beramal tanpa hisab, sedangkan besok adalah hisab tanpa amal.", author: "Ali bin Abi Thalib radhiyallahu 'anhu", category: "Hisab & Akhirat" },
+            { quote: "Wahai manusia, sesungguhnya engkau hanyalah kumpulan hari-hari. Setiap kali berlalu satu hari, maka berkuranglah sebagian dari dirimu.", author: "Hasan Al-Basri rahimahullah", category: "Umur Singkat" },
+            { quote: "Barangsiapa yang harinya sama dengan kemarin, maka ia rugi. Barangsiapa yang harinya lebih buruk dari kemarin, maka ia terlaknat.", author: "Nasihat Salafush Shalih", category: "Evaluasi Diri" },
+            { quote: "Dunia itu hanya tiga hari: Kemarin yang telah berlalu dan takkan kembali, Besok yang belum tentu engkau dapati, dan Hari ini tempat engkau beramal, maka manfaatkanlah!", author: "Imam Al-Ghazali rahimahullah", category: "Waktu" }
+        ];
+
+        let currentDateStr = new Date().toISOString().split('T')[0];
+        let appData = loadAppData();
+        let currentQuoteIndex = 0;
+        let sinChartInstance = null;
+        let isInitRegister = false;
+        let openAccordionState = {};
+
+        function loadAppData() {
+            const stored = localStorage.getItem('tazkiya_app_data');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    console.error('Error parsing stored data', e);
+                }
+            }
+            return {
+                currentUserEmail: '',
+                customAmal: [],
+                gdriveClientId: '',
+                dates: {}
+            };
+        }
+
+        function saveData() {
+            localStorage.setItem('tazkiya_app_data', JSON.stringify(appData));
+            updateDashboardIndexes();
+        }
+
+        function getTodayData() {
+            if (!appData.dates[currentDateStr]) {
+                appData.dates[currentDateStr] = {
+                    dosaChecked: {},
+                    amalChecked: {},
+                    shalatChecked: {},
+                    dzikirCounts: { istighfar: 0, subhanallah: 0, sholawat: 0, hauqolah: 0, tahlil: 0 }
+                };
+            }
+            return appData.dates[currentDateStr];
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active-tab', 'text-amber-300', 'bg-ocean-800/80');
+                btn.classList.add('text-ocean-200');
+            });
+
+            const activeContent = document.getElementById(tabId);
+            if (activeContent) activeContent.classList.remove('hidden');
+
+            const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('active-tab', 'text-amber-300', 'bg-ocean-800/80');
+                activeBtn.classList.remove('text-ocean-200');
+            }
+        }
+
+        function renderMuhasabahDosa() {
+            const container = document.getElementById('muhasabahContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const today = getTodayData();
+
+            DOSA_ANGGOTA_TUBUH.forEach(group => {
+                const groupEl = document.createElement('div');
+                groupEl.className = 'border border-slate-200/80 rounded-xl overflow-hidden bg-white';
+
+                let totalItems = group.items.length;
+                let terjagaCount = 0;
+                group.items.forEach(item => {
+                    if (today.dosaChecked[item.id]) {
+                        terjagaCount++;
+                    }
+                });
+
+                const isAllTerjaga = totalItems > 0 && terjagaCount === totalItems;
+                const isOpen = !!openAccordionState[group.id];
+
+                groupEl.innerHTML = `
+                    <button class="w-full p-3.5 text-left flex items-center justify-between bg-slate-50/70 hover:bg-slate-100/70 transition toggle-accordion" data-target="${group.id}">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-lg ${isAllTerjaga ? 'bg-ocean-100 text-ocean-800' : 'bg-slate-200 text-slate-700'} flex items-center justify-center text-sm">
+                                <i class="fa-solid ${group.icon}"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-sm font-bold text-slate-800">${group.title}</h3>
+                                <p class="text-[11px] text-slate-500" id="accordion-count-${group.id}">${terjagaCount}/${totalItems} Terjaga dari Hilaf</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="text-[10px] font-semibold px-2 py-0.5 rounded-full ${isAllTerjaga ? 'bg-ocean-100 text-ocean-800' : 'bg-amber-100 text-amber-800'}">
+                                ${isAllTerjaga ? 'Bersih' : 'Perlu Dijaga'}
+                            </span>
+                            <i class="fa-solid fa-chevron-down text-xs text-slate-400 transition-transform transform ${isOpen ? 'rotate-180' : ''}"></i>
+                        </div>
+                    </button>
+                    
+                    <div id="group-${group.id}" class="${isOpen ? '' : 'hidden'} p-3 border-t border-slate-100 space-y-2 bg-white">
+                        ${group.items.map(item => {
+                            const isChecked = !!today.dosaChecked[item.id];
+                            return `
+                                <label class="flex items-start space-x-3 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs">
+                                    <input type="checkbox" class="dosa-checkbox mt-0.5 rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4 cursor-pointer" data-id="${item.id}" data-group="${group.id}" ${isChecked ? 'checked' : ''}>
+                                    <span class="${isChecked ? 'text-slate-800 font-medium' : 'text-slate-600'} leading-relaxed">
+                                        ${item.label}
+                                    </span>
+                                </label>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+
+                container.appendChild(groupEl);
+            });
+
+            document.querySelectorAll('.toggle-accordion').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const targetId = btn.getAttribute('data-target');
+                    const targetEl = document.getElementById(`group-${targetId}`);
+                    const icon = btn.querySelector('.fa-chevron-down');
+                    
+                    if (targetEl.classList.contains('hidden')) {
+                        targetEl.classList.remove('hidden');
+                        icon?.classList.add('rotate-180');
+                        openAccordionState[targetId] = true;
+                    } else {
+                        targetEl.classList.add('hidden');
+                        icon?.classList.remove('rotate-180');
+                        openAccordionState[targetId] = false;
+                    }
+                });
+            });
+
+            document.querySelectorAll('.dosa-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    today.dosaChecked[id] = e.target.checked;
+                    saveData();
+                    updateDashboardIndexes();
+                });
+            });
+        }
+
+        function renderAmalSholeh() {
+            const container = document.getElementById('amalSholehContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const today = getTodayData();
+            const allAmal = [...DEFAULT_AMAL_SHOLEH, ...appData.customAmal];
+
+            allAmal.forEach(amal => {
+                const isChecked = !!today.amalChecked[amal.id];
+                const itemEl = document.createElement('div');
+                itemEl.className = `p-3 rounded-xl border transition flex items-center justify-between ${isChecked ? 'bg-ocean-50/60 border-ocean-200' : 'bg-white border-slate-200/80'}`;
+
+                itemEl.innerHTML = `
+                    <label class="flex items-center space-x-3 cursor-pointer w-full">
+                        <input type="checkbox" class="amal-checkbox rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4 cursor-pointer" data-id="${amal.id}" ${isChecked ? 'checked' : ''}>
+                        <div class="flex-grow">
+                            <span class="text-xs font-semibold ${isChecked ? 'text-ocean-900 line-through' : 'text-slate-800'}">
+                                ${amal.label}
+                            </span>
+                            <span class="ml-2 text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">
+                                ${amal.category}
+                            </span>
+                        </div>
+                    </label>
+                `;
+
+                container.appendChild(itemEl);
+            });
+
+            document.querySelectorAll('.amal-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    today.amalChecked[id] = e.target.checked;
+                    saveData();
+                    renderAmalSholeh();
+                });
+            });
+        }
+
+        function renderShalatTracker() {
+            const container = document.getElementById('prayerContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            const today = getTodayData();
+
+            PRAYER_LIST.forEach(prayer => {
+                const isChecked = !!today.shalatChecked[prayer.id];
+                const itemEl = document.createElement('div');
+                itemEl.className = `flex items-center justify-between p-2.5 rounded-xl border ${isChecked ? 'bg-ocean-50/80 border-ocean-200' : 'bg-slate-50/50 border-slate-200/60'}`;
+
+                itemEl.innerHTML = `
+                    <div class="flex items-center space-x-2.5">
+                        <div class="w-7 h-7 rounded-lg ${isChecked ? 'bg-ocean-600 text-white' : 'bg-slate-200 text-slate-600'} flex items-center justify-center text-xs">
+                            <i class="fa-solid ${prayer.icon}"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-800">${prayer.name}</span>
+                    </div>
+                    <input type="checkbox" class="shalat-checkbox rounded text-ocean-600 focus:ring-ocean-500 w-4 h-4 cursor-pointer" data-id="${prayer.id}" ${isChecked ? 'checked' : ''}>
+                `;
+
+                container.appendChild(itemEl);
+            });
+
+            document.querySelectorAll('.shalat-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const id = e.target.getAttribute('data-id');
+                    today.shalatChecked[id] = e.target.checked;
+                    saveData();
+                    renderShalatTracker();
+                });
+            });
+        }
+
+        function renderQuote() {
+            const quote = QUOTES_ULAMA[currentQuoteIndex];
+            const qText = document.getElementById('quoteText');
+            const qAuthor = document.getElementById('quoteAuthor');
+            const qCategory = document.getElementById('quoteCategory');
+            if (qText) qText.innerText = `"${quote.quote}"`;
+            if (qAuthor) qAuthor.innerText = `— ${quote.author}`;
+            if (qCategory) qCategory.innerText = quote.category;
+        }
+
+        function updateDashboardIndexes() {
+            const today = getTodayData();
+
+            let totalDosaItems = 0;
+            let terjagaCount = 0;
+            DOSA_ANGGOTA_TUBUH.forEach(g => {
+                g.items.forEach(i => {
+                    totalDosaItems++;
+                    if (today.dosaChecked[i.id]) terjagaCount++;
+                });
+            });
+            const dosaPct = Math.round((terjagaCount / totalDosaItems) * 100);
+            const dosaIndexEl = document.getElementById('summaryDosaIndex');
+            if (dosaIndexEl) dosaIndexEl.innerText = `${dosaPct}%`;
+
+            renderSinChart(today, totalDosaItems, terjagaCount);
+
+            const allAmal = [...DEFAULT_AMAL_SHOLEH, ...appData.customAmal];
+            let doneAmal = 0;
+            allAmal.forEach(a => {
+                if (today.amalChecked[a.id]) doneAmal++;
+            });
+            const amalPct = allAmal.length > 0 ? Math.round((doneAmal / allAmal.length) * 100) : 0;
+            const amalIndexEl = document.getElementById('summaryAmalIndex');
+            if (amalIndexEl) amalIndexEl.innerText = `${amalPct}%`;
+
+            let shalatDone = 0;
+            PRAYER_LIST.forEach(p => {
+                if (today.shalatChecked[p.id]) shalatDone++;
+            });
+            const shalatCountEl = document.getElementById('summaryShalatCount');
+            if (shalatCountEl) shalatCountEl.innerText = `${shalatDone}/5`;
+        }
+
+        function renderSinChart(today, totalDosaItems, totalTerjagaCount) {
+            const chartCanvas = document.getElementById('sinDistributionChart');
+            const metricsContainer = document.getElementById('chartMetricsContainer');
+            if (!chartCanvas || !metricsContainer) return;
+
+            const labels = [];
+            const sinCounts = [];
+            const backgroundColors = [
+                '#059669', '#3b82f6', '#f59e0b', '#8b5cf6', 
+                '#ec4899', '#ef4444', '#14b8a6'
+            ];
+
+            metricsContainer.innerHTML = '';
+            let totalSinsCommitted = 0;
+
+            DOSA_ANGGOTA_TUBUH.forEach((group) => {
+                labels.push(group.title);
+                let unguardedCount = 0;
+                group.items.forEach(item => {
+                    if (!today.dosaChecked[item.id]) {
+                        unguardedCount++;
+                    }
+                });
+                sinCounts.push(unguardedCount);
+                totalSinsCommitted += unguardedCount;
+
+                const isClean = unguardedCount === 0;
+                const metricPill = document.createElement('div');
+                metricPill.className = `p-2 rounded-lg border flex items-center justify-between ${isClean ? 'bg-ocean-50/70 border-ocean-200 text-ocean-900' : 'bg-red-50/70 border-red-200 text-red-900'}`;
+                metricPill.innerHTML = `
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid ${group.icon} text-xs"></i>
+                        <span class="font-semibold text-[11px]">${group.title}</span>
+                    </div>
+                    <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${isClean ? 'bg-ocean-200/60 text-ocean-800' : 'bg-red-200/60 text-red-800'}">
+                        ${isClean ? 'Terjaga' : unguardedCount + ' Khilaf'}
+                    </span>
+                `;
+                metricsContainer.appendChild(metricPill);
+            });
+
+            const purityPct = Math.round((totalTerjagaCount / totalDosaItems) * 100);
+            const badgeEl = document.getElementById('purityStatusBadge');
+            if (badgeEl) {
+                badgeEl.innerText = `Tingkat Perjagaan: ${purityPct}% (${purityPct >= 80 ? 'Sangat Baik' : purityPct >= 50 ? 'Cukup Waspada' : 'Perlu Taubat'})`;
+                badgeEl.className = `text-xs font-bold px-3 py-1 rounded-full border ${
+                    purityPct >= 80 ? 'bg-ocean-100 text-ocean-800 border-ocean-200' : 
+                    purityPct >= 50 ? 'bg-amber-100 text-amber-800 border-amber-200' : 
+                    'bg-red-100 text-red-800 border-red-200'
+                }`;
+            }
+
+            const ctx = chartCanvas.getContext('2d');
+            const chartDataValues = totalSinsCommitted === 0 ? [1] : sinCounts;
+            const chartLabels = totalSinsCommitted === 0 ? ['Bersih Sepenuhnya'] : labels;
+            const chartColors = totalSinsCommitted === 0 ? ['#059669'] : backgroundColors;
+
+            if (sinChartInstance) {
+                sinChartInstance.data.labels = chartLabels;
+                sinChartInstance.data.datasets[0].data = chartDataValues;
+                sinChartInstance.data.datasets[0].backgroundColor = chartColors;
+                sinChartInstance.update();
+            } else {
+                sinChartInstance = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            data: chartDataValues,
+                            backgroundColor: chartColors,
+                            borderWidth: 2,
+                            borderColor: '#ffffff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        if (totalSinsCommitted === 0) {
+                                            return ' Alhamdulillah, semua 7 anggota tubuh terjaga';
+                                        }
+                                        return ` ${context.label}: ${context.raw} catatan khilaf`;
+                                    }
+                                }
+                            }
+                        },
+                        cutout: '68%'
+                    }
+                });
+            }
+        }
+
+        function updateDzikirUI() {
+            const selectEl = document.getElementById('dzikirSelect');
+            if (!selectEl) return;
+            const selectedKey = selectEl.value;
+            const data = DZIKIR_DATA[selectedKey];
+            const today = getTodayData();
+
+            const arabicEl = document.getElementById('dzikirArabicText');
+            const targetEl = document.getElementById('dzikirTargetDisplay');
+            const counterEl = document.getElementById('dzikirCounterDisplay');
+
+            if (arabicEl) arabicEl.innerText = data.text;
+            if (targetEl) targetEl.innerText = data.target;
+
+            const currentCount = today.dzikirCounts[selectedKey] || 0;
+            if (counterEl) counterEl.innerText = currentCount;
+        }
+
+        function initApp() {
+            const datePicker = document.getElementById('datePicker');
+            if (datePicker) {
+                datePicker.value = currentDateStr;
+                datePicker.addEventListener('change', (e) => {
+                    currentDateStr = e.target.value;
+                    updateAllViews();
+                });
+            }
+
+            document.getElementById('prevDateBtn')?.addEventListener('click', () => {
+                const d = new Date(currentDateStr);
+                d.setDate(d.getDate() - 1);
+                currentDateStr = d.toISOString().split('T')[0];
+                if (datePicker) datePicker.value = currentDateStr;
+                updateAllViews();
+            });
+
+            document.getElementById('nextDateBtn')?.addEventListener('click', () => {
+                const d = new Date(currentDateStr);
+                d.setDate(d.getDate() + 1);
+                currentDateStr = d.toISOString().split('T')[0];
+                if (datePicker) datePicker.value = currentDateStr;
+                updateAllViews();
+            });
+
+            document.getElementById('todayBtn')?.addEventListener('click', () => {
+                currentDateStr = new Date().toISOString().split('T')[0];
+                if (datePicker) datePicker.value = currentDateStr;
+                updateAllViews();
+            });
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const tabId = btn.getAttribute('data-tab');
+                    switchTab(tabId);
+                });
+            });
+
+            document.getElementById('nextQuoteBtn')?.addEventListener('click', () => {
+                currentQuoteIndex = (currentQuoteIndex + 1) % QUOTES_ULAMA.length;
+                renderQuote();
+            });
+
+            document.getElementById('dzikirSelect')?.addEventListener('change', updateDzikirUI);
+
+            document.getElementById('dzikirTapBtn')?.addEventListener('click', () => {
+                const selectedKey = document.getElementById('dzikirSelect')?.value;
+                if (!selectedKey) return;
+                const today = getTodayData();
+                today.dzikirCounts[selectedKey] = (today.dzikirCounts[selectedKey] || 0) + 1;
+                saveData();
+                updateDzikirUI();
+            });
+
+            document.getElementById('resetDzikirBtn')?.addEventListener('click', () => {
+                const selectedKey = document.getElementById('dzikirSelect')?.value;
+                if (!selectedKey) return;
+                const today = getTodayData();
+                today.dzikirCounts[selectedKey] = 0;
+                saveData();
+                updateDzikirUI();
+            });
+
+            const gdriveModal = document.getElementById('gdriveModal');
+            document.getElementById('openGdriveModal')?.addEventListener('click', () => {
+                const input = document.getElementById('gdriveClientIdInput');
+                if (input) input.value = appData.gdriveClientId || '';
+                gdriveModal?.classList.remove('hidden');
+            });
+
+            document.getElementById('closeGdriveModal')?.addEventListener('click', () => {
+                gdriveModal?.classList.add('hidden');
+            });
+
+            document.getElementById('saveGdriveConfigBtn')?.addEventListener('click', () => {
+                const input = document.getElementById('gdriveClientIdInput');
+                if (input) {
+                    appData.gdriveClientId = input.value.trim();
+                    saveData();
+                }
+                gdriveModal?.classList.add('hidden');
+                alert('Konfigurasi Google Drive berhasil disimpan!');
+            });
+
+            document.getElementById('syncNowBtn')?.addEventListener('click', () => {
+                saveData();
+                alert('Data berhasil disimpan secara lokal di browser Anda!');
+                gdriveModal?.classList.add('hidden');
+            });
+
+            const amalModal = document.getElementById('amalModal');
+            document.getElementById('addCustomAmalBtn')?.addEventListener('click', () => {
+                amalModal?.classList.remove('hidden');
+            });
+            document.getElementById('closeAmalModal')?.addEventListener('click', () => {
+                amalModal?.classList.add('hidden');
+            });
+
+            document.getElementById('saveNewAmalBtn')?.addEventListener('click', () => {
+                const titleInput = document.getElementById('newAmalTitle');
+                const categoryInput = document.getElementById('newAmalCategory');
+                const title = titleInput ? titleInput.value.trim() : '';
+                const category = categoryInput ? categoryInput.value : 'Ibadah';
+
+                if (title) {
+                    appData.customAmal.push({
+                        id: 'custom_' + Date.now(),
+                        label: title,
+                        category: category
+                    });
+                    saveData();
+                    renderAmalSholeh();
+                    if (titleInput) titleInput.value = '';
+                    amalModal?.classList.add('hidden');
+                }
+            });
+
+            updateAllViews();
+        }
+
+        function updateAllViews() {
+            renderMuhasabahDosa();
+            renderAmalSholeh();
+            renderShalatTracker();
+            renderQuote();
+            updateDzikirUI();
+            updateDashboardIndexes();
+        }
+
+        function toggleInitAuthMode() {
+            isInitRegister = !isInitRegister;
+            const btnText = document.getElementById('initAuthBtnText');
+            const toggleText = document.getElementById('toggleInitAuthText');
+            if (btnText) btnText.innerText = isInitRegister ? 'Daftar Akun Baru' : 'Masuk ke Aplikasi';
+            if (toggleText) toggleText.innerText = isInitRegister ? 'Masuk Saja' : 'Daftar Akun Baru';
+        }
+
+        function handleInitialAuth(e) {
+            e.preventDefault();
+            const input = document.getElementById('initEmailInput');
+            const email = input ? input.value : 'User';
+            appData.currentUserEmail = email;
+            saveData();
+            showMainApp(email);
+        }
+
+        function showMainApp(userDisplay) {
+            document.getElementById('loginScreen')?.classList.add('hidden');
+            document.getElementById('mainAppWrapper')?.classList.remove('hidden');
+            const userStatus = document.getElementById('userAuthStatusText');
+            if (userStatus) userStatus.innerText = userDisplay.split('@')[0];
+            switchTab('homeTab');
+        }
+
+        function logoutUser() {
+            appData.currentUserEmail = '';
+            saveData();
+            document.getElementById('mainAppWrapper')?.classList.add('hidden');
+            document.getElementById('loginScreen')?.classList.remove('hidden');
+        }
+
+        window.onload = function() {
+            initApp();
+            if (appData.currentUserEmail) {
+                showMainApp(appData.currentUserEmail);
+            }
+        };
+    </script>
+</body>
+</html>
