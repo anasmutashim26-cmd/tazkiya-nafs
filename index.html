@@ -23,20 +23,23 @@
             theme: {
                 extend: {
                     colors: {
-                        emerald: {
-                            950: '#021e17',
-                            900: '#042f2e',
-                            800: '#064e3b',
-                            700: '#047857',
-                            500: '#10b981',
-                            400: '#34d399',
+                        navy: {
+                            950: '#020b18',
+                            900: '#061730',
+                            800: '#0c264d',
+                            700: '#13396e',
+                            600: '#1c4f94',
+                            500: '#2563eb',
+                        },
+                        cyan: {
+                            400: '#22d3ee',
+                            300: '#67e8f9',
                         },
                         gold: {
                             300: '#fde047',
                             400: '#facc15',
                             500: '#eab308',
                             600: '#ca8a04',
-                            700: '#a16207',
                         }
                     },
                     fontFamily: {
@@ -44,10 +47,11 @@
                         arabic: ['Amiri', 'serif'],
                     },
                     boxShadow: {
-                        '3d-glow': '0 10px 30px -10px rgba(16, 185, 129, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2)',
+                        '3d-glow': '0 10px 30px -10px rgba(37, 99, 235, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.25)',
+                        'cyan-glow': '0 10px 25px -5px rgba(34, 211, 238, 0.35), 0 0 15px rgba(34, 211, 238, 0.2)',
                         'gold-glow': '0 10px 25px -5px rgba(234, 179, 8, 0.3), 0 0 15px rgba(234, 179, 8, 0.2)',
-                        'inner-glass': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.08)',
-                        'card-depth': '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)'
+                        'inner-glass': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.1)',
+                        'card-depth': '0 20px 30px -5px rgba(0, 5, 20, 0.7), 0 8px 12px -6px rgba(0, 0, 0, 0.6)'
                     }
                 }
             }
@@ -55,52 +59,52 @@
     </script>
 
     <style>
-        /* Custom Ambient Mesh Background */
+        /* Custom Ambient Deep Blue Mesh Background */
         body {
-            background-color: #02110d;
+            background-color: #020813;
             background-image: 
-                radial-gradient(at 0% 0%, rgba(6, 78, 59, 0.4) 0px, transparent 50%),
-                radial-gradient(at 100% 0%, rgba(202, 138, 4, 0.15) 0px, transparent 50%),
-                radial-gradient(at 50% 100%, rgba(2, 30, 23, 0.8) 0px, transparent 50%);
+                radial-gradient(at 0% 0%, rgba(12, 38, 77, 0.6) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(34, 211, 238, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(6, 23, 48, 0.9) 0px, transparent 50%);
             background-attachment: fixed;
-            color: #e2e8f0;
+            color: #ffffff;
             overflow-x: hidden;
         }
 
-        /* Glassmorphism Classes */
+        /* Glassmorphism Classes (Deep Blue Theme) */
         .glass-panel {
-            background: rgba(4, 47, 46, 0.35);
+            background: rgba(6, 23, 48, 0.55);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-top: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-top: 1px solid rgba(255, 255, 255, 0.22);
         }
 
         .glass-card {
-            background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(4, 47, 46, 0.2) 100%);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(52, 211, 153, 0.12);
+            background: linear-gradient(135deg, rgba(12, 38, 77, 0.5) 0%, rgba(6, 23, 48, 0.3) 100%);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(34, 211, 238, 0.15);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             transform-style: preserve-3d;
             perspective: 1000px;
         }
 
         .glass-card:hover {
-            border-color: rgba(250, 204, 21, 0.4);
-            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.2);
+            border-color: rgba(34, 211, 238, 0.5);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.7), 0 0 25px rgba(34, 211, 238, 0.25);
             transform: translateY(-4px) rotateX(2deg);
         }
 
-        /* Gold Gradient Text */
+        /* Gradient Texts */
         .text-gold-gradient {
-            background: linear-gradient(135deg, #fffbeb 0%, #facc15 50%, #ca8a04 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #facc15 50%, #ca8a04 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .text-emerald-gradient {
-            background: linear-gradient(135deg, #a7f3d0 0%, #34d399 50%, #059669 100%);
+        .text-cyan-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #67e8f9 50%, #2563eb 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -110,14 +114,14 @@
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #02110d;
+            background: #020813;
         }
         ::-webkit-scrollbar-thumb {
-            background: #064e3b;
+            background: #0c264d;
             border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #047857;
+            background: #13396e;
         }
 
         /* Floating 3D Animation */
@@ -130,8 +134,8 @@
         }
 
         @keyframes pulse-glow {
-            0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 15px rgba(16,185,129,0.4)); }
-            50% { opacity: 0.8; filter: drop-shadow(0 0 25px rgba(250,204,21,0.6)); }
+            0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 15px rgba(34,211,238,0.5)); }
+            50% { opacity: 0.9; filter: drop-shadow(0 0 25px rgba(250,204,21,0.7)); }
         }
         .pulse-heart {
             animation: pulse-glow 3s infinite ease-in-out;
@@ -143,60 +147,60 @@
             transform: scale(1);
         }
         .check-card input:checked ~ .card-bg {
-            background: linear-gradient(135deg, rgba(6, 78, 59, 0.8) 0%, rgba(16, 185, 129, 0.25) 100%);
-            border-color: rgba(52, 211, 153, 0.6);
+            background: linear-gradient(135deg, rgba(12, 38, 77, 0.85) 0%, rgba(34, 211, 238, 0.3) 100%);
+            border-color: rgba(34, 211, 238, 0.6);
         }
     </style>
 </head>
-<body class="min-h-screen font-sans pb-16 antialiased selection:bg-emerald-500 selection:text-white">
+<body class="min-h-screen font-sans pb-16 antialiased selection:bg-cyan-500 selection:text-white">
 
-    <!-- TOP DECORATIVE ambient lights -->
-    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-emerald-500/10 blur-[120px] pointer-events-none rounded-full z-0"></div>
-    <div class="fixed top-1/3 right-10 w-80 h-80 bg-gold-500/10 blur-[100px] pointer-events-none rounded-full z-0"></div>
+    <!-- TOP DECORATIVE ambient lights (Navy/Cyan Accent) -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-navy-600/20 blur-[130px] pointer-events-none rounded-full z-0"></div>
+    <div class="fixed top-1/3 right-10 w-80 h-80 bg-cyan-400/10 blur-[110px] pointer-events-none rounded-full z-0"></div>
 
     <!-- MAIN APP WRAPPER -->
     <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-6">
 
         <!-- HEADER & BRAND BAR -->
-        <header class="glass-panel rounded-3xl p-5 mb-8 shadow-card-depth flex flex-col md:flex-row justify-between items-center gap-4 border-b border-emerald-500/20">
+        <header class="glass-panel rounded-3xl p-5 mb-8 shadow-card-depth flex flex-col md:flex-row justify-between items-center gap-4 border-b border-cyan-400/20">
             <div class="flex items-center gap-4 cursor-pointer" onclick="showHome()">
                 <div class="relative group">
-                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-800 via-emerald-600 to-gold-400 p-[2px] shadow-3d-glow transform transition duration-500 group-hover:rotate-6">
-                        <div class="w-full h-full bg-emerald-950 rounded-[14px] flex items-center justify-center">
-                            <i data-lucide="sparkles" class="w-7 h-7 text-gold-400"></i>
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-navy-800 via-cyan-500 to-gold-400 p-[2px] shadow-3d-glow transform transition duration-500 group-hover:rotate-6">
+                        <div class="w-full h-full bg-navy-950 rounded-[14px] flex items-center justify-center">
+                            <i data-lucide="sparkles" class="w-7 h-7 text-cyan-300"></i>
                         </div>
                     </div>
                     <span class="absolute -bottom-1 -right-1 flex h-4 w-4">
-                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                      <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-emerald-950"></span>
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-4 w-4 bg-cyan-400 border-2 border-navy-950"></span>
                     </span>
                 </div>
                 <div>
                     <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                        TAZKIYA NAFS <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-400 border border-gold-500/30">v2.0 3D</span>
+                        TAZKIYA NAFS <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-400/30">3D BLUE</span>
                     </h1>
-                    <p class="text-xs sm:text-sm text-emerald-300/80 font-medium flex items-center gap-2 mt-0.5">
-                        <span>by</span>
+                    <p class="text-xs sm:text-sm text-cyan-200/80 font-medium flex items-center gap-2 mt-0.5">
+                        <span class="text-slate-300">by</span>
                         <a href="https://instagram.com/takutdosa.id" target="_blank" onclick="event.stopPropagation()" class="text-gold-400 hover:text-gold-300 font-bold underline decoration-gold-500/40 transition">@takutdosa.id</a>
-                        <span class="text-emerald-600">•</span>
-                        <span id="live-time" class="text-emerald-200">--:--:--</span>
+                        <span class="text-navy-700">•</span>
+                        <span id="live-time" class="text-white font-semibold">--:--:--</span>
                     </p>
                 </div>
             </div>
 
             <!-- Header Right Stats & Controls -->
             <div class="flex items-center gap-3 w-full md:w-auto justify-end">
-                <div class="glass-panel px-4 py-2 rounded-2xl flex items-center gap-2.5 border border-gold-500/30 bg-gold-500/5">
-                    <div class="w-8 h-8 rounded-xl bg-gold-500/20 flex items-center justify-center text-gold-400 animate-pulse">
+                <div class="glass-panel px-4 py-2 rounded-2xl flex items-center gap-2.5 border border-cyan-400/30 bg-cyan-500/10">
+                    <div class="w-8 h-8 rounded-xl bg-cyan-400/20 flex items-center justify-center text-gold-400 animate-pulse">
                         <i data-lucide="flame" class="w-5 h-5 fill-gold-400"></i>
                     </div>
                     <div>
-                        <div class="text-[10px] text-emerald-300 uppercase tracking-wider font-semibold">Streak Muhasabah</div>
-                        <div class="text-sm font-bold text-gold-300"><span id="streak-counter">0</span> Hari Beruntun</div>
+                        <div class="text-[10px] text-cyan-200 uppercase tracking-wider font-semibold">Streak Muhasabah</div>
+                        <div class="text-sm font-bold text-white"><span id="streak-counter">0</span> Hari Beruntun</div>
                     </div>
                 </div>
 
-                <button id="sound-btn" onclick="toggleSound()" class="glass-panel p-3 rounded-2xl text-emerald-300 hover:text-gold-400 hover:border-gold-500/40 transition flex items-center justify-center" title="Efek Suara">
+                <button id="sound-btn" onclick="toggleSound()" class="glass-panel p-3 rounded-2xl text-cyan-200 hover:text-gold-400 hover:border-gold-500/40 transition flex items-center justify-center" title="Efek Suara">
                     <i data-lucide="volume-2" id="sound-icon" class="w-5 h-5"></i>
                 </button>
             </div>
@@ -204,20 +208,20 @@
 
         <!-- DATE & HIJRI BAR -->
         <div class="flex flex-wrap items-center justify-between gap-3 mb-8 px-2">
-            <div class="flex items-center gap-2 text-sm text-emerald-200/90 font-medium">
-                <i data-lucide="calendar" class="w-4 h-4 text-gold-400"></i>
+            <div class="flex items-center gap-2 text-sm text-white font-medium">
+                <i data-lucide="calendar" class="w-4 h-4 text-cyan-400"></i>
                 <span id="gregorian-date">--</span>
-                <span class="text-emerald-600">|</span>
+                <span class="text-slate-500">|</span>
                 <span id="hijri-date" class="text-gold-300 font-arabic text-base">--</span>
             </div>
             <div class="flex items-center gap-3">
-                <div id="user-profile-badge" class="hidden text-xs bg-emerald-950/80 border border-emerald-600/40 px-3 py-1 rounded-full flex items-center gap-2">
-                    <i data-lucide="user" class="w-3.5 h-3.5 text-gold-400"></i>
-                    <span id="user-display-name" class="font-bold text-emerald-200">Hamba Allah</span>
+                <div id="user-profile-badge" class="hidden text-xs bg-navy-900/90 border border-cyan-500/40 px-3.5 py-1.5 rounded-full flex items-center gap-2">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-cyan-400"></i>
+                    <span id="user-display-name" class="font-bold text-white">Hamba Allah</span>
                     <button onclick="logoutUser()" class="text-rose-400 hover:text-rose-300 ml-1 font-bold underline" title="Keluar">Logout</button>
                 </div>
-                <div class="text-xs text-emerald-400/80 bg-emerald-900/40 border border-emerald-700/30 px-3 py-1 rounded-full flex items-center gap-1.5">
-                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                <div class="text-xs text-white bg-navy-900/60 border border-navy-700/60 px-3.5 py-1.5 rounded-full flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-cyan-400"></i>
                     Penyucian Jiwa Setiap Hari
                 </div>
             </div>
@@ -227,17 +231,17 @@
         <!-- VIEW 0: AUTENTIKASI (LOGIN & REGISTER LAYER) -->
         <!-- ========================================================= -->
         <div id="view-auth" class="max-w-md mx-auto my-8 transition-all duration-500">
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth border border-gold-500/30 relative overflow-hidden">
-                <div class="absolute -right-12 -top-12 w-40 h-40 bg-gold-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth border border-cyan-400/30 relative overflow-hidden">
+                <div class="absolute -right-12 -top-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
                 
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-800 via-emerald-600 to-gold-400 p-[2px] shadow-3d-glow mx-auto mb-3">
-                        <div class="w-full h-full bg-emerald-950 rounded-[14px] flex items-center justify-center">
-                            <i data-lucide="lock" class="w-8 h-8 text-gold-400"></i>
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-navy-800 via-navy-600 to-cyan-400 p-[2px] shadow-3d-glow mx-auto mb-3">
+                        <div class="w-full h-full bg-navy-950 rounded-[14px] flex items-center justify-center">
+                            <i data-lucide="lock" class="w-8 h-8 text-cyan-300"></i>
                         </div>
                     </div>
                     <h2 id="auth-title" class="text-2xl font-black text-white">Masuk ke Tazkiya Nafs</h2>
-                    <p id="auth-subtitle" class="text-xs text-emerald-200/70 mt-1">Masukkan email & kata sandi yang telah didaftarkan</p>
+                    <p id="auth-subtitle" class="text-xs text-slate-300 mt-1">Masukkan email & kata sandi yang telah didaftarkan</p>
                 </div>
 
                 <!-- ALERT NOTIFICATION -->
@@ -248,24 +252,24 @@
                 <!-- LOGIN FORM -->
                 <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
                     <div>
-                        <label class="block text-xs font-bold text-emerald-300 mb-1">Email</label>
+                        <label class="block text-xs font-bold text-white mb-1">Email</label>
                         <div class="relative">
-                            <i data-lucide="mail" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
-                            <input type="email" id="login-email" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="nama@email.com">
+                            <i data-lucide="mail" class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3"></i>
+                            <input type="email" id="login-email" required class="w-full bg-navy-950/90 border border-navy-700/80 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition" placeholder="nama@email.com">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-emerald-300 mb-1">Kata Sandi</label>
+                        <label class="block text-xs font-bold text-white mb-1">Kata Sandi</label>
                         <div class="relative">
-                            <i data-lucide="key-round" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
-                            <input type="password" id="login-password" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="••••••••">
+                            <i data-lucide="key-round" class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3"></i>
+                            <input type="password" id="login-password" required class="w-full bg-navy-950/90 border border-navy-700/80 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition" placeholder="••••••••">
                         </div>
                     </div>
-                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-extrabold text-xs shadow-3d-glow transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-navy-700 via-navy-600 to-cyan-600 hover:from-navy-600 hover:to-cyan-500 text-white font-extrabold text-xs shadow-3d-glow transition transform active:scale-95 flex items-center justify-center gap-2 border border-cyan-400/40">
                         <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Sekarang
                     </button>
                     <div class="text-center pt-2">
-                        <span class="text-xs text-emerald-300/70">Belum punya akun? </span>
+                        <span class="text-xs text-slate-300">Belum punya akun? </span>
                         <button type="button" onclick="toggleAuthMode('register')" class="text-xs text-gold-400 font-bold hover:underline">Daftar Akun Baru</button>
                     </div>
                 </form>
@@ -273,31 +277,31 @@
                 <!-- REGISTER FORM -->
                 <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
                     <div>
-                        <label class="block text-xs font-bold text-emerald-300 mb-1">Nama Lengkap</label>
+                        <label class="block text-xs font-bold text-white mb-1">Nama Lengkap</label>
                         <div class="relative">
-                            <i data-lucide="user" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
-                            <input type="text" id="reg-name" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="Hamba Allah">
+                            <i data-lucide="user" class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3"></i>
+                            <input type="text" id="reg-name" required class="w-full bg-navy-950/90 border border-navy-700/80 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition" placeholder="Hamba Allah">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-emerald-300 mb-1">Email</label>
+                        <label class="block text-xs font-bold text-white mb-1">Email</label>
                         <div class="relative">
-                            <i data-lucide="mail" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
-                            <input type="email" id="reg-email" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="nama@email.com">
+                            <i data-lucide="mail" class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3"></i>
+                            <input type="email" id="reg-email" required class="w-full bg-navy-950/90 border border-navy-700/80 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition" placeholder="nama@email.com">
                         </div>
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-emerald-300 mb-1">Buat Kata Sandi</label>
+                        <label class="block text-xs font-bold text-white mb-1">Buat Kata Sandi</label>
                         <div class="relative">
-                            <i data-lucide="key-round" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
-                            <input type="password" id="reg-password" minlength="6" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="Minimal 6 karakter">
+                            <i data-lucide="key-round" class="w-4 h-4 text-cyan-400 absolute left-3.5 top-3"></i>
+                            <input type="password" id="reg-password" minlength="6" required class="w-full bg-navy-950/90 border border-navy-700/80 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition" placeholder="Minimal 6 karakter">
                         </div>
                     </div>
-                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-emerald-950 font-extrabold text-xs shadow-gold-glow transition transform active:scale-95 flex items-center justify-center gap-2">
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-navy-950 font-extrabold text-xs shadow-gold-glow transition transform active:scale-95 flex items-center justify-center gap-2">
                         <i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun & Mulai
                     </button>
                     <div class="text-center pt-2">
-                        <span class="text-xs text-emerald-300/70">Sudah punya akun? </span>
+                        <span class="text-xs text-slate-300">Sudah punya akun? </span>
                         <button type="button" onclick="toggleAuthMode('login')" class="text-xs text-gold-400 font-bold hover:underline">Masuk di sini</button>
                     </div>
                 </form>
@@ -316,10 +320,10 @@
                         <div class="w-12 h-12 rounded-2xl bg-rose-500/20 flex items-center justify-center text-rose-400 mb-4 group-hover:scale-110 transition">
                             <i data-lucide="shield-alert" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white group-hover:text-gold-300 transition mb-1">1. Muhasabah Dosa</h3>
-                        <p class="text-xs text-emerald-200/70 leading-relaxed">Evaluasi 9 anggota tubuh dari dosa mata, lisan, hati, pikiran, hingga langkah kaki.</p>
+                        <h3 class="text-xl font-bold text-white group-hover:text-cyan-300 transition mb-1">1. Muhasabah Dosa</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">Evaluasi 9 anggota tubuh dari dosa mata, lisan, hati, pikiran, hingga langkah kaki.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-rose-400">
+                    <div class="mt-6 pt-4 border-t border-navy-700/60 flex items-center justify-between text-xs font-bold text-rose-400">
                         <span>Mulai Evaluasi</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
                     </div>
@@ -332,24 +336,24 @@
                             <i data-lucide="scroll" class="w-6 h-6"></i>
                         </div>
                         <h3 class="text-xl font-bold text-white group-hover:text-gold-300 transition mb-1">2. Reminder & Nasehat</h3>
-                        <p class="text-xs text-emerald-200/70 leading-relaxed">Renungan usia singkat, ajal kematian, hisab berat, dahsyatnya neraka & nasehat ulama salaf.</p>
+                        <p class="text-xs text-slate-300 leading-relaxed">Renungan usia singkat, ajal kematian, hisab berat, dahsyatnya neraka & nasehat ulama salaf.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-gold-400">
+                    <div class="mt-6 pt-4 border-t border-navy-700/60 flex items-center justify-between text-xs font-bold text-gold-400">
                         <span>Baca Renungan</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
                     </div>
                 </div>
 
                 <!-- CARD 3: DOA & DZIKIR SUNNAH -->
-                <div onclick="openFeature('doa')" class="glass-card rounded-3xl p-6 cursor-pointer border border-emerald-500/30 hover:border-emerald-400 flex flex-col justify-between group">
+                <div onclick="openFeature('doa')" class="glass-card rounded-3xl p-6 cursor-pointer border border-cyan-400/30 hover:border-cyan-300 flex flex-col justify-between group">
                     <div>
-                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition">
+                        <div class="w-12 h-12 rounded-2xl bg-cyan-500/20 flex items-center justify-center text-cyan-300 mb-4 group-hover:scale-110 transition">
                             <i data-lucide="sparkles" class="w-6 h-6"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-white group-hover:text-gold-300 transition mb-1">3. Doa & Dzikir Sunnah</h3>
-                        <p class="text-xs text-emerald-200/70 leading-relaxed">Amalan doa pelebur dosa yang shahih beserta tasbih digital 3D interaktif.</p>
+                        <h3 class="text-xl font-bold text-white group-hover:text-cyan-300 transition mb-1">3. Doa & Dzikir Sunnah</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed">Amalan doa pelebur dosa yang shahih beserta tasbih digital 3D interaktif.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-emerald-400">
+                    <div class="mt-6 pt-4 border-t border-navy-700/60 flex items-center justify-between text-xs font-bold text-cyan-300">
                         <span>Buka Doa & Dzikir</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
                     </div>
@@ -361,30 +365,30 @@
         <!-- VIEW 2: MODUL MUHASABAH DOSA 9 ANGGOTA TUBUH -->
         <!-- ========================================================= -->
         <div id="view-muhasabah" class="hidden transition-all duration-500">
-            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-700/50 text-xs font-bold text-emerald-200 flex items-center gap-2 transition">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-navy-900/80 hover:bg-navy-800/90 border border-navy-700/60 text-xs font-bold text-white flex items-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-cyan-400"></i> Kembali ke Beranda
             </button>
 
             <!-- 3D QOLBU CONDITION & DOSA SUMMARY -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
                 <!-- LEFT COLUMN: 3D QOLBU STATUS METER -->
                 <div class="lg:col-span-5 flex flex-col justify-between glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth relative overflow-hidden">
-                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
                     <div class="flex justify-between items-center mb-4">
-                        <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-400">Monitoring Kondisi Qolbu</span>
-                        <span id="heart-status-badge" class="text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Qolbun Salim</span>
+                        <span class="text-xs font-extrabold uppercase tracking-widest text-cyan-400">Monitoring Kondisi Qolbu</span>
+                        <span id="heart-status-badge" class="text-xs px-3 py-1 rounded-full font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40">Qolbun Salim</span>
                     </div>
 
                     <!-- 3D Heart Progress Ring -->
                     <div class="my-6 flex flex-col items-center justify-center relative">
                         <div class="w-48 h-48 relative flex items-center justify-center">
                             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="42" stroke="rgba(6, 78, 59, 0.4)" stroke-width="8" fill="transparent" />
-                                <circle id="heart-progress-ring" cx="50" cy="50" r="42" stroke="url(#emerald-gold-grad)" stroke-width="8" stroke-linecap="round" class="transition-all duration-700 ease-out" fill="transparent" stroke-dasharray="263.89" stroke-dashoffset="0" />
+                                <circle cx="50" cy="50" r="42" stroke="rgba(12, 38, 77, 0.5)" stroke-width="8" fill="transparent" />
+                                <circle id="heart-progress-ring" cx="50" cy="50" r="42" stroke="url(#blue-cyan-grad)" stroke-width="8" stroke-linecap="round" class="transition-all duration-700 ease-out" fill="transparent" stroke-dasharray="263.89" stroke-dashoffset="0" />
                                 <defs>
-                                    <linearGradient id="emerald-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                        <stop offset="0%" stop-color="#10b981" />
+                                    <linearGradient id="blue-cyan-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#22d3ee" />
                                         <stop offset="50%" stop-color="#facc15" />
                                         <stop offset="100%" stop-color="#f43f5e" />
                                     </linearGradient>
@@ -392,19 +396,19 @@
                             </svg>
                             <div class="absolute inset-0 flex flex-col items-center justify-center">
                                 <div id="3d-heart-icon" class="pulse-heart transition-transform duration-500">
-                                    <i data-lucide="heart" class="w-16 h-16 text-emerald-400 fill-emerald-500/30 stroke-[1.5]"></i>
+                                    <i data-lucide="heart" class="w-16 h-16 text-cyan-400 fill-cyan-500/30 stroke-[1.5]"></i>
                                 </div>
                                 <span id="heart-score-percent" class="text-2xl font-black text-white mt-1">0 Dosa</span>
                             </div>
                         </div>
 
-                        <h3 id="heart-status-title" class="text-xl font-bold text-emerald-300 mt-2">Qolbun Salim</h3>
-                        <p id="heart-status-desc" class="text-xs text-emerald-200/70 mt-1 max-w-xs leading-relaxed">
+                        <h3 id="heart-status-title" class="text-xl font-bold text-white mt-2">Qolbun Salim</h3>
+                        <p id="heart-status-desc" class="text-xs text-slate-300 mt-1 max-w-xs leading-relaxed">
                             Tidak ada noda dosa terdeteksi hari ini. Jaga pandangan, lisan, dan hatimu!
                         </p>
 
-                        <div class="w-full bg-emerald-950/80 rounded-xl p-3 mt-5 border border-emerald-800/40 flex items-center justify-between text-xs">
-                            <span class="text-emerald-400 font-medium">Catatan Dosa Tercentang:</span>
+                        <div class="w-full bg-navy-950/80 rounded-xl p-3 mt-5 border border-navy-800/60 flex items-center justify-between text-xs">
+                            <span class="text-cyan-300 font-medium">Catatan Dosa Tercentang:</span>
                             <span class="font-bold text-rose-400" id="completed-count-text">0 Terdeteksi</span>
                         </div>
                     </div>
@@ -419,9 +423,9 @@
                                     <i data-lucide="shield-alert" class="w-5 h-5 text-rose-400"></i>
                                     Evaluasi Dosa 9 Anggota Tubuh
                                 </h2>
-                                <p class="text-xs text-emerald-300/70">Pilih kartu di bawah ini untuk memeriksa rincian dosa hari ini</p>
+                                <p class="text-xs text-slate-300">Pilih kartu di bawah ini untuk memeriksa rincian dosa hari ini</p>
                             </div>
-                            <button onclick="resetDosaChecklist()" class="text-xs text-rose-400 hover:text-rose-300 bg-rose-950/30 border border-rose-800/30 px-3 py-1.5 rounded-xl transition flex items-center gap-1">
+                            <button onclick="resetDosaChecklist()" class="text-xs text-rose-400 hover:text-rose-300 bg-rose-950/40 border border-rose-800/40 px-3 py-1.5 rounded-xl transition flex items-center gap-1 font-semibold">
                                 <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
                             </button>
                         </div>
@@ -440,10 +444,10 @@
                     <i data-lucide="pen-tool" class="w-5 h-5 text-gold-400"></i>
                     <h3 class="text-lg font-bold text-white">Jurnal Istighfar & Taubat Nasuha</h3>
                 </div>
-                <textarea id="journal-input" rows="3" class="w-full bg-emerald-950/80 border border-emerald-800/50 rounded-2xl p-4 text-sm text-emerald-100 placeholder-emerald-600/70 focus:outline-none focus:border-gold-500/60 transition resize-none" placeholder="Tuliskan penyesalan dosa, ikrar taubat, atau perbaikan diri yang ingin kamu lakukan hari ini..."></textarea>
+                <textarea id="journal-input" rows="3" class="w-full bg-navy-950/90 border border-navy-700/80 rounded-2xl p-4 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-cyan-400 transition resize-none" placeholder="Tuliskan penyesalan dosa, ikrar taubat, atau perbaikan diri yang ingin kamu lakukan hari ini..."></textarea>
                 <div class="flex justify-between items-center mt-3">
-                    <span id="journal-status" class="text-xs text-emerald-400 font-medium opacity-0 transition-opacity">Tersimpan otomatis!</span>
-                    <button onclick="saveJournal()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center gap-2">
+                    <span id="journal-status" class="text-xs text-cyan-300 font-medium opacity-0 transition-opacity">Tersimpan otomatis!</span>
+                    <button onclick="saveJournal()" class="px-5 py-2 rounded-xl bg-cyan-600 hover:bg-cyan-500 text-white font-bold text-xs transition flex items-center gap-2 shadow-cyan-glow">
                         <i data-lucide="save" class="w-4 h-4"></i> Simpan Taubat
                     </button>
                 </div>
@@ -460,19 +464,19 @@
         </div>
 
         <!-- MODAL POPUP FOR DOSA DETAIL LIST -->
-        <div id="dosa-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-all">
-            <div class="glass-panel max-w-2xl w-full rounded-3xl p-6 sm:p-8 max-h-[85vh] flex flex-col border border-gold-500/30 shadow-card-depth animate-float">
-                <div class="flex justify-between items-center pb-4 border-b border-emerald-800/50 mb-4">
+        <div id="dosa-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-navy-950/80 backdrop-blur-md hidden transition-all">
+            <div class="glass-panel max-w-2xl w-full rounded-3xl p-6 sm:p-8 max-h-[85vh] flex flex-col border border-cyan-400/30 shadow-card-depth animate-float">
+                <div class="flex justify-between items-center pb-4 border-b border-navy-700/60 mb-4">
                     <div class="flex items-center gap-3">
                         <div id="modal-icon-container" class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400 border border-rose-500/30">
                             <i data-lucide="eye" id="modal-icon" class="w-6 h-6"></i>
                         </div>
                         <div>
                             <h3 id="modal-title" class="text-xl font-bold text-white">Dosa Mata</h3>
-                            <p class="text-xs text-emerald-300/70">Periksa dan jujurlah pada diri sendiri</p>
+                            <p class="text-xs text-slate-300">Periksa dan jujurlah pada diri sendiri</p>
                         </div>
                     </div>
-                    <button onclick="closeDosaModal()" class="w-8 h-8 rounded-full bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 flex items-center justify-center transition">
+                    <button onclick="closeDosaModal()" class="w-8 h-8 rounded-full bg-navy-900/80 hover:bg-navy-800 text-white flex items-center justify-center transition">
                         <i data-lucide="x" class="w-5 h-5"></i>
                     </button>
                 </div>
@@ -481,8 +485,8 @@
                     <!-- Dynamic Checkboxes Injection -->
                 </div>
 
-                <div class="pt-4 border-t border-emerald-800/50 flex justify-end">
-                    <button onclick="closeDosaModal()" class="px-6 py-2.5 rounded-xl bg-gold-500 text-emerald-950 font-bold text-xs hover:bg-gold-400 transition">
+                <div class="pt-4 border-t border-navy-700/60 flex justify-end">
+                    <button onclick="closeDosaModal()" class="px-6 py-2.5 rounded-xl bg-gold-500 text-navy-950 font-bold text-xs hover:bg-gold-400 transition">
                         Selesai Evaluasi
                     </button>
                 </div>
@@ -493,8 +497,8 @@
         <!-- VIEW 3: MODUL REMINDER & NASEHAT ULAMA -->
         <!-- ========================================================= -->
         <div id="view-reminder" class="hidden transition-all duration-500">
-            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-700/50 text-xs font-bold text-emerald-200 flex items-center gap-2 transition">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-navy-900/80 hover:bg-navy-800/90 border border-navy-700/60 text-xs font-bold text-white flex items-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-cyan-400"></i> Kembali ke Beranda
             </button>
 
             <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth mb-8">
@@ -504,22 +508,22 @@
                             <i data-lucide="scroll" class="w-6 h-6 text-gold-400"></i>
                             Reminder Hakikat Kehidupan & Nasehat Ulama
                         </h2>
-                        <p class="text-xs text-emerald-300/70 mt-1">Renungan kematian, ajal singkat, azab Allah yang nyata, & perkataan Salafus Shalih</p>
+                        <p class="text-xs text-slate-300 mt-1">Renungan kematian, ajal singkat, azab Allah yang nyata, & perkataan Salafus Shalih</p>
                     </div>
                 </div>
 
                 <!-- CATEGORY TABS -->
-                <div class="flex gap-2 border-b border-emerald-800/40 pb-3 mb-6 overflow-x-auto no-scrollbar">
-                    <button onclick="switchReminderTab('ajal')" id="rtab-ajal" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-emerald-700/50 text-gold-300 border border-gold-500/30 whitespace-nowrap">
+                <div class="flex gap-2 border-b border-navy-700/60 pb-3 mb-6 overflow-x-auto no-scrollbar">
+                    <button onclick="switchReminderTab('ajal')" id="rtab-ajal" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-navy-700/60 text-gold-300 border border-gold-500/30 whitespace-nowrap">
                         <i data-lucide="clock" class="w-4 h-4"></i> Usia & Ajal Kematian
                     </button>
-                    <button onclick="switchReminderTab('dunia')" id="rtab-dunia" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap">
+                    <button onclick="switchReminderTab('dunia')" id="rtab-dunia" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-white hover:bg-navy-800/60 whitespace-nowrap">
                         <i data-lucide="globe" class="w-4 h-4"></i> Dunia Sementara & Akhirat
                     </button>
-                    <button onclick="switchReminderTab('hisab')" id="rtab-hisab" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap">
+                    <button onclick="switchReminderTab('hisab')" id="rtab-hisab" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-white hover:bg-navy-800/60 whitespace-nowrap">
                         <i data-lucide="flame" class="w-4 h-4"></i> Hisab & Dahsyatnya Neraka
                     </button>
-                    <button onclick="switchReminderTab('ulama')" id="rtab-ulama" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap">
+                    <button onclick="switchReminderTab('ulama')" id="rtab-ulama" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-white hover:bg-navy-800/60 whitespace-nowrap">
                         <i data-lucide="book-marked" class="w-4 h-4"></i> Nasehat Salafus Shalih
                     </button>
                 </div>
@@ -533,27 +537,27 @@
         <!-- VIEW 4: MODUL DOA PELEBUR DOSA & DZIKIR SUNNAH -->
         <!-- ========================================================= -->
         <div id="view-doa" class="hidden transition-all duration-500">
-            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-700/50 text-xs font-bold text-emerald-200 flex items-center gap-2 transition">
-                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-navy-900/80 hover:bg-navy-800/90 border border-navy-700/60 text-xs font-bold text-white flex items-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4 text-cyan-400"></i> Kembali ke Beranda
             </button>
 
             <!-- 3D TASBIH DIGITAL COUNTER CARD -->
-            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth mb-8 flex flex-col items-center text-center relative overflow-hidden border border-gold-500/20">
-                <div class="text-xs uppercase font-extrabold tracking-wider text-gold-400 mb-2">Tasbih & Dzikir Digital 3D</div>
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth mb-8 flex flex-col items-center text-center relative overflow-hidden border border-cyan-400/20">
+                <div class="text-xs uppercase font-extrabold tracking-wider text-cyan-400 mb-2">Tasbih & Dzikir Digital 3D</div>
                 <h3 id="current-dzikir-title" class="text-xl font-bold text-white mb-1">Sayyidul Istighfar / Dzikir Harian</h3>
                 <p id="current-dzikir-arabic" class="font-arabic text-2xl text-gold-300 my-2">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</p>
                 
                 <div class="my-6 relative flex items-center justify-center">
-                    <div class="w-40 h-40 rounded-full bg-gradient-to-tr from-emerald-900 via-emerald-800 to-gold-500/30 p-[3px] shadow-3d-glow">
-                        <button onclick="incrementTasbih()" class="w-full h-full rounded-full bg-emerald-950 flex flex-col items-center justify-center hover:bg-emerald-900/60 active:scale-95 transition duration-150">
+                    <div class="w-40 h-40 rounded-full bg-gradient-to-tr from-navy-900 via-navy-700 to-cyan-400/40 p-[3px] shadow-3d-glow">
+                        <button onclick="incrementTasbih()" class="w-full h-full rounded-full bg-navy-950 flex flex-col items-center justify-center hover:bg-navy-900/80 active:scale-95 transition duration-150">
                             <span id="tasbih-count" class="text-5xl font-black text-white">0</span>
-                            <span class="text-[10px] text-emerald-400 uppercase tracking-widest mt-1">Klik Dzikir</span>
+                            <span class="text-[10px] text-cyan-300 uppercase tracking-widest mt-1">Klik Dzikir</span>
                         </button>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-3">
-                    <button onclick="resetTasbih()" class="px-4 py-2 rounded-xl bg-rose-950/40 border border-rose-800/40 text-xs text-rose-300 font-bold hover:bg-rose-900/60 transition flex items-center gap-1.5">
+                    <button onclick="resetTasbih()" class="px-4 py-2 rounded-xl bg-rose-950/50 border border-rose-800/50 text-xs text-rose-200 font-bold hover:bg-rose-900/60 transition flex items-center gap-1.5">
                         <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset Count
                     </button>
                 </div>
@@ -562,18 +566,18 @@
             <!-- DOA PELEBUR DOSA SHAHIH LIST -->
             <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth mb-12">
                 <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
-                    <i data-lucide="sparkles" class="w-5 h-5 text-gold-400"></i>
+                    <i data-lucide="sparkles" class="w-5 h-5 text-cyan-400"></i>
                     Doa-Doa Shahih Penghapus Dosa
                 </h2>
-                <p class="text-xs text-emerald-300/70 mb-6">Lafadz doa dari Al-Qur'an & Hadits Shahih untuk memohon ampunan Allah</p>
+                <p class="text-xs text-slate-300 mb-6">Lafadz doa dari Al-Qur'an & Hadits Shahih untuk memohon ampunan Allah</p>
 
                 <div id="doa-list-container" class="space-y-6"></div>
             </div>
         </div>
 
         <!-- FOOTER BRANDING -->
-        <footer class="text-center pb-8 text-xs text-emerald-400/60">
-            <p class="mb-1">Aplikasi Tazkiya Nafs Web UI Redesign v2.0</p>
+        <footer class="text-center pb-8 text-xs text-slate-400">
+            <p class="mb-1">Aplikasi Tazkiya Nafs Web UI Redesign v2.0 (Deep Blue Edition)</p>
             <p>Inspirasi Konten Dakwah & Tazkiyatun Nafs oleh <a href="https://instagram.com/takutdosa.id" target="_blank" class="text-gold-400 hover:underline font-semibold">@takutdosa.id</a></p>
         </footer>
 
@@ -648,46 +652,106 @@
         const REMINDERS = {
             ajal: [
                 {
-                    title: "Ajal Datang Tiba-Tiba",
-                    quote: "Tiap-tiap yang berjiwa akan merasakan mati. Dan sesungguhnya pada hari kiamat sahajalah disempurnakan pahalamu.",
-                    ref: "QS. Ali 'Imran: 185",
-                    desc: "Tidak ada satu pun di antara kita yang mengetahui di detik mana nafas terakhir akan dihembuskan."
+                    title: "Ajal Datang Tiba-Tiba Tanpa Penundaan",
+                    quote: "Dan Allah sekali-kali tidak akan menangguhkan (kematian) seseorang apabila telah datang waktu kematiannya. Dan Allah Maha Mengenal apa yang kamu kerjakan.",
+                    ref: "QS. Al-Munafiqun: 11",
+                    desc: "Kematian tidak menunggu kamu siap, tidak menunggu kamu bertaubat. Persiapkan bekal sebelum kesempatan itu dicabut secara mendadak."
                 },
                 {
-                    title: "Perbanyak Mengingat Pemutus Kelezatan",
+                    title: "Mengingat Pemutus Kelezatan",
                     quote: "Perbanyaklah mengingat pemutus kelezatan, yaitu kematian.",
-                    ref: "HR. Tirmidzi no. 2307",
-                    desc: "Mengingat kematian menghancurkan kesombongan dan mendorong jiwa segera bertaubat."
+                    ref: "HR. Tirmidzi no. 2307 (Shahih)",
+                    desc: "Mengingat kematian menghancurkan kesombongan, melembutkan hati yang keras, dan mendorong jiwa untuk segera bertaubat."
+                },
+                {
+                    title: "Jangan Menunggu Pagi atau Sore",
+                    quote: "Jika engkau berada di sore hari, janganlah menunggu datangnya pagi. Dan jika engkau berada di pagi hari, janganlah menunggu datangnya sore. Manfaatkanlah masa sehatmu sebelum datang sakitmu, dan masa hidupmu sebelum datang matimu.",
+                    ref: "HR. Bukhari no. 6416 (Ibnu Umar RA)",
+                    desc: "Setiap detik yang berlalu dari umurmu tidak akan pernah kembali. Jangan menunda taubat karena merasa umur masih panjang."
+                },
+                {
+                    title: "Tiap Dzat Berjiwa Pasti Wafat",
+                    quote: "Tiap-tiap yang berjiwa akan merasakan mati. Dan sesungguhnya pada hari kiamat sahajalah disempurnakan pahalamu.",
+                    ref: "QS. Ali 'Imran: 185",
+                    desc: "Raja, rakyat biasa, kaya, maupun miskin semuanya akan masuk ke liang lahat yang sama berdindingkan tanah basah."
                 }
             ],
             dunia: [
                 {
-                    title: "Dunia Hanyalah Persinggahan",
-                    quote: "Jadilah engkau di dunia ini seakan-akan orang asing atau pengembara yang sekadar menyeberangi jalan.",
+                    title: "Perumpamaan Dunia vs Akhirat",
+                    quote: "Demi Allah, tidaklah dunia dibanding akhirat melainkan seperti salah seorang dari kalian mencelupkan jarinya ke dalam lautan, maka lihatlah apa yang tersisa di jarinya (air yang menempel).",
+                    ref: "HR. Muslim no. 2858",
+                    desc: "Betapa konyolnya orang yang mengorbankan lautan kenikmatan abadi di akhirat demi mengejar setetes air kelezatan semu di dunia."
+                },
+                {
+                    title: "Kehidupan Akhirat Itulah Kehidupan Sebenarnya",
+                    quote: "Dan kehidupan dunia ini tidak lain hanyalah kesenangan yang melalaikan dan permainan. Dan sesungguhnya negeri akhirat itulah kehidupan yang sebenarnya, sekiranya mereka mengetahui.",
+                    ref: "QS. Al-Ankabut: 64",
+                    desc: "Semua penderitaan dan kebahagiaan di dunia ini fana. Akhirat adalah tempat tinggal abadi tanpa ada akhir."
+                },
+                {
+                    title: "Orang Asing & Pengembara",
+                    quote: "Jadilah engkau di dunia ini seakan-akan orang asing atau seorang pengembara yang sekadar menyeberangi jalan.",
                     ref: "HR. Bukhari no. 6416",
-                    desc: "Harta dan jabatan yang dikejar tidak akan dibawa masuk ke dalam liang lahat."
+                    desc: "Seorang musafir tidak akan membangun istana permanen di tengah perjalanannya. Ia hanya fokus mengumpulkan bekal menuju tanah airnya."
+                },
+                {
+                    title: "Manusia Hanyalah Kumpulan Hari",
+                    quote: "Wahai anak Adam, sesungguhnya engkau hanyalah kumpulan hari. Setiap kali berlalu satu hari, maka berkuranglah sebagian dari dirimu.",
+                    ref: "Al-Hasan Al-Basri rahimahullah",
+                    desc: "Setiap terbit matahari, berkurang satu lembar dari jatah usiamu di dunia. Berapa banyak sisa usiamu yang belum terpakai?"
                 }
             ],
             hisab: [
                 {
-                    title: "Hisab yang Sangat Teliti",
+                    title: "Hisab yang Sangat Teliti & Sekecil Dzarrah",
                     quote: "Barangsiapa yang mengerjakan kebaikan seberat dzarrah pun, niscaya dia akan melihat (balasan)nya. Dan barangsiapa mengerjakan kejahatan sebesar dzarrah pun, niscaya dia akan melihatnya.",
                     ref: "QS. Az-Zalzalah: 7-8",
-                    desc: "Setiap pandangan, ketikan jari, dan detik waktu kita akan dihisab tanpa terkecuali."
+                    desc: "Setiap lirikan mata, ketikan jari, bisikan hati, dan kalimat lisan akan dibuka dalam kitab catatan di Hari Berbangkit."
                 },
                 {
-                    title: "Dahsyatnya Azab Neraka",
-                    quote: "Siksaan penduduk neraka yang paling ringan adalah seseorang yang diberi dua sandak dari api yang membuat otaknya mendidih.",
+                    title: "Dahsyatnya Panas Api Neraka",
+                    quote: "Api yang kalian nyalakan (di dunia) ini hanyalah satu dari 70 bagian panasnya api neraka Jahannam.",
+                    ref: "HR. Bukhari no. 3265 & Muslim no. 2843",
+                    desc: "Jika api dunia yang tampak ini mampu menghancurkan tulang dan daging dalam hitungan detik, bagaimana mungkin tubuh yang lemah ini tahan menghadapi api neraka Jahannam?"
+                },
+                {
+                    title: "Siksaan Neraka yang Paling Ringan",
+                    quote: "Sesungguhnya penduduk neraka yang paling ringan azabnya adalah seseorang yang dipasangkan dua sandel dari api yang membuat otaknya mendidih.",
                     ref: "HR. Bukhari no. 6561 & Muslim no. 213",
-                    desc: "Semoga Allah menyelamatkan kita dan keluarga kita dari siksa api neraka."
+                    desc: "Ini adalah azab bagi orang yang mendapat siksaan paling ringan. Bayangkan bagaimana dahsyatnya azab bagi para pelaku dosa besar yang enggan bertaubat!"
+                },
+                {
+                    title: "Guncangan Dahsyat Hari Kiamat",
+                    quote: "Wahai manusia, bertakwalah kepada Rabbmu; sesungguhnya guncangan hari kiamat itu adalah suatu kejadian yang sangat besar (dahsyat).",
+                    ref: "QS. Al-Hajj: 1-2",
+                    desc: "Pada hari itu, wanita yang menyusui akan melupakan anak susuannya dan setiap manusia terlihat mabuk padahal mereka tidak mabuk."
                 }
             ],
             ulama: [
                 {
+                    title: "Hari Beramal Tanpa Hisab vs Hari Hisab Tanpa Amal",
+                    quote: "Sesungguhnya hari ini adalah hari untuk beramal dan belum ada hisab, sedangkan besok (di akhirat) adalah hari hisab dan tidak ada lagi kesempatan beramal.",
+                    ref: "Ali bin Abi Thalib radhiyallahu 'anhu",
+                    desc: "Pergunakanlah sisa nafasmu hari ini untuk memohon ampun sebelum pintu amal ditutup selamanya."
+                },
+                {
                     title: "Evaluasi Diri Sebelum Dihisab",
-                    quote: "Hisablah diri kalian sebelum kalian dihisab, dan timbanglah amalan kalian sebelum ditimbang.",
+                    quote: "Hisablah diri kalian sebelum kalian dihisab, dan timbanglah amalan kalian sebelum ditimbang (di mizan). Hiasilah diri kalian untuk menghadapi persidangan yang besar.",
                     ref: "Umar bin Khattab radhiyallahu 'anhu",
-                    desc: "Orang yang cerdas adalah orang yang mengoreksi dirinya dan beramal untuk kehidupan setelah kematian."
+                    desc: "Mengoreksi dosa sendiri di dunia jauh lebih ringan daripada dipertontonkan aibnya di hadapan seluruh makhluk di Padang Mahsyar."
+                },
+                {
+                    title: "Tangisan Kerinduan & Ketakutan Ulama",
+                    quote: "Aku menangis bukan karena takut mati atau cinta dunia, tetapi karena sedikitnya bekal yang kupunya sedangkan perjalananku ke akhirat sangatlah jauh.",
+                    ref: "Sufyan Ats-Tsauri rahimahullah",
+                    desc: "Seorang ulama besar menangisi sedikitnya bekal akhiratnya, bagaimana dengan kita yang bergelimang dosa namun merasa aman dari siksa?"
+                },
+                {
+                    title: "Tanda Hati yang Mati",
+                    quote: "Di antara tanda matinya hati adalah tidak adanya rasa sedih ketika engkau melewatkan ketaatan dan tidak adanya rasa penyesalan atas dosa yang engkau lakukan.",
+                    ref: "Ibnu Ataillah rahimahullah",
+                    desc: "Waspadalah jika bermaksiat terasa biasa dan ibadah terasa berat, itu pertanda hati sedang diselimuti noda dosa."
                 }
             ]
         };
@@ -824,22 +888,22 @@
                 card.onclick = () => openDosaModal(key);
                 card.className = `glass-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between border transition-all duration-300 relative overflow-hidden group ${
                     checkedInCat > 0 
-                    ? 'border-rose-500/50 bg-rose-950/20' 
-                    : 'border-emerald-700/30 hover:border-gold-400/50'
+                    ? 'border-rose-500/50 bg-rose-950/30' 
+                    : 'border-navy-700/50 hover:border-cyan-400/60'
                 }`;
 
                 card.innerHTML = `
                     <div class="flex items-center justify-between mb-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-900/60 group-hover:bg-gold-500/20 flex items-center justify-center text-emerald-300 group-hover:text-gold-400 transition">
+                        <div class="w-10 h-10 rounded-xl bg-navy-900/80 group-hover:bg-cyan-500/20 flex items-center justify-center text-cyan-300 transition">
                             <i data-lucide="${cat.icon}" class="w-5 h-5"></i>
                         </div>
                         ${checkedInCat > 0 ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/30 text-rose-300 border border-rose-500/40">${checkedInCat} Dosa</span>` : ''}
                     </div>
                     <div>
-                        <h4 class="text-base font-bold text-white group-hover:text-gold-300 transition">${cat.title}</h4>
-                        <p class="text-[11px] text-emerald-200/60 line-clamp-2 mt-0.5 leading-snug">${cat.desc}</p>
+                        <h4 class="text-base font-bold text-white group-hover:text-cyan-300 transition">${cat.title}</h4>
+                        <p class="text-[11px] text-slate-300 line-clamp-2 mt-0.5 leading-snug">${cat.desc}</p>
                     </div>
-                    <div class="mt-3 pt-2 border-t border-emerald-800/40 flex items-center justify-between text-[11px] font-semibold text-emerald-400 group-hover:text-gold-400">
+                    <div class="mt-3 pt-2 border-t border-navy-700/60 flex items-center justify-between text-[11px] font-semibold text-cyan-400 group-hover:text-cyan-300">
                         <span>${cat.items.length} Rincian</span>
                         <i data-lucide="chevron-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition"></i>
                     </div>
@@ -869,17 +933,17 @@
                 card.className = `flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer select-none transition-all ${
                     isChecked 
                     ? 'bg-rose-950/40 border-rose-500/50 text-white' 
-                    : 'bg-emerald-950/40 border-emerald-800/30 text-emerald-100 hover:border-emerald-700/50'
+                    : 'bg-navy-950/60 border-navy-700/60 text-white hover:border-navy-600'
                 }`;
 
                 card.innerHTML = `
                     <input type="checkbox" class="hidden" onchange="toggleDosaItem('${item.id}')" ${isChecked ? 'checked' : ''}>
                     <div class="w-5 h-5 rounded border mt-0.5 flex items-center justify-center transition ${
-                        isChecked ? 'bg-rose-500 border-rose-400 text-white' : 'border-emerald-600 bg-emerald-950/80'
+                        isChecked ? 'bg-rose-500 border-rose-400 text-white' : 'border-navy-600 bg-navy-950'
                     }">
                         <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3] ${isChecked ? 'block' : 'hidden'}"></i>
                     </div>
-                    <span class="text-xs font-medium leading-relaxed ${isChecked ? 'text-rose-200 font-semibold' : ''}">${item.label}</span>
+                    <span class="text-xs font-medium leading-relaxed ${isChecked ? 'text-rose-200 font-semibold' : 'text-white'}">${item.label}</span>
                 `;
 
                 container.appendChild(card);
@@ -923,7 +987,6 @@
             document.getElementById('completed-count-text').innerText = `${totalCheckedDosa} Terdeteksi`;
 
             const ring = document.getElementById('heart-progress-ring');
-            // Progress ring fills as dosa increases
             const maxDosa = 40;
             const percentage = Math.min(100, Math.round((totalCheckedDosa / maxDosa) * 100));
             const offset = 263.89 - (263.89 * percentage) / 100;
@@ -936,11 +999,11 @@
 
             if (totalCheckedDosa === 0) {
                 badge.innerText = 'Qolbun Salim';
-                badge.className = 'text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+                badge.className = 'text-xs px-3 py-1 rounded-full font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40';
                 title.innerText = 'Hati Selamat & Bersih';
-                title.className = 'text-xl font-bold text-emerald-300 mt-2';
+                title.className = 'text-xl font-bold text-white mt-2';
                 desc.innerText = 'Alhamdulillah! Tidak ada noda dosa terdeteksi hari ini. Pertahankan ketakwaanmu!';
-                heartIcon.innerHTML = `<i data-lucide="heart" class="w-16 h-16 text-emerald-400 fill-emerald-500/50 stroke-[1.5]"></i>`;
+                heartIcon.innerHTML = `<i data-lucide="heart" class="w-16 h-16 text-cyan-400 fill-cyan-500/50 stroke-[1.5]"></i>`;
             } else if (totalCheckedDosa <= 3) {
                 badge.innerText = 'Noda Ringan';
                 badge.className = 'text-xs px-3 py-1 rounded-full font-bold bg-gold-500/20 text-gold-300 border border-gold-500/40';
@@ -995,7 +1058,7 @@
                     datasets: [{
                         label: 'Jumlah Dosa Terdeteksi',
                         data: dataPoints,
-                        backgroundColor: 'rgba(244, 63, 94, 0.7)',
+                        backgroundColor: 'rgba(244, 63, 94, 0.75)',
                         borderRadius: 10,
                     }]
                 },
@@ -1004,8 +1067,8 @@
                     maintainAspectRatio: false,
                     plugins: { legend: { display: false } },
                     scales: {
-                        y: { beginAtZero: true, ticks: { color: '#fda4af' } },
-                        x: { ticks: { color: '#a7f3d0' } }
+                        y: { beginAtZero: true, ticks: { color: '#ffffff' } },
+                        x: { ticks: { color: '#67e8f9' } }
                     }
                 }
             });
@@ -1331,9 +1394,9 @@
         function switchReminderTab(tab) {
             activeReminderTab = tab;
             document.querySelectorAll('.rem-tab').forEach(btn => {
-                btn.className = 'rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap';
+                btn.className = 'rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-white hover:bg-navy-800/60 whitespace-nowrap';
             });
-            document.getElementById(`rtab-${tab}`).className = 'rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-emerald-700/50 text-gold-300 border border-gold-500/30 whitespace-nowrap';
+            document.getElementById(`rtab-${tab}`).className = 'rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-navy-700/60 text-gold-300 border border-gold-500/30 whitespace-nowrap';
             renderReminders();
         }
 
@@ -1344,17 +1407,17 @@
             const list = REMINDERS[activeReminderTab] || [];
             list.forEach((item, index) => {
                 const card = document.createElement('div');
-                card.className = 'glass-panel p-6 rounded-2xl border border-emerald-700/40 flex flex-col justify-between';
+                card.className = 'glass-panel p-6 rounded-2xl border border-navy-700/60 flex flex-col justify-between';
                 
                 card.innerHTML = `
                     <div>
                         <h4 class="text-base font-bold text-gold-300 mb-2">${item.title}</h4>
-                        <p class="text-sm italic text-emerald-100 font-serif mb-3 leading-relaxed">"${item.quote}"</p>
-                        <span class="text-xs font-bold text-gold-400/90 block mb-4">— ${item.ref}</span>
-                        <p class="text-xs text-emerald-200/70 border-t border-emerald-800/40 pt-3">${item.desc}</p>
+                        <p class="text-sm italic text-white font-serif mb-3 leading-relaxed">"${item.quote}"</p>
+                        <span class="text-xs font-bold text-cyan-300/90 block mb-4">— ${item.ref}</span>
+                        <p class="text-xs text-slate-300 border-t border-navy-700/60 pt-3">${item.desc}</p>
                     </div>
                     <div class="mt-4 text-right">
-                        <button data-index="${index}" class="btn-copy-reminder text-xs text-emerald-300 hover:text-white bg-emerald-900/40 px-3 py-1.5 rounded-xl border border-emerald-700/40 transition">
+                        <button data-index="${index}" class="btn-copy-reminder text-xs text-cyan-300 hover:text-white bg-navy-900/60 px-3 py-1.5 rounded-xl border border-navy-700/60 transition font-semibold">
                             Copy Quote
                         </button>
                     </div>
@@ -1362,7 +1425,6 @@
                 container.appendChild(card);
             });
 
-            // Ganti inline onclick dengan event listener delegasi yang aman
             container.querySelectorAll('.btn-copy-reminder').forEach(button => {
                 button.addEventListener('click', function() {
                     const idx = this.getAttribute('data-index');
@@ -1374,29 +1436,6 @@
             });
         }
 
-        function copyReminderText(quoteText, refText) {
-            const text = `"${quoteText}" — ${refText} (via @takutdosa.id)`;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(text).then(() => {
-                    alert('Kutipan nasehat berhasil disalin!');
-                }).catch(() => {
-                    fallbackCopy(text);
-                });
-            } else {
-                fallbackCopy(text);
-            }
-        }
-
-        function fallbackCopy(text) {
-            const input = document.createElement('textarea');
-            input.value = text;
-            document.body.appendChild(input);
-            input.select();
-            document.execCommand('copy');
-            document.body.removeChild(input);
-            alert('Kutipan nasehat berhasil disalin!');
-        }
-
         // DOA & TASBIH LOGIC
         function renderDoaList() {
             const container = document.getElementById('doa-list-container');
@@ -1404,15 +1443,15 @@
 
             DOA_LIST.forEach(doa => {
                 const card = document.createElement('div');
-                card.className = 'glass-panel p-6 rounded-2xl border border-emerald-700/40';
+                card.className = 'glass-panel p-6 rounded-2xl border border-navy-700/60';
                 card.innerHTML = `
                     <div class="flex justify-between items-start gap-2 mb-3">
                         <h3 class="text-lg font-bold text-gold-300">${doa.title}</h3>
                         <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-gold-500/10 text-gold-400 border border-gold-500/20">${doa.ref}</span>
                     </div>
                     <p class="font-arabic text-2xl text-white text-right leading-loose mb-4">${doa.arabic}</p>
-                    <p class="text-xs italic text-emerald-200/90 mb-2">${doa.latin}</p>
-                    <p class="text-xs text-emerald-300/80 leading-relaxed">${doa.meaning}</p>
+                    <p class="text-xs italic text-cyan-300/90 mb-2">${doa.latin}</p>
+                    <p class="text-xs text-slate-300 leading-relaxed">${doa.meaning}</p>
                 `;
                 container.appendChild(card);
             });
