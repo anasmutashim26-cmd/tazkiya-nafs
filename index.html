@@ -1,537 +1,1218 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tazkiya Nafs - Muhasabah Planner by @takutdosa.id</title>
-    
+    <title>Tazkiya Nafs - @takutdosa.id</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons CDN -->
+    <!-- Google Fonts: Inter & Plus Jakarta Sans & Amiri for Arabic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts (Plus Jakarta Sans) -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <!-- Chart.js for History Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Canvas Confetti for Completion Celebration -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
                     colors: {
-                        ocean: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                            950: '#082f49',
+                        emerald: {
+                            950: '#021e17',
+                            900: '#042f2e',
+                            800: '#064e3b',
+                            700: '#047857',
+                            500: '#10b981',
+                            400: '#34d399',
+                        },
+                        gold: {
+                            300: '#fde047',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                            700: '#a16207',
                         }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                    },
+                    boxShadow: {
+                        '3d-glow': '0 10px 30px -10px rgba(16, 185, 129, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2)',
+                        'gold-glow': '0 10px 25px -5px rgba(234, 179, 8, 0.3), 0 0 15px rgba(234, 179, 8, 0.2)',
+                        'inner-glass': 'inset 0 2px 4px 0 rgba(255, 255, 255, 0.08)',
+                        'card-depth': '0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5)'
                     }
                 }
             }
         }
     </script>
-    
+
     <style>
+        /* Custom Ambient Mesh Background */
+        body {
+            background-color: #02110d;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(6, 78, 59, 0.4) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(202, 138, 4, 0.15) 0px, transparent 50%),
+                radial-gradient(at 50% 100%, rgba(2, 30, 23, 0.8) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Classes */
+        .glass-panel {
+            background: rgba(4, 47, 46, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.18);
+        }
+
         .glass-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: linear-gradient(135deg, rgba(6, 78, 59, 0.4) 0%, rgba(4, 47, 46, 0.2) 100%);
             backdrop-filter: blur(12px);
-            border: 1px solid rgba(224, 242, 254, 0.8);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(52, 211, 153, 0.12);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+            perspective: 1000px;
         }
-        .body-silhouette-container {
-            background: radial-gradient(circle at center, #0284c7 0%, #0369a1 50%, #075985 100%);
-            border-radius: 1.5rem;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.25), 0 10px 25px -5px rgba(14, 165, 233, 0.3);
+
+        .glass-card:hover {
+            border-color: rgba(250, 204, 21, 0.4);
+            box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.2);
+            transform: translateY(-4px) rotateX(2deg);
         }
-        .body-part-glow {
-            transition: all 0.4s ease;
-            fill: #38bdf8;
-            opacity: 0.85;
-            stroke: #e0f2fe;
-            stroke-width: 1.5;
-            filter: drop-shadow(0 0 4px #7dd3fc);
+
+        /* Gold Gradient Text */
+        .text-gold-gradient {
+            background: linear-gradient(135deg, #fffbeb 0%, #facc15 50%, #ca8a04 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .body-part-glow.has-sin {
-            fill: #ef4444 !important;
-            opacity: 0.95;
-            stroke: #fca5a5 !important;
-            filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.9)) !important;
+
+        .text-emerald-gradient {
+            background: linear-gradient(135deg, #a7f3d0 0%, #34d399 50%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #02110d;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #064e3b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #047857;
+        }
+
+        /* Floating 3D Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.4; filter: drop-shadow(0 0 15px rgba(16,185,129,0.4)); }
+            50% { opacity: 0.8; filter: drop-shadow(0 0 25px rgba(250,204,21,0.6)); }
+        }
+        .pulse-heart {
+            animation: pulse-glow 3s infinite ease-in-out;
+        }
+
+        /* Checkbox Custom Style */
+        .check-card input:checked ~ .check-icon {
+            opacity: 1;
+            transform: scale(1);
+        }
+        .check-card input:checked ~ .card-bg {
+            background: linear-gradient(135deg, rgba(6, 78, 59, 0.8) 0%, rgba(16, 185, 129, 0.25) 100%);
+            border-color: rgba(52, 211, 153, 0.6);
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-ocean-50 via-slate-50 to-ocean-100 min-h-screen font-sans text-slate-800 antialiased pb-12">
+<body class="min-h-screen font-sans pb-16 antialiased selection:bg-emerald-500 selection:text-white">
 
-    <!-- AUTHENTICATION CONTAINER (LOGIN / REGISTER) -->
-    <div id="authContainer" class="min-h-screen flex items-center justify-center p-4">
-        <div class="glass-card max-w-md w-full rounded-3xl p-8 shadow-2xl shadow-ocean-900/10 border border-ocean-100 relative overflow-hidden">
-            <!-- Header Logo -->
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-tr from-ocean-600 to-ocean-400 rounded-2xl text-white shadow-lg shadow-ocean-500/30 mb-3">
-                    <i data-lucide="heart-handshake" class="w-8 h-8"></i>
-                </div>
-                <h1 class="text-2xl font-extrabold tracking-wide text-ocean-950 flex items-center justify-center gap-2">
-                    <span>TAZKIYA NAFS</span>
-                    <span class="text-xs bg-ocean-100 text-ocean-800 font-semibold px-2.5 py-0.5 rounded-full border border-ocean-200">Planner</span>
-                </h1>
-                <p class="text-[11px] font-semibold text-ocean-600 tracking-wide mt-1">by @takutdosa.id</p>
-            </div>
+    <!-- TOP DECORATIVE ambient lights -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-emerald-500/10 blur-[120px] pointer-events-none rounded-full z-0"></div>
+    <div class="fixed top-1/3 right-10 w-80 h-80 bg-gold-500/10 blur-[100px] pointer-events-none rounded-full z-0"></div>
 
-            <!-- Notification Alert -->
-            <div id="authAlert" class="hidden mb-4 p-3 rounded-xl text-xs font-medium border"></div>
+    <!-- MAIN APP WRAPPER -->
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-6">
 
-            <!-- Login / Register Form -->
-            <form id="authForm" onsubmit="handleAuthSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Email</label>
-                    <div class="relative">
-                        <i data-lucide="mail" class="w-4 h-4 absolute left-3 top-3.5 text-slate-400"></i>
-                        <input type="email" id="authEmail" required placeholder="nama@email.com" 
-                            class="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-transparent transition">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Kata Sandi</label>
-                    <div class="relative">
-                        <i data-lucide="lock" class="w-4 h-4 absolute left-3 top-3.5 text-slate-400"></i>
-                        <input type="password" id="authPassword" required placeholder="••••••••" 
-                            class="w-full pl-9 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-ocean-500 focus:border-transparent transition">
-                    </div>
-                </div>
-
-                <button type="submit" id="authSubmitBtn"
-                    class="w-full py-3.5 bg-gradient-to-r from-ocean-600 to-ocean-500 hover:from-ocean-700 hover:to-ocean-600 text-white font-bold rounded-xl shadow-lg shadow-ocean-500/25 transition duration-200 text-sm">
-                    Masuk ke Aplikasi
-                </button>
-            </form>
-
-            <!-- Toggle Register/Login -->
-            <div class="mt-6 text-center">
-                <button type="button" onclick="toggleAuthMode()" id="toggleAuthBtn" class="text-xs font-semibold text-ocean-600 hover:text-ocean-800 transition">
-                    Belum punya akun? Daftar Akun Baru
-                </button>
-            </div>
-
-            <footer class="mt-8 text-center text-xs text-slate-400 font-medium">
-                <p>Tazkiya Nafs &bull; <span class="text-ocean-600 font-semibold">by @takutdosa.id</span></p>
-            </footer>
-        </div>
-    </div>
-
-    <!-- MAIN APPLICATION CONTAINER -->
-    <div id="mainAppContainer" class="hidden max-w-md mx-auto px-4 pt-4 pb-20">
-        
-        <!-- App Top Header -->
-        <header class="glass-card rounded-2xl p-4 mb-4 shadow-sm flex items-center justify-between border border-ocean-100">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 bg-ocean-600 text-white rounded-xl flex items-center justify-center font-bold text-lg shadow-md shadow-ocean-500/20">
-                    <i data-lucide="sparkles" class="w-5 h-5"></i>
-                </div>
-                <div>
-                    <h1 class="font-extrabold text-base leading-tight tracking-wide text-ocean-950 flex items-center gap-2">
-                        <span>TAZKIYA NAFS</span>
-                        <span class="text-[10px] bg-ocean-100 text-ocean-800 font-semibold px-2 py-0.5 rounded-full border border-ocean-200">Planner</span>
-                    </h1>
-                    <p class="text-[11px] font-semibold text-ocean-600">by @takutdosa.id</p>
-                </div>
-            </div>
-            
-            <button onclick="handleLogout()" class="w-9 h-9 flex items-center justify-center bg-slate-100 hover:bg-red-50 hover:text-red-600 text-slate-500 rounded-xl transition" title="Keluar">
-                <i data-lucide="log-out" class="w-4 h-4"></i>
-            </button>
-        </header>
-
-        <!-- Quote Card -->
-        <div class="bg-gradient-to-r from-ocean-900 to-ocean-800 rounded-2xl p-4 mb-5 text-white shadow-lg relative overflow-hidden">
-            <div class="absolute right-0 top-0 translate-x-4 -translate-y-4 opacity-10">
-                <i data-lucide="quote" class="w-24 h-24"></i>
-            </div>
-            <p id="quoteText" class="text-xs italic font-light leading-relaxed text-ocean-100 mb-2"></p>
-            <p id="quoteAuthor" class="text-[11px] font-bold text-ocean-300 uppercase tracking-wider text-right"></p>
-        </div>
-
-        <!-- Dynamic Body & Percentage Overview -->
-        <div class="glass-card rounded-2xl p-5 mb-5 shadow-sm text-center">
-            <div class="flex items-center justify-between mb-3 border-b border-slate-100 pb-2">
-                <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">Kebersihan Diri Harian</span>
-                <span id="purityBadge" class="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700">
-                    100% Suci
-                </span>
-            </div>
-
-            <!-- SVG Human Body Diagram (Stylized Glow Silhouette matching reference) -->
-            <div class="body-silhouette-container relative my-4 py-6 px-4 flex justify-center items-center overflow-hidden">
-                <svg width="180" height="310" viewBox="0 0 200 360" class="drop-shadow-2xl">
-                    <defs>
-                        <!-- Glow filter for cyan outline -->
-                        <filter id="cyanGlow" x="-20%" y="-20%" width="140%" height="140%">
-                            <feGaussianBlur stdDeviation="3" result="blur" />
-                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                        </filter>
-                    </defs>
-
-                    <g filter="url(#cyanGlow)">
-                        <!-- KEPALA & PIKIRAN -->
-                        <path id="part-kepala" class="body-part-glow" d="M 100,20 C 87,20 78,30 78,45 C 78,60 87,68 93,70 C 90,75 84,77 75,80 L 125,80 C 116,77 110,75 107,70 C 113,68 122,60 122,45 C 122,30 113,20 100,20 Z" />
-
-                        <!-- MATA -->
-                        <ellipse id="part-mata" class="body-part-glow" cx="92" cy="42" rx="3.5" ry="2" />
-                        <ellipse id="part-mata2" class="body-part-glow" cx="108" cy="42" rx="3.5" ry="2" />
-
-                        <!-- LISAN -->
-                        <path id="part-lisan" class="body-part-glow" d="M 94,56 Q 100,60 106,56" stroke-width="2" />
-
-                        <!-- DADA / HATI / TORSO -->
-                        <path id="part-hati" class="body-part-glow" d="M 75,82 L 125,82 C 136,95 142,120 138,155 C 135,170 125,185 125,190 L 75,190 C 75,185 65,170 62,155 C 58,120 64,95 75,82 Z" />
-
-                        <!-- TANGAN KIRI -->
-                        <path id="part-tangan-kiri" class="body-part-glow" d="M 73,84 C 65,95 55,120 48,150 C 44,170 41,190 38,208 C 36,218 30,225 32,232 C 34,235 41,232 44,222 C 48,208 55,185 60,165 C 64,150 67,135 73,115 Z" />
-
-                        <!-- TANGAN KANAN -->
-                        <path id="part-tangan-kanan" class="body-part-glow" d="M 127,84 C 135,95 145,120 152,150 C 156,170 159,190 162,208 C 164,218 170,225 168,232 C 166,235 159,232 156,222 C 152,208 145,185 140,165 C 136,150 133,135 127,115 Z" />
-
-                        <!-- KEMALUAN / PANGGUL -->
-                        <path id="part-kemaluan" class="body-part-glow" d="M 75,192 L 125,192 C 127,208 120,222 100,230 C 80,222 73,208 75,192 Z" />
-
-                        <!-- KAKI KIRI -->
-                        <path id="part-kaki-kiri" class="body-part-glow" d="M 76,220 C 75,240 73,275 75,310 C 76,325 72,335 68,342 C 65,346 72,348 83,348 C 88,348 88,342 87,335 C 87,315 89,275 96,230 Z" />
-
-                        <!-- KAKI KANAN -->
-                        <path id="part-kaki-kanan" class="body-part-glow" d="M 124,220 C 125,240 127,275 125,310 C 124,325 128,335 132,342 C 135,346 128,348 117,348 C 112,348 112,342 113,335 C 113,315 111,275 104,230 Z" />
-                    </g>
-                </svg>
-
-                <!-- Indicator Legend -->
-                <div class="absolute right-3 top-3 text-left text-[10px] space-y-1.5 bg-slate-900/60 p-2.5 rounded-xl border border-ocean-400/30 backdrop-blur-md text-white">
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-sky-400 shadow-sm shadow-sky-400"></span>
-                        <span class="text-sky-100">Terjaga</span>
-                    </div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="w-2.5 h-2.5 rounded-full bg-red-500 shadow-sm shadow-red-500"></span>
-                        <span class="text-red-300 font-bold">Ada Khilaf</span>
-                    </div>
-                </div>
-            </div>
-
-            <p class="text-xs text-slate-500 italic mt-1">
-                "Setiap kali dosa dicentang, bagian tubuh terkait akan memerah dan persentase kebersihan berkurang."
-            </p>
-        </div>
-
-        <!-- Section: Checklists -->
-        <div class="space-y-4">
-            
-            <!-- Muhasabah Dosa (Ceklist Dosa yang Dilakukan) -->
-            <div class="glass-card rounded-2xl p-5 shadow-sm">
-                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-lg bg-red-100 text-red-600 flex items-center justify-center font-bold text-xs">
-                            <i data-lucide="shield-alert" class="w-4 h-4"></i>
+        <!-- HEADER & BRAND BAR -->
+        <header class="glass-panel rounded-3xl p-5 mb-8 shadow-card-depth flex flex-col md:flex-row justify-between items-center gap-4 border-b border-emerald-500/20">
+            <div class="flex items-center gap-4 cursor-pointer" onclick="showHome()">
+                <div class="relative group">
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-tr from-emerald-800 via-emerald-600 to-gold-400 p-[2px] shadow-3d-glow transform transition duration-500 group-hover:rotate-6">
+                        <div class="w-full h-full bg-emerald-950 rounded-[14px] flex items-center justify-center">
+                            <i data-lucide="sparkles" class="w-7 h-7 text-gold-400"></i>
                         </div>
-                        <h2 class="font-bold text-sm text-slate-800">Evaluasi Dosa & Khilaf</h2>
                     </div>
-                    <span class="text-[10px] bg-red-50 text-red-600 font-semibold px-2 py-0.5 rounded-md border border-red-100">
-                        Centang jika khilaf
+                    <span class="absolute -bottom-1 -right-1 flex h-4 w-4">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-4 w-4 bg-emerald-500 border-2 border-emerald-950"></span>
                     </span>
                 </div>
-
-                <div id="sinChecklistContainer" class="space-y-3">
-                    <!-- Dynamic rendering of Sins -->
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                        TAZKIYA NAFS <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-gold-500/20 text-gold-400 border border-gold-500/30">v2.0 3D</span>
+                    </h1>
+                    <p class="text-xs sm:text-sm text-emerald-300/80 font-medium flex items-center gap-2 mt-0.5">
+                        <span>by</span>
+                        <a href="https://instagram.com/takutdosa.id" target="_blank" onclick="event.stopPropagation()" class="text-gold-400 hover:text-gold-300 font-bold underline decoration-gold-500/40 transition">@takutdosa.id</a>
+                        <span class="text-emerald-600">•</span>
+                        <span id="live-time" class="text-emerald-200">--:--:--</span>
+                    </p>
                 </div>
             </div>
 
-            <!-- Amal Sholeh Checklist -->
-            <div class="glass-card rounded-2xl p-5 shadow-sm">
-                <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
-                    <div class="flex items-center gap-2">
-                        <div class="w-7 h-7 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-xs">
-                            <i data-lucide="check-circle-2" class="w-4 h-4"></i>
-                        </div>
-                        <h2 class="font-bold text-sm text-slate-800">Amal Sholeh Harian</h2>
+            <!-- Header Right Stats & Controls -->
+            <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                <div class="glass-panel px-4 py-2 rounded-2xl flex items-center gap-2.5 border border-gold-500/30 bg-gold-500/5">
+                    <div class="w-8 h-8 rounded-xl bg-gold-500/20 flex items-center justify-center text-gold-400 animate-pulse">
+                        <i data-lucide="flame" class="w-5 h-5 fill-gold-400"></i>
+                    </div>
+                    <div>
+                        <div class="text-[10px] text-emerald-300 uppercase tracking-wider font-semibold">Streak Muhasabah</div>
+                        <div class="text-sm font-bold text-gold-300"><span id="streak-counter">0</span> Hari Beruntun</div>
                     </div>
                 </div>
 
-                <div id="goodDeedsContainer" class="space-y-3">
-                    <!-- Dynamic rendering of Good Deeds -->
+                <button id="sound-btn" onclick="toggleSound()" class="glass-panel p-3 rounded-2xl text-emerald-300 hover:text-gold-400 hover:border-gold-500/40 transition flex items-center justify-center" title="Efek Suara">
+                    <i data-lucide="volume-2" id="sound-icon" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- DATE & HIJRI BAR -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-8 px-2">
+            <div class="flex items-center gap-2 text-sm text-emerald-200/90 font-medium">
+                <i data-lucide="calendar" class="w-4 h-4 text-gold-400"></i>
+                <span id="gregorian-date">--</span>
+                <span class="text-emerald-600">|</span>
+                <span id="hijri-date" class="text-gold-300 font-arabic text-base">--</span>
+            </div>
+            <div class="text-xs text-emerald-400/80 bg-emerald-900/40 border border-emerald-700/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                Penyucian Jiwa Setiap Hari
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 1: BERANDA TAMPILAN UTAMA (3 KARTU FITUR UTAMA) -->
+        <!-- ========================================================= -->
+        <div id="view-home" class="transition-all duration-500">
+            <div class="text-center mb-10 max-w-2xl mx-auto">
+                <span class="text-xs uppercase tracking-widest font-extrabold text-gold-400 bg-gold-500/10 border border-gold-500/20 px-3 py-1 rounded-full">Tazkiyatun Nafs</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-3 mb-2">Pilih Modul Penyucian Jiwa</h2>
+                <p class="text-sm text-emerald-200/70">"Sungguh beruntung orang yang mensucikan jiwanya, dan sungguh rugi orang yang mengotorinya." (QS. Asy-Syams: 9-10)</p>
+            </div>
+
+            <!-- 3 MAIN FEATURE CARDS GRID -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <!-- CARD 1: MUHASABAH DOSA -->
+                <div onclick="openFeature('muhasabah')" class="glass-card rounded-3xl p-6 sm:p-7 cursor-pointer flex flex-col justify-between border border-emerald-500/20 hover:border-gold-400/60 group relative overflow-hidden shadow-card-depth">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/20 transition-all"></div>
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 mb-5 group-hover:scale-110 transition duration-300">
+                            <i data-lucide="shield-alert" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-extrabold text-rose-400 bg-rose-950/60 border border-rose-800/40 px-2.5 py-1 rounded-md uppercase tracking-wider">01. Evaluasi Diri</span>
+                        <h3 class="text-xl font-extrabold text-white mt-2 group-hover:text-gold-300 transition">Muhasabah Dosa</h3>
+                        <p class="text-xs text-emerald-200/70 mt-2 leading-relaxed">
+                            Pemeriksaan noda maksiat pada 9 anggota tubuh: Mata, Telinga, Lisan, Pikiran, Hati, Tangan, Kemaluan, Perut, & Kaki.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-gold-400">
+                        <span>Mulai Muhasabah</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- CARD 2: REMINDER NASEHAT ULAMA -->
+                <div onclick="openFeature('reminder')" class="glass-card rounded-3xl p-6 sm:p-7 cursor-pointer flex flex-col justify-between border border-emerald-500/20 hover:border-gold-400/60 group relative overflow-hidden shadow-card-depth">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-gold-500/10 rounded-full blur-xl group-hover:bg-gold-500/20 transition-all"></div>
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-gold-500/20 border border-gold-500/30 flex items-center justify-center text-gold-400 mb-5 group-hover:scale-110 transition duration-300">
+                            <i data-lucide="scroll" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-extrabold text-gold-400 bg-gold-950/60 border border-gold-800/40 px-2.5 py-1 rounded-md uppercase tracking-wider">02. Pengingat Jiwa</span>
+                        <h3 class="text-xl font-extrabold text-white mt-2 group-hover:text-gold-300 transition">Reminder & Nasehat</h3>
+                        <p class="text-xs text-emerald-200/70 mt-2 leading-relaxed">
+                            Renungan usia singkat, ajal kematian, dunia sementara, dahsyatnya hisab, adzab neraka, & nasehat Salafus Shalih.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-gold-400">
+                        <span>Baca Nasehat</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+
+                <!-- CARD 3: DOA & DZIKIR SUNNAH -->
+                <div onclick="openFeature('doa')" class="glass-card rounded-3xl p-6 sm:p-7 cursor-pointer flex flex-col justify-between border border-emerald-500/20 hover:border-gold-400/60 group relative overflow-hidden shadow-card-depth">
+                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
+                    <div>
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition duration-300">
+                            <i data-lucide="sparkles" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-extrabold text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2.5 py-1 rounded-md uppercase tracking-wider">03. Amalan Pelebur</span>
+                        <h3 class="text-xl font-extrabold text-white mt-2 group-hover:text-gold-300 transition">Doa & Dzikir Sunnah</h3>
+                        <p class="text-xs text-emerald-200/70 mt-2 leading-relaxed">
+                            Doa-doa pelebur dosa yang shahih, Sayyidul Istighfar, serta fitur Tasbih Digital 3D interaktif.
+                        </p>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-gold-400">
+                        <span>Buka Dzikir</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 2: MODUL MUHASABAH HARIAN (DOSA 9 ANGGOTA TUBUH) -->
+        <!-- ========================================================= -->
+        <div id="view-muhasabah" class="hidden transition-all duration-500">
+            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-700/50 text-xs font-bold text-emerald-200 flex items-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+            </button>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+                <!-- LEFT COLUMN: QOLBU STATUS METER FOR DOSA -->
+                <div class="lg:col-span-5 flex flex-col gap-6">
+                    <div class="glass-panel rounded-3xl p-6 relative overflow-hidden shadow-card-depth border border-emerald-500/20 flex flex-col items-center text-center">
+                        <div class="w-full flex justify-between items-center mb-4">
+                            <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-300/80">Kondisi Qolbu 3D</span>
+                            <span id="heart-status-badge" class="text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Bersih</span>
+                        </div>
+
+                        <div class="relative w-48 h-48 my-2 flex items-center justify-center">
+                            <div id="heart-glow" class="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl transition-all duration-700"></div>
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="6" class="text-emerald-950/80" fill="transparent" />
+                                <circle id="heart-progress-ring" cx="50" cy="50" r="42" stroke="url(#emerald-gold-grad)" stroke-width="8" stroke-linecap="round" class="transition-all duration-700 ease-out" fill="transparent" stroke-dasharray="263.89" stroke-dashoffset="0" />
+                                <defs>
+                                    <linearGradient id="emerald-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stop-color="#10b981" />
+                                        <stop offset="50%" stop-color="#facc15" />
+                                        <stop offset="100%" stop-color="#f43f5e" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <div id="3d-heart-icon" class="pulse-heart transition-transform duration-500">
+                                    <i data-lucide="heart" class="w-16 h-16 text-emerald-400 fill-emerald-500/30 stroke-[1.5]"></i>
+                                </div>
+                                <span id="heart-score-percent" class="text-2xl font-black text-white mt-1">0 Dosa</span>
+                            </div>
+                        </div>
+
+                        <h3 id="heart-status-title" class="text-xl font-bold text-emerald-300 mt-2">Qolbun Salim</h3>
+                        <p id="heart-status-desc" class="text-xs text-emerald-200/70 mt-1 max-w-xs leading-relaxed">
+                            Tidak ada noda dosa terdeteksi hari ini. Jaga pandangan, lisan, dan hatimu!
+                        </p>
+
+                        <div class="w-full bg-emerald-950/80 rounded-xl p-3 mt-5 border border-emerald-800/40 flex items-center justify-between text-xs">
+                            <span class="text-emerald-400 font-medium">Catatan Dosa Tercentang:</span>
+                            <span class="font-bold text-rose-400" id="completed-count-text">0 Terdeteksi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: 9 CARDS GRID OF DOSA CATEGORIES -->
+                <div class="lg:col-span-7 flex flex-col gap-6">
+                    <div class="glass-panel rounded-3xl p-6 shadow-card-depth">
+                        <div class="flex justify-between items-center mb-6">
+                            <div>
+                                <h2 class="text-xl font-bold text-white flex items-center gap-2">
+                                    <i data-lucide="shield-alert" class="w-5 h-5 text-rose-400"></i>
+                                    Evaluasi Dosa 9 Anggota Tubuh
+                                </h2>
+                                <p class="text-xs text-emerald-300/70">Pilih kartu di bawah ini untuk memeriksa rincian dosa hari ini</p>
+                            </div>
+                            <button onclick="resetDosaChecklist()" class="text-xs text-rose-400 hover:text-rose-300 bg-rose-950/30 border border-rose-800/30 px-3 py-1.5 rounded-xl transition flex items-center gap-1">
+                                <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset
+                            </button>
+                        </div>
+
+                        <!-- 9 CATEGORIES GRID -->
+                        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4" id="dosa-category-grid">
+                            <!-- JS Inject 9 Cards -->
+                        </div>
+                    </div>
                 </div>
             </div>
 
+            <!-- JOURNAL TAUBAT -->
+            <div class="glass-panel rounded-3xl p-6 shadow-card-depth mb-8">
+                <div class="flex items-center gap-2 mb-3">
+                    <i data-lucide="pen-tool" class="w-5 h-5 text-gold-400"></i>
+                    <h3 class="text-lg font-bold text-white">Jurnal Istighfar & Taubat Nasuha</h3>
+                </div>
+                <textarea id="journal-input" rows="3" class="w-full bg-emerald-950/80 border border-emerald-800/50 rounded-2xl p-4 text-sm text-emerald-100 placeholder-emerald-600/70 focus:outline-none focus:border-gold-500/60 transition resize-none" placeholder="Tuliskan penyesalan dosa, ikrar taubat, atau perbaikan diri yang ingin kamu lakukan hari ini..."></textarea>
+                <div class="flex justify-between items-center mt-3">
+                    <span id="journal-status" class="text-xs text-emerald-400 font-medium opacity-0 transition-opacity">Tersimpan otomatis!</span>
+                    <button onclick="saveJournal()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs transition flex items-center gap-2">
+                        <i data-lucide="save" class="w-4 h-4"></i> Simpan Taubat
+                    </button>
+                </div>
+            </div>
+
+            <section class="glass-panel rounded-3xl p-6 shadow-card-depth mb-12">
+                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                    <i data-lucide="bar-chart-3" class="w-5 h-5 text-gold-400"></i> Grafik Rekam Dosa 7 Hari Terakhir
+                </h3>
+                <div class="w-full h-56 relative">
+                    <canvas id="historyChart"></canvas>
+                </div>
+            </section>
         </div>
 
-        <!-- App Bottom Footer Attribution -->
-        <footer class="mt-8 mb-4 text-center text-xs text-slate-400 font-medium">
-            <p>Tazkiya Nafs App &bull; <span class="text-ocean-600 font-semibold">by @takutdosa.id</span></p>
+        <!-- MODAL POPUP FOR DOSA DETAIL LIST -->
+        <div id="dosa-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden transition-all">
+            <div class="glass-panel max-w-2xl w-full rounded-3xl p-6 sm:p-8 max-h-[85vh] flex flex-col border border-gold-500/30 shadow-card-depth animate-float">
+                <div class="flex justify-between items-center pb-4 border-b border-emerald-800/50 mb-4">
+                    <div class="flex items-center gap-3">
+                        <div id="modal-icon-container" class="w-10 h-10 rounded-xl bg-rose-500/20 flex items-center justify-center text-rose-400 border border-rose-500/30">
+                            <i data-lucide="eye" id="modal-icon" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 id="modal-title" class="text-xl font-bold text-white">Dosa Mata</h3>
+                            <p class="text-xs text-emerald-300/70">Periksa dan jujurlah pada diri sendiri</p>
+                        </div>
+                    </div>
+                    <button onclick="closeDosaModal()" class="w-8 h-8 rounded-full bg-emerald-900/60 hover:bg-emerald-800 text-emerald-200 flex items-center justify-center transition">
+                        <i data-lucide="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+
+                <div id="modal-dosa-list" class="overflow-y-auto space-y-3 pr-2 flex-1 my-2">
+                    <!-- Dynamic Checkboxes Injection -->
+                </div>
+
+                <div class="pt-4 border-t border-emerald-800/50 flex justify-end">
+                    <button onclick="closeDosaModal()" class="px-6 py-2.5 rounded-xl bg-gold-500 text-emerald-950 font-bold text-xs hover:bg-gold-400 transition">
+                        Selesai Evaluasi
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 3: MODUL REMINDER & NASEHAT ULAMA -->
+        <!-- ========================================================= -->
+        <div id="view-reminder" class="hidden transition-all duration-500">
+            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-700/50 text-xs font-bold text-emerald-200 flex items-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+            </button>
+
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth mb-8">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i data-lucide="scroll" class="w-6 h-6 text-gold-400"></i>
+                            Reminder Hakikat Kehidupan & Nasehat Ulama
+                        </h2>
+                        <p class="text-xs text-emerald-300/70 mt-1">Renungan kematian, ajal singkat, azab Allah yang nyata, & perkataan Salafus Shalih</p>
+                    </div>
+                </div>
+
+                <!-- CATEGORY TABS -->
+                <div class="flex gap-2 border-b border-emerald-800/40 pb-3 mb-6 overflow-x-auto no-scrollbar">
+                    <button onclick="switchReminderTab('ajal')" id="rtab-ajal" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-emerald-700/50 text-gold-300 border border-gold-500/30 whitespace-nowrap">
+                        <i data-lucide="clock" class="w-4 h-4"></i> Usia & Ajal Kematian
+                    </button>
+                    <button onclick="switchReminderTab('dunia')" id="rtab-dunia" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap">
+                        <i data-lucide="globe" class="w-4 h-4"></i> Dunia Sementara & Akhirat
+                    </button>
+                    <button onclick="switchReminderTab('hisab')" id="rtab-hisab" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap">
+                        <i data-lucide="flame" class="w-4 h-4"></i> Hisab & Dahsyatnya Neraka
+                    </button>
+                    <button onclick="switchReminderTab('ulama')" id="rtab-ulama" class="rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap">
+                        <i data-lucide="book-marked" class="w-4 h-4"></i> Nasehat Salafus Shalih
+                    </button>
+                </div>
+
+                <!-- REMINDER CONTENT CONTAINER -->
+                <div id="reminder-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 4: MODUL DOA PELEBUR DOSA & DZIKIR SUNNAH -->
+        <!-- ========================================================= -->
+        <div id="view-doa" class="hidden transition-all duration-500">
+            <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-700/50 text-xs font-bold text-emerald-200 flex items-center gap-2 transition">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
+            </button>
+
+            <!-- 3D TASBIH DIGITAL COUNTER CARD -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth mb-8 flex flex-col items-center text-center relative overflow-hidden border border-gold-500/20">
+                <div class="text-xs uppercase font-extrabold tracking-wider text-gold-400 mb-2">Tasbih & Dzikir Digital 3D</div>
+                <h3 id="current-dzikir-title" class="text-xl font-bold text-white mb-1">Sayyidul Istighfar / Dzikir Harian</h3>
+                <p id="current-dzikir-arabic" class="font-arabic text-2xl text-gold-300 my-2">أَسْتَغْفِرُ اللَّهَ وَأَتُوبُ إِلَيْهِ</p>
+                
+                <div class="my-6 relative flex items-center justify-center">
+                    <div class="w-40 h-40 rounded-full bg-gradient-to-tr from-emerald-900 via-emerald-800 to-gold-500/30 p-[3px] shadow-3d-glow">
+                        <button onclick="incrementTasbih()" class="w-full h-full rounded-full bg-emerald-950 flex flex-col items-center justify-center hover:bg-emerald-900/60 active:scale-95 transition duration-150">
+                            <span id="tasbih-count" class="text-5xl font-black text-white">0</span>
+                            <span class="text-[10px] text-emerald-400 uppercase tracking-widest mt-1">Klik Dzikir</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="resetTasbih()" class="px-4 py-2 rounded-xl bg-rose-950/40 border border-rose-800/40 text-xs text-rose-300 font-bold hover:bg-rose-900/60 transition flex items-center gap-1.5">
+                        <i data-lucide="rotate-ccw" class="w-3.5 h-3.5"></i> Reset Count
+                    </button>
+                </div>
+            </div>
+
+            <!-- DOA PELEBUR DOSA SHAHIH LIST -->
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth mb-12">
+                <h2 class="text-xl font-bold text-white mb-2 flex items-center gap-2">
+                    <i data-lucide="sparkles" class="w-5 h-5 text-gold-400"></i>
+                    Doa-Doa Shahih Penghapus Dosa
+                </h2>
+                <p class="text-xs text-emerald-300/70 mb-6">Lafadz doa dari Al-Qur'an & Hadits Shahih untuk memohon ampunan Allah</p>
+
+                <div id="doa-list-container" class="space-y-6"></div>
+            </div>
+        </div>
+
+        <!-- FOOTER BRANDING -->
+        <footer class="text-center pb-8 text-xs text-emerald-400/60">
+            <p class="mb-1">Aplikasi Tazkiya Nafs Web UI Redesign v2.0</p>
+            <p>Inspirasi Konten Dakwah & Tazkiyatun Nafs oleh <a href="https://instagram.com/takutdosa.id" target="_blank" class="text-gold-400 hover:underline font-semibold">@takutdosa.id</a></p>
         </footer>
+
     </div>
 
-    <!-- MAIN JAVASCRIPT LOGIC -->
+    <!-- AUDIO EFFECTS -->
     <script>
-        // DATA CONSTANTS
-        const QUOTES_ULAMA = [
-            { text: "Hisablah diri kalian sebelum kalian dihisab pada hari kiamat.", author: "Umar bin Khattab RA" },
-            { text: "Hati itu bisa berkarat sebagaimana besi berkarat, dan pembersihnya adalah istighfar.", author: "Ibn al-Qayyim" },
-            { text: "Penyesalan atas dosa adalah awal dari penyucian jiwa.", author: "Imam Al-Ghazali" }
-        ];
+        let soundEnabled = true;
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx;
 
-        const DOSA_ANGGOTA_TUBUH = [
-            { id: 'sin_mata', part: 'mata', name: 'Mata (Melihat Hal Haram / Risih)', targetSvg: ['part-mata', 'part-mata2'] },
-            { id: 'sin_lisan', part: 'lisan', name: 'Lisan (Ghibah, Bohong, Berkata Kasar)', targetSvg: ['part-lisan', 'part-kepala'] },
-            { id: 'sin_hati', part: 'hati', name: 'Pikiran / Hati (Iri, Dengki, Riya)', targetSvg: ['part-hati'] },
-            { id: 'sin_tangan', part: 'tangan', name: 'Tangan (Mengambil Hak Orang, Mengetik Jahat)', targetSvg: ['part-tangan-kiri', 'part-tangan-kanan'] },
-            { id: 'sin_kemaluan', part: 'kemaluan', name: 'Kemaluan (Zina / Syahwat Tak Terjaga)', targetSvg: ['part-kemaluan'] },
-            { id: 'sin_kaki', part: 'kaki', name: 'Kaki (Melangkah ke Tempat Maksiat)', targetSvg: ['part-kaki-kiri', 'part-kaki-kanan'] }
-        ];
+        function initAudio() {
+            if (!audioCtx) audioCtx = new AudioContext();
+        }
 
-        const DEFAULT_AMAL_SHOLEH = [
-            { id: 'good_shalat', name: 'Shalat Wajib 5 Waktu Tepat Waktu' },
-            { id: 'good_quran', name: 'Membaca Al-Qur\'an Minimal 1 Halaman' },
-            { id: 'good_sedekah', name: 'Sedekah / Berbuat Baik Harian' },
-            { id: 'good_dzikir', name: 'Dzikir Pagi & Petang' }
-        ];
+        function playCheckSound() {
+            if (!soundEnabled) return;
+            initAudio();
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.15);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.15);
+            } catch (e) {}
+        }
 
-        // GLOBAL STATE
-        let isRegisterMode = false;
-        let currentUser = null;
-        let userState = {
-            sins: {},
-            goodDeeds: {}
-        };
+        function playUncheckSound() {
+            if (!soundEnabled) return;
+            initAudio();
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(293.66, audioCtx.currentTime + 0.12);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.12);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 0.12);
+            } catch (e) {}
+        }
 
-        // INITIALIZATION ON LOAD
-        window.onload = function() {
+        function toggleSound() {
+            soundEnabled = !soundEnabled;
+            const icon = document.getElementById('sound-icon');
+            const btn = document.getElementById('sound-btn');
+            if (soundEnabled) {
+                icon.setAttribute('data-lucide', 'volume-2');
+                btn.classList.remove('text-rose-400');
+                btn.classList.add('text-emerald-300');
+            } else {
+                icon.setAttribute('data-lucide', 'volume-x');
+                btn.classList.remove('text-emerald-300');
+                btn.classList.add('text-rose-400');
+            }
             lucide.createIcons();
-            checkExistingSession();
-            renderRandomQuote();
+        }
+    </script>
+
+    <!-- DATA & LOGIC APP -->
+    <script>
+        // DATA REMINDERS & NASEHAT
+        const REMINDERS = {
+            ajal: [
+                {
+                    title: "Ajal Datang Tiba-Tiba",
+                    quote: "Tiap-tiap yang berjiwa akan merasakan mati. Dan sesungguhnya pada hari kiamat sahajalah disempurnakan pahalamu.",
+                    ref: "QS. Ali 'Imran: 185",
+                    desc: "Tidak ada satu pun di antara kita yang mengetahui di detik mana nafas terakhir akan dihembuskan."
+                },
+                {
+                    title: "Perbanyak Mengingat Pemutus Kelezatan",
+                    quote: "Perbanyaklah mengingat pemutus kelezatan, yaitu kematian.",
+                    ref: "HR. Tirmidzi no. 2307",
+                    desc: "Mengingat kematian menghancurkan kesombongan dan mendorong jiwa segera bertaubat."
+                }
+            ],
+            dunia: [
+                {
+                    title: "Dunia Hanyalah Persinggahan",
+                    quote: "Jadilah engkau di dunia ini seakan-akan orang asing atau pengembara yang sekadar menyeberangi jalan.",
+                    ref: "HR. Bukhari no. 6416",
+                    desc: "Harta dan jabatan yang dikejar tidak akan dibawa masuk ke dalam liang lahat."
+                }
+            ],
+            hisab: [
+                {
+                    title: "Hisab yang Sangat Teliti",
+                    quote: "Barangsiapa yang mengerjakan kebaikan seberat dzarrah pun, niscaya dia akan melihat (balasan)nya. Dan barangsiapa mengerjakan kejahatan sebesar dzarrah pun, niscaya dia akan melihatnya.",
+                    ref: "QS. Az-Zalzalah: 7-8",
+                    desc: "Setiap pandangan, ketikan jari, dan detik waktu kita akan dihisab tanpa terkecuali."
+                },
+                {
+                    title: "Dahsyatnya Azab Neraka",
+                    quote: "Siksaan penduduk neraka yang paling ringan adalah seseorang yang diberi dua sandak dari api yang membuat otaknya mendidih.",
+                    ref: "HR. Bukhari no. 6561 & Muslim no. 213",
+                    desc: "Semoga Allah menyelamatkan kita dan keluarga kita dari siksa api neraka."
+                }
+            ],
+            ulama: [
+                {
+                    title: "Evaluasi Diri Sebelum Dihisab",
+                    quote: "Hisablah diri kalian sebelum kalian dihisab, dan timbanglah amalan kalian sebelum ditimbang.",
+                    ref: "Umar bin Khattab radhiyallahu 'anhu",
+                    desc: "Orang yang cerdas adalah orang yang mengoreksi dirinya dan beramal untuk kehidupan setelah kematian."
+                }
+            ]
         };
 
-        // AUTHENTICATION FUNCTIONS
-        function toggleAuthMode() {
-            isRegisterMode = !isRegisterMode;
-            const submitBtn = document.getElementById('authSubmitBtn');
-            const toggleBtn = document.getElementById('toggleAuthBtn');
-            const alertBox = document.getElementById('authAlert');
-            
-            alertBox.classList.add('hidden');
-
-            if (isRegisterMode) {
-                submitBtn.innerText = "Daftar Akun Baru";
-                toggleBtn.innerText = "Sudah punya akun? Masuk di sini";
-            } else {
-                submitBtn.innerText = "Masuk ke Aplikasi";
-                toggleBtn.innerText = "Belum punya akun? Daftar Akun Baru";
+        // 9 KATEGORI DOSA BESERTA DETAIL LENGKAP
+        const DOSA_CATEGORIES = {
+            mata: {
+                title: 'Mata',
+                icon: 'eye',
+                desc: 'Pandangan haram & penglihatan maksiat',
+                items: [
+                    { id: 'm1', label: 'Melihat aurat non-mahram (di sosmed / dunia nyata)' },
+                    { id: 'm2', label: 'Menonton konten pornografi / adegan tidak senonoh' },
+                    { id: 'm3', label: 'Memandang orang lain dengan tatapan merendahkan / sombong' },
+                    { id: 'm4', label: 'Mengintip atau mencari-cari kejelekan / privasi orang lain' },
+                    { id: 'm5', label: 'Melihat harta orang lain dengan rasa iri / dengki' },
+                ]
+            },
+            telinga: {
+                title: 'Telinga',
+                icon: 'ear',
+                desc: 'Pendengaran hal terlarang & kebatilan',
+                items: [
+                    { id: 'l1', label: 'Mendengarkan ghibah (gosip/pengumpat) tentang orang lain' },
+                    { id: 'l2', label: 'Mendengarkan musik yang melalaikan & memicu syahwat' },
+                    { id: 'l3', label: 'Menguntit / mendengarkan pembicaraan rahasia orang tanpa izin' },
+                    { id: 'l4', label: 'Mendengarkan fitnah & adu domba (namimah)' },
+                    { id: 'l5', label: 'Mendengarkan ucapan syirik, kufur, atau pelecehan agama' },
+                ]
+            },
+            lisan: {
+                title: 'Lisan',
+                icon: 'message-square-warning',
+                desc: 'Ucapan, pembicaraan & kebohongan',
+                items: [
+                    { id: 's1', label: 'Membicarakan aib orang lain (Ghibah)' },
+                    { id: 's2', label: 'Berdusta / berbohong dalam perkataan atau janji' },
+                    { id: 's3', label: 'Mengucapkan kata-kata kasar, kotor, atau mencaci maki' },
+                    { id: 's4', label: 'Adu domba (Namimah) untuk memecah belah hubungan' },
+                    { id: 's5', label: 'Mengolok-olok / mengejek kekurangan orang lain' },
+                    { id: 's6', label: 'Bersumpah palsu atau menyebut nama Allah secara sembarangan' },
+                ]
+            },
+            pikiran: {
+                title: 'Pikiran',
+                icon: 'brain',
+                desc: 'Prasangka buruk & lintasan maksiat',
+                items: [
+                    { id: 'p1', label: 'Prasangka buruk (Su\'udzon) kepada Allah atau sesama manusia' },
+                    { id: 'p2', label: 'Mengkhayalkan / membayangkan perbuatan zina & maksiat' },
+                    { id: 'p3', label: 'Merencanakan niat jahat atau niat balas dendam' },
+                    { id: 'p4', label: 'Ragu-ragu terhadap janji dan keadilan Allah' },
+                    { id: 'p5', label: 'Merasa diri lebih alim / lebih suci dibanding orang lain' },
+                ]
+            },
+            hati: {
+                title: 'Hati',
+                icon: 'heart-crack',
+                desc: 'Penyakit dalam jiwa & perasaan jahat',
+                items: [
+                    { id: 'h1', label: 'Riya\' (Ingin dipuji orang lain dalam beribadah)' },
+                    { id: 'h2', label: 'Hasad / Dengki (Tidak suka melihat orang lain dapat nikmat)' },
+                    { id: 'h3', label: 'Takabbur / Sombong & Ujub (Kagum pada kehebatan diri sendiri)' },
+                    { id: 'h4', label: 'Amarah tidak terkontrol & menyimpan dendam' },
+                    { id: 'h5', label: 'Cinta dunia berlebihan (Wahn) hingga takut mati' },
+                    { id: 'h6', label: 'Tidak ridha / mengeluh terhadap takdir Allah' },
+                ]
+            },
+            tangan: {
+                title: 'Tangan',
+                icon: 'hand',
+                desc: 'Perbuatan, ketikan & pengambilan hak',
+                items: [
+                    { id: 't1', label: 'Mengetik komentar jahat, bully, atau sebar hoaks di internet' },
+                    { id: 't2', label: 'Menyentuh non-mahram yang tidak halal' },
+                    { id: 't3', label: 'Mengambil, mencuri, atau meminjam barang tanpa izin' },
+                    { id: 't4', label: 'Menyakiti atau memukul makhluk hidup secara zhalim' },
+                    { id: 't5', label: 'Menulis atau menyebarkan hal-hal yang tidak bermanfaat / haram' },
+                ]
+            },
+            kemaluan: {
+                title: 'Kemaluan',
+                icon: 'shield-x',
+                desc: 'Syahwat & pelanggaran kesucian',
+                items: [
+                    { id: 'k1', label: 'Mendekati zina (berkhalwat / pacaran / chat mesra non-mahram)' },
+                    { id: 'k2', label: 'Melakukan masturbasi / onani' },
+                    { id: 'k3', label: 'Melakukan perbuatan zina / penyimpangan seksual' },
+                    { id: 'k4', label: 'Membuka aurat di depan orang yang bukan mahram' },
+                ]
+            },
+            perut: {
+                title: 'Perut',
+                icon: 'utensils',
+                desc: 'Konsumsi haram, syubhat & rakus',
+                items: [
+                    { id: 'rt1', label: 'Makan/minum yang diharamkan (alkohol, babi, zat berbahaya)' },
+                    { id: 'rt2', label: 'Makan dari hasil uang haram (Riba, suap, hasil curian/judi)' },
+                    { id: 'rt3', label: 'Makan berlebihan hingga malas beribadah (Gluttony)' },
+                    { id: 'rt4', label: 'Mengkonsumsi barang syubhat (yang belum jelas kehalalannya)' },
+                ]
+            },
+            kaki: {
+                title: 'Kaki',
+                icon: 'footprints',
+                desc: 'Langkah ke tempat maksiat & kewajiban',
+                items: [
+                    { id: 'kk1', label: 'Melangkah menuju tempat-tempat kemaksiatan / kelab / perjudian' },
+                    { id: 'kk2', label: 'Kabur / sengaja melarikan diri dari kewajiban beragama' },
+                    { id: 'kk3', label: 'Melangkah untuk menzhalimi atau merugikan orang lain' },
+                    { id: 'kk4', label: 'Sengaja enggan melangkah ke masjid / majelis ilmu' },
+                ]
             }
-        }
+        };
 
-        function showAuthAlert(message, type = 'error') {
-            const alertBox = document.getElementById('authAlert');
-            alertBox.classList.remove('hidden', 'bg-red-50', 'text-red-600', 'border-red-200', 'bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
-            
-            if (type === 'error') {
-                alertBox.classList.add('bg-red-50', 'text-red-600', 'border-red-200');
-            } else {
-                alertBox.classList.add('bg-emerald-50', 'text-emerald-600', 'border-emerald-200');
-            }
-            
-            alertBox.innerText = message;
-        }
+        let activeModalCategory = null;
 
-        function handleAuthSubmit(event) {
-            event.preventDefault();
-            const email = document.getElementById('authEmail').value.trim().toLowerCase();
-            const password = document.getElementById('authPassword').value.trim();
+        // RENDER 9 DOSA CARDS
+        function renderDosaCategories() {
+            const grid = document.getElementById('dosa-category-grid');
+            if (!grid) return;
+            grid.innerHTML = '';
 
-            let users = JSON.parse(localStorage.getItem('tazkiya_registered_users') || '{}');
-
-            if (isRegisterMode) {
-                if (users[email]) {
-                    showAuthAlert("Email ini sudah terdaftar! Silakan login.");
-                    return;
-                }
-                users[email] = { password: password };
-                localStorage.setItem('tazkiya_registered_users', JSON.stringify(users));
+            Object.keys(DOSA_CATEGORIES).forEach(key => {
+                const cat = DOSA_CATEGORIES[key];
                 
-                showAuthAlert("Pendaftaran berhasil! Silakan masuk.", "success");
-                toggleAuthMode();
-            } else {
-                // STRICT PASSWORD CHECK
-                if (!users[email]) {
-                    showAuthAlert("Email belum terdaftar. Silakan klik 'Daftar Akun Baru'.");
-                    return;
-                }
-                
-                if (users[email].password !== password) {
-                    showAuthAlert("Kata sandi salah! Masukkan kata sandi yang benar.");
-                    return;
-                }
+                // Count checked items for this category
+                let checkedInCat = 0;
+                cat.items.forEach(item => {
+                    if (todayData[item.id]) checkedInCat++;
+                });
 
-                // Successful Authentication
-                currentUser = email;
-                localStorage.setItem('tazkiya_current_session', email);
-                loadUserData();
-                showMainApp();
-            }
-        }
-
-        function checkExistingSession() {
-            const session = localStorage.getItem('tazkiya_current_session');
-            if (session) {
-                currentUser = session;
-                loadUserData();
-                showMainApp();
-            } else {
-                showAuthScreen();
-            }
-        }
-
-        function handleLogout() {
-            localStorage.removeItem('tazkiya_current_session');
-            currentUser = null;
-            showAuthScreen();
-        }
-
-        function showAuthScreen() {
-            document.getElementById('authContainer').classList.remove('hidden');
-            document.getElementById('mainAppContainer').classList.add('hidden');
-        }
-
-        function showMainApp() {
-            document.getElementById('authContainer').classList.add('hidden');
-            document.getElementById('mainAppContainer').classList.remove('hidden');
-            renderSinChecklist();
-            renderGoodDeedsChecklist();
-            updatePurityVisualization();
-        }
-
-        // DATA STORAGE & SYNC
-        function loadUserData() {
-            const storedData = localStorage.getItem(`tazkiya_data_${currentUser}`);
-            if (storedData) {
-                userState = JSON.parse(storedData);
-            } else {
-                userState = { sins: {}, goodDeeds: {} };
-            }
-        }
-
-        function saveUserData() {
-            if (currentUser) {
-                localStorage.setItem(`tazkiya_data_${currentUser}`, JSON.stringify(userState));
-            }
-        }
-
-        // RENDERING FUNCTIONS
-        function renderRandomQuote() {
-            const random = QUOTES_ULAMA[Math.floor(Math.random() * QUOTES_ULAMA.length)];
-            document.getElementById('quoteText').innerText = `"${random.text}"`;
-            document.getElementById('quoteAuthor').innerText = `— ${random.author}`;
-        }
-
-        function renderSinChecklist() {
-            const container = document.getElementById('sinChecklistContainer');
-            container.innerHTML = '';
-
-            DOSA_ANGGOTA_TUBUH.forEach(sin => {
-                const isChecked = !!userState.sins[sin.id];
-                const div = document.createElement('div');
-                div.className = `flex items-center justify-between p-3 rounded-xl border transition ${
-                    isChecked ? 'bg-red-50/80 border-red-200' : 'bg-slate-50 border-slate-200'
+                const card = document.createElement('div');
+                card.onclick = () => openDosaModal(key);
+                card.className = `glass-card rounded-2xl p-4 cursor-pointer flex flex-col justify-between border transition-all duration-300 relative overflow-hidden group ${
+                    checkedInCat > 0 
+                    ? 'border-rose-500/50 bg-rose-950/20' 
+                    : 'border-emerald-700/30 hover:border-gold-400/50'
                 }`;
 
-                div.innerHTML = `
-                    <label class="flex items-center gap-3 cursor-pointer w-full">
-                        <input type="checkbox" onchange="toggleSin('${sin.id}')" ${isChecked ? 'checked' : ''} 
-                            class="w-4 h-4 rounded text-red-600 focus:ring-red-500 border-slate-300">
-                        <span class="text-xs font-medium ${isChecked ? 'text-red-800 font-semibold' : 'text-slate-700'}">
-                            ${sin.name}
-                        </span>
-                    </label>
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-900/60 group-hover:bg-gold-500/20 flex items-center justify-center text-emerald-300 group-hover:text-gold-400 transition">
+                            <i data-lucide="${cat.icon}" class="w-5 h-5"></i>
+                        </div>
+                        ${checkedInCat > 0 ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-rose-500/30 text-rose-300 border border-rose-500/40">${checkedInCat} Dosa</span>` : ''}
+                    </div>
+                    <div>
+                        <h4 class="text-base font-bold text-white group-hover:text-gold-300 transition">${cat.title}</h4>
+                        <p class="text-[11px] text-emerald-200/60 line-clamp-2 mt-0.5 leading-snug">${cat.desc}</p>
+                    </div>
+                    <div class="mt-3 pt-2 border-t border-emerald-800/40 flex items-center justify-between text-[11px] font-semibold text-emerald-400 group-hover:text-gold-400">
+                        <span>${cat.items.length} Rincian</span>
+                        <i data-lucide="chevron-right" class="w-3.5 h-3.5 group-hover:translate-x-1 transition"></i>
+                    </div>
                 `;
-                container.appendChild(div);
+
+                grid.appendChild(card);
             });
+
+            lucide.createIcons();
         }
 
-        function renderGoodDeedsChecklist() {
-            const container = document.getElementById('goodDeedsContainer');
+        // MODAL DOSA FUNCTIONS
+        function openDosaModal(catKey) {
+            activeModalCategory = catKey;
+            const cat = DOSA_CATEGORIES[catKey];
+            if (!cat) return;
+
+            document.getElementById('modal-title').innerText = `Kategori Dosa: ${cat.title}`;
+            document.getElementById('modal-icon').setAttribute('data-lucide', cat.icon);
+
+            const container = document.getElementById('modal-dosa-list');
             container.innerHTML = '';
 
-            DEFAULT_AMAL_SHOLEH.forEach(deed => {
-                const isChecked = !!userState.goodDeeds[deed.id];
-                const div = document.createElement('div');
-                div.className = `flex items-center justify-between p-3 rounded-xl border transition ${
-                    isChecked ? 'bg-emerald-50/80 border-emerald-200' : 'bg-slate-50 border-slate-200'
+            cat.items.forEach(item => {
+                const isChecked = !!todayData[item.id];
+                const card = document.createElement('label');
+                card.className = `flex items-start gap-3 p-3.5 rounded-xl border cursor-pointer select-none transition-all ${
+                    isChecked 
+                    ? 'bg-rose-950/40 border-rose-500/50 text-white' 
+                    : 'bg-emerald-950/40 border-emerald-800/30 text-emerald-100 hover:border-emerald-700/50'
                 }`;
 
-                div.innerHTML = `
-                    <label class="flex items-center gap-3 cursor-pointer w-full">
-                        <input type="checkbox" onchange="toggleGoodDeed('${deed.id}')" ${isChecked ? 'checked' : ''} 
-                            class="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-slate-300">
-                        <span class="text-xs font-medium ${isChecked ? 'text-emerald-800 font-semibold' : 'text-slate-700'}">
-                            ${deed.name}
-                        </span>
-                    </label>
+                card.innerHTML = `
+                    <input type="checkbox" class="hidden" onchange="toggleDosaItem('${item.id}')" ${isChecked ? 'checked' : ''}>
+                    <div class="w-5 h-5 rounded border mt-0.5 flex items-center justify-center transition ${
+                        isChecked ? 'bg-rose-500 border-rose-400 text-white' : 'border-emerald-600 bg-emerald-950/80'
+                    }">
+                        <i data-lucide="check" class="w-3.5 h-3.5 stroke-[3] ${isChecked ? 'block' : 'hidden'}"></i>
+                    </div>
+                    <span class="text-xs font-medium leading-relaxed ${isChecked ? 'text-rose-200 font-semibold' : ''}">${item.label}</span>
                 `;
-                container.appendChild(div);
-            });
-        }
 
-        // INTERACTION HANDLERS
-        function toggleSin(sinId) {
-            userState.sins[sinId] = !userState.sins[sinId];
-            saveUserData();
-            renderSinChecklist();
-            updatePurityVisualization();
-        }
-
-        function toggleGoodDeed(deedId) {
-            userState.goodDeeds[deedId] = !userState.goodDeeds[deedId];
-            saveUserData();
-            renderGoodDeedsChecklist();
-        }
-
-        // VISUALIZATION LOGIC (SVG HUMAN BODY & PURITY CALCULATOR)
-        function updatePurityVisualization() {
-            const totalSins = DOSA_ANGGOTA_TUBUH.length;
-            let checkedSinsCount = 0;
-
-            // Reset SVG Colors to Clean Glowing Blue
-            document.querySelectorAll('.body-part-glow').forEach(el => {
-                el.classList.remove('has-sin');
+                container.appendChild(card);
             });
 
-            DOSA_ANGGOTA_TUBUH.forEach(sin => {
-                if (userState.sins[sin.id]) {
-                    checkedSinsCount++;
-                    sin.targetSvg.forEach(svgId => {
-                        const target = document.getElementById(svgId);
-                        if (target) {
-                            target.classList.add('has-sin');
-                        }
+            document.getElementById('dosa-modal').classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeDosaModal() {
+            document.getElementById('dosa-modal').classList.add('hidden');
+            renderDosaCategories();
+        }
+
+        function toggleDosaItem(id) {
+            todayData[id] = !todayData[id];
+            if (todayData[id]) playUncheckSound();
+            else playCheckSound();
+            saveData();
+            openDosaModal(activeModalCategory);
+        }
+
+        function resetDosaChecklist() {
+            if (confirm('Apakah kamu yakin ingin mereset rekam dosa muhasabah hari ini?')) {
+                todayData = {};
+                saveData();
+                renderDosaCategories();
+            }
+        }
+
+        // UPDATE DASHBOARD SCORE & STATUS (FAVORING ZERO DOSA)
+        function updateDashboard() {
+            let totalCheckedDosa = 0;
+            Object.values(DOSA_CATEGORIES).forEach(cat => {
+                cat.items.forEach(item => {
+                    if (todayData[item.id]) totalCheckedDosa++;
+                });
+            });
+
+            document.getElementById('heart-score-percent').innerText = `${totalCheckedDosa} Dosa`;
+            document.getElementById('completed-count-text').innerText = `${totalCheckedDosa} Terdeteksi`;
+
+            const ring = document.getElementById('heart-progress-ring');
+            // Progress ring fills as dosa increases
+            const maxDosa = 40;
+            const percentage = Math.min(100, Math.round((totalCheckedDosa / maxDosa) * 100));
+            const offset = 263.89 - (263.89 * percentage) / 100;
+            ring.style.strokeDashoffset = offset;
+
+            const badge = document.getElementById('heart-status-badge');
+            const title = document.getElementById('heart-status-title');
+            const desc = document.getElementById('heart-status-desc');
+            const heartIcon = document.getElementById('3d-heart-icon');
+
+            if (totalCheckedDosa === 0) {
+                badge.innerText = 'Qolbun Salim';
+                badge.className = 'text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40';
+                title.innerText = 'Hati Selamat & Bersih';
+                title.className = 'text-xl font-bold text-emerald-300 mt-2';
+                desc.innerText = 'Alhamdulillah! Tidak ada noda dosa terdeteksi hari ini. Pertahankan ketakwaanmu!';
+                heartIcon.innerHTML = `<i data-lucide="heart" class="w-16 h-16 text-emerald-400 fill-emerald-500/50 stroke-[1.5]"></i>`;
+            } else if (totalCheckedDosa <= 3) {
+                badge.innerText = 'Noda Ringan';
+                badge.className = 'text-xs px-3 py-1 rounded-full font-bold bg-gold-500/20 text-gold-300 border border-gold-500/40';
+                title.innerText = 'Perbanyak Istighfar';
+                title.className = 'text-xl font-bold text-gold-300 mt-2';
+                desc.innerText = 'Ada sedikit kehilafan hari ini. Segera hapus dengan ketaatan & Sayyidul Istighfar.';
+                heartIcon.innerHTML = `<i data-lucide="heart" class="w-16 h-16 text-gold-400 fill-gold-500/40 stroke-[1.5]"></i>`;
+            } else {
+                badge.innerText = 'Qolbun Maridh';
+                badge.className = 'text-xs px-3 py-1 rounded-full font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40';
+                title.innerText = 'Banyak Noda Dosa';
+                title.className = 'text-xl font-bold text-rose-300 mt-2';
+                desc.innerText = 'Hati terancam mengeras. Ambil air wudhu, lakukan shalat taubat, & basahi lisan dengan istighfar.';
+                heartIcon.innerHTML = `<i data-lucide="heart-crack" class="w-16 h-16 text-rose-400 fill-rose-500/30 stroke-[1.5]"></i>`;
+            }
+
+            lucide.createIcons();
+        }
+
+        // CHART LOGIC
+        function renderChart() {
+            const labels = [];
+            const dataPoints = [];
+
+            for (let i = 6; i >= 0; i--) {
+                const d = new Date();
+                d.setDate(d.getDate() - i);
+                const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                
+                labels.push(d.toLocaleDateString('id-ID', { weekday: 'short' }));
+
+                const dayDataRaw = localStorage.getItem(`tazkiya_${key}`);
+                if (dayDataRaw) {
+                    const dayData = JSON.parse(dayDataRaw);
+                    let checkedDosa = 0;
+                    Object.values(DOSA_CATEGORIES).forEach(cat => {
+                        cat.items.forEach(item => {
+                            if (dayData[item.id]) checkedDosa++;
+                        });
                     });
+                    dataPoints.push(checkedDosa);
+                } else dataPoints.push(0);
+            }
+
+            const ctx = document.getElementById('historyChart').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah Dosa Terdeteksi',
+                        data: dataPoints,
+                        backgroundColor: 'rgba(244, 63, 94, 0.7)',
+                        borderRadius: 10,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, ticks: { color: '#fda4af' } },
+                        x: { ticks: { color: '#a7f3d0' } }
+                    }
                 }
             });
+        }
 
-            // Calculate percentage starting from 100%
-            const purityPercentage = Math.round(((totalSins - checkedSinsCount) / totalSins) * 100);
+        // OVERRIDE OPENFEATURE FOR MUHASABAH
+        const origOpenFeature = openFeature;
+        openFeature = function(feature) {
+            origOpenFeature(feature);
+            if (feature === 'muhasabah') {
+                renderDosaCategories();
+            }
+        };
 
-            // Update Badge UI
-            const badge = document.getElementById('purityBadge');
-            badge.innerText = `${purityPercentage}% Kebersihan Diri`;
+        // DATA DOA SHAHIH
+        const DOA_LIST = [
+            {
+                title: "Sayyidul Istighfar (Raja Istighfar)",
+                arabic: "اللَّهُمَّ أَنْتَ رَبِّي لاَ إِلَهَ إِلاَّ أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ، وَأَبُوءُ بِذَنْبِي فَاغْفِرْ لِي فَإِنَّهُ لاَ يَغْفِرُ الذُّنُوبَ إِلاَّ أَنْتَ",
+                latin: "Allahumma anta rabbii laa ilaaha illaa anta, khalaqtanii wa anaa 'abduka, wa anaa 'alaa 'ahdika wa wa'dika mastatha'tu, a'uudzu bika min syarri maa shana'tu, abuu-u laka bini'matika 'alayya, wa abuu-u bidzanbii faghfir lii fa-innahu laa yaghfirudz-dzunuuba illaa anta.",
+                meaning: "Ya Allah, Engkau adalah Rabbku, tidak ada ilah yang berhak disembah selain Engkau. Engkau yang menciptakanku dan aku adalah hamba-Mu...",
+                ref: "HR. Bukhari no. 6306"
+            },
+            {
+                title: "Doa Nabi Yunus (Pelebur Dosa & Kesulitan)",
+                arabic: "لَا إِلٰهَ إِلَّا أَنْتَ سُبْحَانَكَ إِنِّي كُنْتُ مِنَ الظَّالِمِينَ",
+                latin: "Laa ilaaha illaa anta subhaanaka innii kuntu minazh-zhaalimiin.",
+                meaning: "Tidak ada ilah selain Engkau. Maha Suci Engkau, sesungguhnya aku adalah termasuk orang-orang yang zhalim.",
+                ref: "QS. Al-Anbiya': 87 / HR. Tirmidzi no. 3505"
+            },
+            {
+                title: "Kaffaratul Majelis (Penghapus Dosa Majelis/Lisan)",
+                arabic: "سُبْحَانَكَ اللَّهُمَّ وَبِحَمْدِكَ، أَشْهَدُ أَنْ لاَ إِلَهَ إِلاَّ أَنْتَ، أَسْتَغْفِرُكَ وَأَتُوبُ إِلَيْكَ",
+                latin: "Subhaanakallahumma wa bihamdika, asyhadu alla ilaaha illaa anta, astaghfiruka wa atuubu ilaik.",
+                meaning: "Maha Suci Engkau ya Allah, dengan memuji-Mu aku bersaksi bahwa tiada ilah selain Engkau, aku memohon ampun dan bertaubat kepada-Mu.",
+                ref: "HR. Tirmidzi no. 3433"
+            }
+        ];
 
-            if (purityPercentage === 100) {
-                badge.className = "text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200";
-            } else if (purityPercentage >= 60) {
-                badge.className = "text-xs font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-700 border border-amber-200";
-            } else {
-                badge.className = "text-xs font-extrabold px-2.5 py-1 rounded-full bg-red-100 text-red-700 border border-red-200";
+        let activeCategory = 'shalat';
+        let activeReminderTab = 'ajal';
+        let todayData = {};
+        let streakCount = 0;
+        let chartInstance = null;
+        let tasbihCount = 0;
+
+        // NAVIGATION LOGIC
+        function showHome() {
+            document.getElementById('view-home').classList.remove('hidden');
+            document.getElementById('view-muhasabah').classList.add('hidden');
+            document.getElementById('view-reminder').classList.add('hidden');
+            document.getElementById('view-doa').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function openFeature(feature) {
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-muhasabah').classList.add('hidden');
+            document.getElementById('view-reminder').classList.add('hidden');
+            document.getElementById('view-doa').classList.add('hidden');
+
+            if (feature === 'muhasabah') {
+                document.getElementById('view-muhasabah').classList.remove('hidden');
+                renderChecklist();
+                updateDashboard();
+                renderChart();
+            } else if (feature === 'reminder') {
+                document.getElementById('view-reminder').classList.remove('hidden');
+                renderReminders();
+            } else if (feature === 'doa') {
+                document.getElementById('view-doa').classList.remove('hidden');
+                renderDoaList();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            lucide.createIcons();
+        }
+
+        // DATE UTILS
+        function getTodayKey() {
+            const d = new Date();
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+
+        function initDates() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('gregorian-date').innerText = now.toLocaleDateString('id-ID', options);
+
+            try {
+                const hijriFormatter = new Intl.DateTimeFormat('id-ID-u-ca-islamic-umalqura', {
+                    day: 'numeric', month: 'long', year: 'numeric'
+                });
+                document.getElementById('hijri-date').innerText = hijriFormatter.format(now);
+            } catch (e) {
+                document.getElementById('hijri-date').innerText = '1446 Hijriah';
+            }
+
+            setInterval(() => {
+                const t = new Date();
+                document.getElementById('live-time').innerText = t.toLocaleTimeString('id-ID');
+            }, 1000);
+        }
+
+        // LOCAL STORAGE STORAGE LOGIC
+        function loadData() {
+            const todayKey = getTodayKey();
+            const stored = localStorage.getItem(`tazkiya_${todayKey}`);
+            if (stored) todayData = JSON.parse(stored);
+            else todayData = {};
+
+            const storedJournal = localStorage.getItem(`tazkiya_journal_${todayKey}`);
+            if (storedJournal) {
+                const journalElem = document.getElementById('journal-input');
+                if (journalElem) journalElem.value = storedJournal;
+            }
+
+            calculateStreak();
+        }
+
+        function saveData() {
+            const todayKey = getTodayKey();
+            localStorage.setItem(`tazkiya_${todayKey}`, JSON.stringify(todayData));
+            updateDashboard();
+            renderChart();
+        }
+
+        function calculateStreak() {
+            let streak = 0;
+            let d = new Date();
+            
+            while (true) {
+                const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+                const data = localStorage.getItem(`tazkiya_${key}`);
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    const checkedCount = Object.values(parsed).filter(Boolean).length;
+                    if (checkedCount > 0) {
+                        streak++;
+                        d.setDate(d.getDate() - 1);
+                    } else break;
+                } else break;
+            }
+            streakCount = streak;
+            document.getElementById('streak-counter').innerText = streakCount;
+        }
+
+        // MUHASABAH LOGIC (Dosa 9 Anggota Tubuh)
+        function renderChecklist() {
+            renderDosaCategories();
+        }
+
+        function switchCategory(cat) {
+            activeCategory = cat;
+            renderChecklist();
+        }
+
+        function resetTodayChecklist() {
+            resetDosaChecklist();
+        }
+
+        function saveJournal() {
+            const text = document.getElementById('journal-input').value;
+            const todayKey = getTodayKey();
+            localStorage.setItem(`tazkiya_journal_${todayKey}`, text);
+
+            const status = document.getElementById('journal-status');
+            if (status) {
+                status.style.opacity = '1';
+                setTimeout(() => { status.style.opacity = '0'; }, 2500);
             }
         }
+
+        // REMINDER TAB LOGIC
+        function switchReminderTab(tab) {
+            activeReminderTab = tab;
+            document.querySelectorAll('.rem-tab').forEach(btn => {
+                btn.className = 'rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 text-emerald-300 hover:bg-emerald-800/30 whitespace-nowrap';
+            });
+            document.getElementById(`rtab-${tab}`).className = 'rem-tab px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-emerald-700/50 text-gold-300 border border-gold-500/30 whitespace-nowrap';
+            renderReminders();
+        }
+
+        function renderReminders() {
+            const container = document.getElementById('reminder-cards-container');
+            container.innerHTML = '';
+
+            const list = REMINDERS[activeReminderTab] || [];
+            list.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel p-6 rounded-2xl border border-emerald-700/40 flex flex-col justify-between';
+                
+                card.innerHTML = `
+                    <div>
+                        <h4 class="text-base font-bold text-gold-300 mb-2">${item.title}</h4>
+                        <p class="text-sm italic text-emerald-100 font-serif mb-3 leading-relaxed">"${item.quote}"</p>
+                        <span class="text-xs font-bold text-gold-400/90 block mb-4">— ${item.ref}</span>
+                        <p class="text-xs text-emerald-200/70 border-t border-emerald-800/40 pt-3">${item.desc}</p>
+                    </div>
+                    <div class="mt-4 text-right">
+                        <button data-index="${index}" class="btn-copy-reminder text-xs text-emerald-300 hover:text-white bg-emerald-900/40 px-3 py-1.5 rounded-xl border border-emerald-700/40 transition">
+                            Copy Quote
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+
+            // Ganti inline onclick dengan event listener delegasi yang aman
+            container.querySelectorAll('.btn-copy-reminder').forEach(button => {
+                button.addEventListener('click', function() {
+                    const idx = this.getAttribute('data-index');
+                    const item = REMINDERS[activeReminderTab][idx];
+                    if (item) {
+                        copyReminderText(item.quote, item.ref);
+                    }
+                });
+            });
+        }
+
+        function copyReminderText(quoteText, refText) {
+            const text = `"${quoteText}" — ${refText} (via @takutdosa.id)`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text).then(() => {
+                    alert('Kutipan nasehat berhasil disalin!');
+                }).catch(() => {
+                    fallbackCopy(text);
+                });
+            } else {
+                fallbackCopy(text);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const input = document.createElement('textarea');
+            input.value = text;
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            alert('Kutipan nasehat berhasil disalin!');
+        }
+
+        // DOA & TASBIH LOGIC
+        function renderDoaList() {
+            const container = document.getElementById('doa-list-container');
+            container.innerHTML = '';
+
+            DOA_LIST.forEach(doa => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel p-6 rounded-2xl border border-emerald-700/40';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start gap-2 mb-3">
+                        <h3 class="text-lg font-bold text-gold-300">${doa.title}</h3>
+                        <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-gold-500/10 text-gold-400 border border-gold-500/20">${doa.ref}</span>
+                    </div>
+                    <p class="font-arabic text-2xl text-white text-right leading-loose mb-4">${doa.arabic}</p>
+                    <p class="text-xs italic text-emerald-200/90 mb-2">${doa.latin}</p>
+                    <p class="text-xs text-emerald-300/80 leading-relaxed">${doa.meaning}</p>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function incrementTasbih() {
+            tasbihCount++;
+            document.getElementById('tasbih-count').innerText = tasbihCount;
+            playCheckSound();
+        }
+
+        function resetTasbih() {
+            tasbihCount = 0;
+            document.getElementById('tasbih-count').innerText = tasbihCount;
+        }
+
+        window.onload = function() {
+            initDates();
+            loadData();
+            showHome();
+            lucide.createIcons();
+        };
     </script>
 </body>
 </html>
