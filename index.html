@@ -210,77 +210,147 @@
                 <span class="text-emerald-600">|</span>
                 <span id="hijri-date" class="text-gold-300 font-arabic text-base">--</span>
             </div>
-            <div class="text-xs text-emerald-400/80 bg-emerald-900/40 border border-emerald-700/30 px-3 py-1 rounded-full flex items-center gap-1.5">
-                <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
-                Penyucian Jiwa Setiap Hari
+            <div class="flex items-center gap-3">
+                <div id="user-profile-badge" class="hidden text-xs bg-emerald-950/80 border border-emerald-600/40 px-3 py-1 rounded-full flex items-center gap-2">
+                    <i data-lucide="user" class="w-3.5 h-3.5 text-gold-400"></i>
+                    <span id="user-display-name" class="font-bold text-emerald-200">Hamba Allah</span>
+                    <button onclick="logoutUser()" class="text-rose-400 hover:text-rose-300 ml-1 font-bold underline" title="Keluar">Logout</button>
+                </div>
+                <div class="text-xs text-emerald-400/80 bg-emerald-900/40 border border-emerald-700/30 px-3 py-1 rounded-full flex items-center gap-1.5">
+                    <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    Penyucian Jiwa Setiap Hari
+                </div>
+            </div>
+        </div>
+
+        <!-- ========================================================= -->
+        <!-- VIEW 0: AUTENTIKASI (LOGIN & REGISTER LAYER) -->
+        <!-- ========================================================= -->
+        <div id="view-auth" class="max-w-md mx-auto my-8 transition-all duration-500">
+            <div class="glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth border border-gold-500/30 relative overflow-hidden">
+                <div class="absolute -right-12 -top-12 w-40 h-40 bg-gold-500/10 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-800 via-emerald-600 to-gold-400 p-[2px] shadow-3d-glow mx-auto mb-3">
+                        <div class="w-full h-full bg-emerald-950 rounded-[14px] flex items-center justify-center">
+                            <i data-lucide="lock" class="w-8 h-8 text-gold-400"></i>
+                        </div>
+                    </div>
+                    <h2 id="auth-title" class="text-2xl font-black text-white">Masuk ke Tazkiya Nafs</h2>
+                    <p id="auth-subtitle" class="text-xs text-emerald-200/70 mt-1">Masukkan email & kata sandi yang telah didaftarkan</p>
+                </div>
+
+                <!-- ALERT NOTIFICATION -->
+                <div id="auth-alert" class="hidden mb-4 p-3 rounded-xl bg-rose-950/80 border border-rose-500/50 text-rose-200 text-xs text-center font-medium animate-pulse">
+                    Pesan Kesalahan
+                </div>
+
+                <!-- LOGIN FORM -->
+                <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-300 mb-1">Email</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
+                            <input type="email" id="login-email" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="nama@email.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-300 mb-1">Kata Sandi</label>
+                        <div class="relative">
+                            <i data-lucide="key-round" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
+                            <input type="password" id="login-password" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="••••••••">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-500 hover:to-emerald-400 text-white font-extrabold text-xs shadow-3d-glow transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="log-in" class="w-4 h-4"></i> Masuk Sekarang
+                    </button>
+                    <div class="text-center pt-2">
+                        <span class="text-xs text-emerald-300/70">Belum punya akun? </span>
+                        <button type="button" onclick="toggleAuthMode('register')" class="text-xs text-gold-400 font-bold hover:underline">Daftar Akun Baru</button>
+                    </div>
+                </form>
+
+                <!-- REGISTER FORM -->
+                <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-300 mb-1">Nama Lengkap</label>
+                        <div class="relative">
+                            <i data-lucide="user" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
+                            <input type="text" id="reg-name" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="Hamba Allah">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-300 mb-1">Email</label>
+                        <div class="relative">
+                            <i data-lucide="mail" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
+                            <input type="email" id="reg-email" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="nama@email.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-emerald-300 mb-1">Buat Kata Sandi</label>
+                        <div class="relative">
+                            <i data-lucide="key-round" class="w-4 h-4 text-emerald-500 absolute left-3.5 top-3"></i>
+                            <input type="password" id="reg-password" minlength="6" required class="w-full bg-emerald-950/80 border border-emerald-800/60 rounded-xl py-2.5 pl-10 pr-4 text-xs text-white placeholder-emerald-700 focus:outline-none focus:border-gold-400 transition" placeholder="Minimal 6 karakter">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-gold-600 to-gold-500 hover:from-gold-500 hover:to-gold-400 text-emerald-950 font-extrabold text-xs shadow-gold-glow transition transform active:scale-95 flex items-center justify-center gap-2">
+                        <i data-lucide="user-plus" class="w-4 h-4"></i> Buat Akun & Mulai
+                    </button>
+                    <div class="text-center pt-2">
+                        <span class="text-xs text-emerald-300/70">Sudah punya akun? </span>
+                        <button type="button" onclick="toggleAuthMode('login')" class="text-xs text-gold-400 font-bold hover:underline">Masuk di sini</button>
+                    </div>
+                </form>
             </div>
         </div>
 
         <!-- ========================================================= -->
         <!-- VIEW 1: BERANDA TAMPILAN UTAMA (3 KARTU FITUR UTAMA) -->
         <!-- ========================================================= -->
-        <div id="view-home" class="transition-all duration-500">
-            <div class="text-center mb-10 max-w-2xl mx-auto">
-                <span class="text-xs uppercase tracking-widest font-extrabold text-gold-400 bg-gold-500/10 border border-gold-500/20 px-3 py-1 rounded-full">Tazkiyatun Nafs</span>
-                <h2 class="text-3xl sm:text-4xl font-extrabold text-white mt-3 mb-2">Pilih Modul Penyucian Jiwa</h2>
-                <p class="text-sm text-emerald-200/70">"Sungguh beruntung orang yang mensucikan jiwanya, dan sungguh rugi orang yang mengotorinya." (QS. Asy-Syams: 9-10)</p>
-            </div>
-
+        <div id="view-home" class="transition-all duration-500 hidden">
             <!-- 3 MAIN FEATURE CARDS GRID -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <!-- CARD 1: MUHASABAH DOSA -->
-                <div onclick="openFeature('muhasabah')" class="glass-card rounded-3xl p-6 sm:p-7 cursor-pointer flex flex-col justify-between border border-emerald-500/20 hover:border-gold-400/60 group relative overflow-hidden shadow-card-depth">
-                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-rose-500/10 rounded-full blur-xl group-hover:bg-rose-500/20 transition-all"></div>
+                <div onclick="openFeature('muhasabah')" class="glass-card rounded-3xl p-6 cursor-pointer border border-rose-500/30 hover:border-rose-400 flex flex-col justify-between group">
                     <div>
-                        <div class="w-14 h-14 rounded-2xl bg-rose-500/20 border border-rose-500/30 flex items-center justify-center text-rose-400 mb-5 group-hover:scale-110 transition duration-300">
-                            <i data-lucide="shield-alert" class="w-7 h-7"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/20 flex items-center justify-center text-rose-400 mb-4 group-hover:scale-110 transition">
+                            <i data-lucide="shield-alert" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-[10px] font-extrabold text-rose-400 bg-rose-950/60 border border-rose-800/40 px-2.5 py-1 rounded-md uppercase tracking-wider">01. Evaluasi Diri</span>
-                        <h3 class="text-xl font-extrabold text-white mt-2 group-hover:text-gold-300 transition">Muhasabah Dosa</h3>
-                        <p class="text-xs text-emerald-200/70 mt-2 leading-relaxed">
-                            Pemeriksaan noda maksiat pada 9 anggota tubuh: Mata, Telinga, Lisan, Pikiran, Hati, Tangan, Kemaluan, Perut, & Kaki.
-                        </p>
+                        <h3 class="text-xl font-bold text-white group-hover:text-gold-300 transition mb-1">1. Muhasabah Dosa</h3>
+                        <p class="text-xs text-emerald-200/70 leading-relaxed">Evaluasi 9 anggota tubuh dari dosa mata, lisan, hati, pikiran, hingga langkah kaki.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-gold-400">
-                        <span>Mulai Muhasabah</span>
+                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-rose-400">
+                        <span>Mulai Evaluasi</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
                     </div>
                 </div>
 
-                <!-- CARD 2: REMINDER NASEHAT ULAMA -->
-                <div onclick="openFeature('reminder')" class="glass-card rounded-3xl p-6 sm:p-7 cursor-pointer flex flex-col justify-between border border-emerald-500/20 hover:border-gold-400/60 group relative overflow-hidden shadow-card-depth">
-                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-gold-500/10 rounded-full blur-xl group-hover:bg-gold-500/20 transition-all"></div>
+                <!-- CARD 2: REMINDER & NASEHAT -->
+                <div onclick="openFeature('reminder')" class="glass-card rounded-3xl p-6 cursor-pointer border border-gold-500/30 hover:border-gold-400 flex flex-col justify-between group">
                     <div>
-                        <div class="w-14 h-14 rounded-2xl bg-gold-500/20 border border-gold-500/30 flex items-center justify-center text-gold-400 mb-5 group-hover:scale-110 transition duration-300">
-                            <i data-lucide="scroll" class="w-7 h-7"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-gold-500/20 flex items-center justify-center text-gold-400 mb-4 group-hover:scale-110 transition">
+                            <i data-lucide="scroll" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-[10px] font-extrabold text-gold-400 bg-gold-950/60 border border-gold-800/40 px-2.5 py-1 rounded-md uppercase tracking-wider">02. Pengingat Jiwa</span>
-                        <h3 class="text-xl font-extrabold text-white mt-2 group-hover:text-gold-300 transition">Reminder & Nasehat</h3>
-                        <p class="text-xs text-emerald-200/70 mt-2 leading-relaxed">
-                            Renungan usia singkat, ajal kematian, dunia sementara, dahsyatnya hisab, adzab neraka, & nasehat Salafus Shalih.
-                        </p>
+                        <h3 class="text-xl font-bold text-white group-hover:text-gold-300 transition mb-1">2. Reminder & Nasehat</h3>
+                        <p class="text-xs text-emerald-200/70 leading-relaxed">Renungan usia singkat, ajal kematian, hisab berat, dahsyatnya neraka & nasehat ulama salaf.</p>
                     </div>
                     <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-gold-400">
-                        <span>Baca Nasehat</span>
+                        <span>Baca Renungan</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
                     </div>
                 </div>
 
                 <!-- CARD 3: DOA & DZIKIR SUNNAH -->
-                <div onclick="openFeature('doa')" class="glass-card rounded-3xl p-6 sm:p-7 cursor-pointer flex flex-col justify-between border border-emerald-500/20 hover:border-gold-400/60 group relative overflow-hidden shadow-card-depth">
-                    <div class="absolute -right-8 -top-8 w-32 h-32 bg-emerald-500/10 rounded-full blur-xl group-hover:bg-emerald-500/20 transition-all"></div>
+                <div onclick="openFeature('doa')" class="glass-card rounded-3xl p-6 cursor-pointer border border-emerald-500/30 hover:border-emerald-400 flex flex-col justify-between group">
                     <div>
-                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-5 group-hover:scale-110 transition duration-300">
-                            <i data-lucide="sparkles" class="w-7 h-7"></i>
+                        <div class="w-12 h-12 rounded-2xl bg-emerald-500/20 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition">
+                            <i data-lucide="sparkles" class="w-6 h-6"></i>
                         </div>
-                        <span class="text-[10px] font-extrabold text-emerald-400 bg-emerald-950/60 border border-emerald-800/40 px-2.5 py-1 rounded-md uppercase tracking-wider">03. Amalan Pelebur</span>
-                        <h3 class="text-xl font-extrabold text-white mt-2 group-hover:text-gold-300 transition">Doa & Dzikir Sunnah</h3>
-                        <p class="text-xs text-emerald-200/70 mt-2 leading-relaxed">
-                            Doa-doa pelebur dosa yang shahih, Sayyidul Istighfar, serta fitur Tasbih Digital 3D interaktif.
-                        </p>
+                        <h3 class="text-xl font-bold text-white group-hover:text-gold-300 transition mb-1">3. Doa & Dzikir Sunnah</h3>
+                        <p class="text-xs text-emerald-200/70 leading-relaxed">Amalan doa pelebur dosa yang shahih beserta tasbih digital 3D interaktif.</p>
                     </div>
-                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-gold-400">
-                        <span>Buka Dzikir</span>
+                    <div class="mt-6 pt-4 border-t border-emerald-800/40 flex items-center justify-between text-xs font-bold text-emerald-400">
+                        <span>Buka Doa & Dzikir</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition"></i>
                     </div>
                 </div>
@@ -288,26 +358,29 @@
         </div>
 
         <!-- ========================================================= -->
-        <!-- VIEW 2: MODUL MUHASABAH HARIAN (DOSA 9 ANGGOTA TUBUH) -->
+        <!-- VIEW 2: MODUL MUHASABAH DOSA 9 ANGGOTA TUBUH -->
         <!-- ========================================================= -->
         <div id="view-muhasabah" class="hidden transition-all duration-500">
             <button onclick="showHome()" class="mb-6 px-4 py-2 rounded-2xl bg-emerald-900/60 hover:bg-emerald-800/80 border border-emerald-700/50 text-xs font-bold text-emerald-200 flex items-center gap-2 transition">
                 <i data-lucide="arrow-left" class="w-4 h-4"></i> Kembali ke Beranda
             </button>
 
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
-                <!-- LEFT COLUMN: QOLBU STATUS METER FOR DOSA -->
-                <div class="lg:col-span-5 flex flex-col gap-6">
-                    <div class="glass-panel rounded-3xl p-6 relative overflow-hidden shadow-card-depth border border-emerald-500/20 flex flex-col items-center text-center">
-                        <div class="w-full flex justify-between items-center mb-4">
-                            <span class="text-xs uppercase font-extrabold tracking-wider text-emerald-300/80">Kondisi Qolbu 3D</span>
-                            <span id="heart-status-badge" class="text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Bersih</span>
-                        </div>
+            <!-- 3D QOLBU CONDITION & DOSA SUMMARY -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 mb-8">
+                <!-- LEFT COLUMN: 3D QOLBU STATUS METER -->
+                <div class="lg:col-span-5 flex flex-col justify-between glass-panel rounded-3xl p-6 sm:p-8 shadow-card-depth relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-2xl pointer-events-none"></div>
 
-                        <div class="relative w-48 h-48 my-2 flex items-center justify-center">
-                            <div id="heart-glow" class="absolute inset-0 rounded-full bg-emerald-500/20 blur-xl transition-all duration-700"></div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-extrabold uppercase tracking-widest text-emerald-400">Monitoring Kondisi Qolbu</span>
+                        <span id="heart-status-badge" class="text-xs px-3 py-1 rounded-full font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">Qolbun Salim</span>
+                    </div>
+
+                    <!-- 3D Heart Progress Ring -->
+                    <div class="my-6 flex flex-col items-center justify-center relative">
+                        <div class="w-48 h-48 relative flex items-center justify-center">
                             <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="42" stroke="currentColor" stroke-width="6" class="text-emerald-950/80" fill="transparent" />
+                                <circle cx="50" cy="50" r="42" stroke="rgba(6, 78, 59, 0.4)" stroke-width="8" fill="transparent" />
                                 <circle id="heart-progress-ring" cx="50" cy="50" r="42" stroke="url(#emerald-gold-grad)" stroke-width="8" stroke-linecap="round" class="transition-all duration-700 ease-out" fill="transparent" stroke-dasharray="263.89" stroke-dashoffset="0" />
                                 <defs>
                                     <linearGradient id="emerald-gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -978,32 +1051,181 @@
         let streakCount = 0;
         let chartInstance = null;
         let tasbihCount = 0;
+        let currentUser = null;
+
+        // AUTHENTICATION LOGIC
+        function toggleAuthMode(mode) {
+            const formLogin = document.getElementById('form-login');
+            const formRegister = document.getElementById('form-register');
+            const title = document.getElementById('auth-title');
+            const subtitle = document.getElementById('auth-subtitle');
+            hideAuthAlert();
+
+            if (mode === 'register') {
+                formLogin.classList.add('hidden');
+                formRegister.classList.remove('hidden');
+                title.innerText = 'Daftar Akun Tazkiya';
+                subtitle.innerText = 'Buat akun baru untuk mulai menyimpan rekam muhasabah diri';
+            } else {
+                formRegister.classList.add('hidden');
+                formLogin.classList.remove('hidden');
+                title.innerText = 'Masuk ke Tazkiya Nafs';
+                subtitle.innerText = 'Masukkan email & kata sandi yang telah didaftarkan';
+            }
+            lucide.createIcons();
+        }
+
+        function showAuthAlert(msg) {
+            const alert = document.getElementById('auth-alert');
+            alert.innerText = msg;
+            alert.classList.remove('hidden');
+        }
+
+        function hideAuthAlert() {
+            document.getElementById('auth-alert').classList.add('hidden');
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim().toLowerCase();
+            const password = document.getElementById('reg-password').value;
+
+            if (!name || !email || !password) {
+                showAuthAlert('Mohon isi semua bidang pendaftaran!');
+                return;
+            }
+
+            const users = JSON.parse(localStorage.getItem('tazkiya_users') || '{}');
+            if (users[email]) {
+                showAuthAlert('Email ini sudah terdaftar! Silakan login.');
+                return;
+            }
+
+            users[email] = { name, email, password };
+            localStorage.setItem('tazkiya_users', JSON.stringify(users));
+
+            // Auto Login after register
+            loginUser({ name, email });
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim().toLowerCase();
+            const password = document.getElementById('login-password').value;
+
+            const users = JSON.parse(localStorage.getItem('tazkiya_users') || '{}');
+            const user = users[email];
+
+            if (!user || user.password !== password) {
+                showAuthAlert('Email atau Kata Sandi salah! Periksa kembali inputan kamu.');
+                playUncheckSound();
+                return;
+            }
+
+            loginUser(user);
+        }
+
+        function loginUser(user) {
+            currentUser = user;
+            localStorage.setItem('tazkiya_session', JSON.stringify(user));
+            updateUserBadge();
+            showHome();
+            playCheckSound();
+        }
+
+        function logoutUser() {
+            if (confirm('Apakah kamu yakin ingin keluar dari akun?')) {
+                currentUser = null;
+                localStorage.removeItem('tazkiya_session');
+                updateUserBadge();
+                showAuth();
+            }
+        }
+
+        function updateUserBadge() {
+            const badge = document.getElementById('user-profile-badge');
+            const nameElem = document.getElementById('user-display-name');
+            if (currentUser) {
+                nameElem.innerText = currentUser.name || 'Hamba Allah';
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function checkSession() {
+            const session = localStorage.getItem('tazkiya_session');
+            if (session) {
+                currentUser = JSON.parse(session);
+                updateUserBadge();
+                showHome();
+            } else {
+                showAuth();
+            }
+        }
+
+        function showAuth() {
+            const vAuth = document.getElementById('view-auth');
+            const vHome = document.getElementById('view-home');
+            const vMuhasabah = document.getElementById('view-muhasabah');
+            const vReminder = document.getElementById('view-reminder');
+            const vDoa = document.getElementById('view-doa');
+
+            if (vAuth) vAuth.classList.remove('hidden');
+            if (vHome) vHome.classList.add('hidden');
+            if (vMuhasabah) vMuhasabah.classList.add('hidden');
+            if (vReminder) vReminder.classList.add('hidden');
+            if (vDoa) vDoa.classList.add('hidden');
+        }
 
         // NAVIGATION LOGIC
         function showHome() {
-            document.getElementById('view-home').classList.remove('hidden');
-            document.getElementById('view-muhasabah').classList.add('hidden');
-            document.getElementById('view-reminder').classList.add('hidden');
-            document.getElementById('view-doa').classList.add('hidden');
+            if (!currentUser) {
+                showAuth();
+                return;
+            }
+            const vAuth = document.getElementById('view-auth');
+            const vHome = document.getElementById('view-home');
+            const vMuhasabah = document.getElementById('view-muhasabah');
+            const vReminder = document.getElementById('view-reminder');
+            const vDoa = document.getElementById('view-doa');
+
+            if (vAuth) vAuth.classList.add('hidden');
+            if (vHome) vHome.classList.remove('hidden');
+            if (vMuhasabah) vMuhasabah.classList.add('hidden');
+            if (vReminder) vReminder.classList.add('hidden');
+            if (vDoa) vDoa.classList.add('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function openFeature(feature) {
-            document.getElementById('view-home').classList.add('hidden');
-            document.getElementById('view-muhasabah').classList.add('hidden');
-            document.getElementById('view-reminder').classList.add('hidden');
-            document.getElementById('view-doa').classList.add('hidden');
+            if (!currentUser) {
+                showAuth();
+                return;
+            }
+            const vAuth = document.getElementById('view-auth');
+            const vHome = document.getElementById('view-home');
+            const vMuhasabah = document.getElementById('view-muhasabah');
+            const vReminder = document.getElementById('view-reminder');
+            const vDoa = document.getElementById('view-doa');
+
+            if (vAuth) vAuth.classList.add('hidden');
+            if (vHome) vHome.classList.add('hidden');
+            if (vMuhasabah) vMuhasabah.classList.add('hidden');
+            if (vReminder) vReminder.classList.add('hidden');
+            if (vDoa) vDoa.classList.add('hidden');
 
             if (feature === 'muhasabah') {
-                document.getElementById('view-muhasabah').classList.remove('hidden');
+                if (vMuhasabah) vMuhasabah.classList.remove('hidden');
                 renderChecklist();
                 updateDashboard();
                 renderChart();
             } else if (feature === 'reminder') {
-                document.getElementById('view-reminder').classList.remove('hidden');
+                if (vReminder) vReminder.classList.remove('hidden');
                 renderReminders();
             } else if (feature === 'doa') {
-                document.getElementById('view-doa').classList.remove('hidden');
+                if (vDoa) vDoa.classList.remove('hidden');
                 renderDoaList();
             }
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1210,7 +1432,7 @@
         window.onload = function() {
             initDates();
             loadData();
-            showHome();
+            checkSession();
             lucide.createIcons();
         };
     </script>
